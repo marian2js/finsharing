@@ -1,0 +1,10 @@
+{
+  "appName": "finsharing",
+  "endpoint": "http://localhost:8000",
+  "port": 8000,
+  "mongoDB": {
+    "uri": "mongodb://localhost:27017",
+    "dbName": "finsharing",
+    "options": {}
+  }
+}

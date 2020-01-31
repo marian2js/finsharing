@@ -1,0 +1,82 @@
+{
+  "entityName": "posts",
+  "collectionName": "posts",
+  "apiKey": "slug",
+  "permissions": {
+    "get": "anyone",
+    "create": "user",
+    "update": "own",
+    "delete": "own"
+  },
+  "attributes": {
+    "user": {
+      "type": "user",
+      "required": true,
+      "index": true,
+      "readonly": true,
+      "permissions": {
+        "create": "system",
+        "update": "system"
+      }
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 150,
+      "required": true
+    },
+    "slug": {
+      "type": "slug",
+      "maxLength": 64,
+      "required": true,
+      "setFrom": "title",
+      "suffix": {
+        "type": "random",
+        "chars": 8
+      },
+      "unique": true,
+      "readonly": true,
+      "permissions": {
+        "update": "system"
+      }
+    },
+    "body": {
+      "type": "string",
+      "required": true,
+      "maxLength": 5000
+    },
+    "market": {
+      "type": "ref",
+      "entity": "markets",
+      "required": true,
+      "index": true,
+      "readonly": true,
+      "permissions": {
+        "update": "system"
+      }
+    },
+    "numberOfComments": {
+      "type": "number",
+      "default": 0,
+      "permissions": {
+        "create": "system",
+        "update": "system"
+      }
+    }
+  },
+  "hooks": {
+    "afterCreate": [
+      {
+        "action": "increment",
+        "target": "this.user.numberOfPosts",
+        "value": 1
+      }
+    ],
+    "afterDelete": [
+      {
+        "action": "increment",
+        "target": "this.user.numberOfPosts",
+        "value": -1
+      }
+    ]
+  }
+}

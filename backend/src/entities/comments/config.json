@@ -1,0 +1,58 @@
+{
+  "entityName": "comments",
+  "collectionName": "comments",
+  "permissions": {
+    "get": "anyone",
+    "create": "user",
+    "update": "own",
+    "delete": "own"
+  },
+  "attributes": {
+    "user": {
+      "type": "user",
+      "required": true,
+      "index": true,
+      "readonly": true,
+      "permissions": {
+        "create": "system",
+        "update": "system"
+      }
+    },
+    "post": {
+      "type": "ref",
+      "entity": "posts",
+      "required": true
+    },
+    "body": {
+      "type": "string",
+      "maxLength": 5000,
+      "required": true
+    }
+  },
+  "hooks": {
+    "afterCreate": [
+      {
+        "action": "increment",
+        "target": "this.user.numberOfComments",
+        "value": 1
+      },
+      {
+        "action": "increment",
+        "target": "this.post.numberOfComments",
+        "value": 1
+      }
+    ],
+    "afterDelete": [
+      {
+        "action": "increment",
+        "target": "this.user.numberOfComments",
+        "value": -1
+      },
+      {
+        "action": "increment",
+        "target": "this.post.numberOfComments",
+        "value": -1
+      }
+    ]
+  }
+}

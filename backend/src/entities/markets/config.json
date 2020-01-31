@@ -1,0 +1,36 @@
+{
+  "entityName": "markets",
+  "collectionName": "markets",
+  "apiKey": "slug",
+  "permissions": {
+    "get": "anyone",
+    "create": "admin",
+    "update": "admin",
+    "delete": "admin"
+  },
+  "attributes": {
+    "slug": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string"
+    },
+    "imageUrl": {
+      "type": "string"
+    },
+    "exchange": {
+      "type": "enum",
+      "values": [
+        "NYSE",
+        "NASDAQ"
+      ],
+      "index": true
+    }
+  }
+}
