@@ -34,10 +34,7 @@
         "chars": 8
       },
       "unique": true,
-      "readonly": true,
-      "permissions": {
-        "update": "system"
-      }
+      "readonly": true
     },
     "body": {
       "type": "string",
@@ -61,6 +58,14 @@
         "create": "system",
         "update": "system"
       }
+    },
+    "votes": {
+      "type": "number",
+      "default": 0,
+      "permissions": {
+        "create": "system",
+        "update": "system"
+      }
     }
   },
   "hooks": {
@@ -78,5 +83,15 @@
         "value": -1
       }
     ]
+  },
+  "joinAttributes": {
+    "viewerVote": {
+      "type": "findOne",
+      "entity": "postVotes",
+      "query": {
+        "user": "{user._id}",
+        "post": "{this._id}"
+      }
+    }
   }
 }
