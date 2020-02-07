@@ -18,6 +18,10 @@
       "type": "string",
       "required": true
     },
+    "fullName": {
+      "type": "string",
+      "required": true
+    },
     "description": {
       "type": "string"
     },
@@ -31,6 +35,21 @@
         "NASDAQ"
       ],
       "index": true
+    },
+    "price": {
+      "type": "number"
+    },
+    "numberOfPosts": {
+      "type": "number",
+      "default": 0
     }
-  }
+  },
+  "indexes": [
+    {
+      "keys": {
+        "slug": "text",
+        "name": "text"
+      }
+    }
+  ]
 }

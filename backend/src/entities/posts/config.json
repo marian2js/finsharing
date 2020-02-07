@@ -39,7 +39,7 @@
     "body": {
       "type": "string",
       "required": true,
-      "maxLength": 5000
+      "maxLength": 20000
     },
     "market": {
       "type": "ref",
@@ -74,12 +74,22 @@
         "action": "increment",
         "target": "this.user.numberOfPosts",
         "value": 1
+      },
+      {
+        "action": "increment",
+        "target": "this.market.numberOfPosts",
+        "value": 1
       }
     ],
     "afterDelete": [
       {
         "action": "increment",
         "target": "this.user.numberOfPosts",
+        "value": -1
+      },
+      {
+        "action": "increment",
+        "target": "this.market.numberOfPosts",
         "value": -1
       }
     ]

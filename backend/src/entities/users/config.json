@@ -23,6 +23,12 @@
         "create": "system",
         "update": "system"
       }
+    },
+    "fullName": {
+      "type": "string"
+    },
+    "website": {
+      "type": "string"
     }
   }
 }
