@@ -1,0 +1,639 @@
+type Comment implements Node {
+  id: ID!
+  user: User!
+  post: Post!
+  body: String!
+  createdAt: String
+  updatedAt: String
+}
+
+input CommentBodyFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input CommentCreatedAtFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input CommentFilterInput {
+  id: CommentIdFilterInput
+  user: CommentUserFilterInput
+  post: CommentPostFilterInput
+  body: CommentBodyFilterInput
+  createdAt: CommentCreatedAtFilterInput
+  updatedAt: CommentUpdatedAtFilterInput
+  or: [CommentFilterInput]
+  and: [CommentFilterInput]
+}
+
+input CommentIdFilterInput {
+  value: ID!
+  comparator: FilterComparatorSymbol
+}
+
+input CommentOrderByInput {
+  id: OrderByDirection
+  user: OrderByDirection
+  post: OrderByDirection
+  body: OrderByDirection
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
+}
+
+input CommentPostFilterInput {
+  value: ID!
+  comparator: FilterComparatorSymbol
+}
+
+input CommentUpdatedAtFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input CommentUserFilterInput {
+  value: ID!
+  comparator: FilterComparatorSymbol
+}
+
+input CreateCommentInput {
+  post: ID!
+  body: String!
+}
+
+type CreateCommentPayload {
+  comment: Comment
+}
+
+input CreateMarketInput {
+  slug: String!
+  name: String!
+  fullName: String!
+  description: String
+  imageUrl: String
+  exchange: MarketExchangeEnum
+  price: Float
+  numberOfPosts: Float
+}
+
+type CreateMarketPayload {
+  market: Market
+}
+
+input CreatePostInput {
+  title: String!
+  body: String!
+  market: ID!
+}
+
+type CreatePostPayload {
+  post: Post
+}
+
+input CreatePostVoteInput {
+  post: ID!
+  value: PostVoteValueEnum!
+}
+
+type CreatePostVotePayload {
+  postVote: PostVote
+}
+
+input CreateUserInput {
+  username: String!
+  email: String!
+  password: String
+  verified: Boolean
+  fullName: String
+  website: String
+}
+
+type CreateUserPayload {
+  user: User
+}
+
+input DeleteCommentInput {
+  id: ID!
+}
+
+type DeleteCommentPayload {
+  result: Boolean!
+}
+
+input DeleteMarketInput {
+  slug: String!
+}
+
+type DeleteMarketPayload {
+  result: Boolean!
+}
+
+input DeletePostInput {
+  slug: String!
+}
+
+type DeletePostPayload {
+  result: Boolean!
+}
+
+input DeletePostVoteInput {
+  id: ID!
+}
+
+type DeletePostVotePayload {
+  result: Boolean!
+}
+
+input DeleteUserInput {
+  username: String!
+}
+
+type DeleteUserPayload {
+  result: Boolean!
+}
+
+enum FilterComparatorSymbol {
+  EQUAL
+  NOT_EQUAL
+  GREATER_THAN
+  GREATER_THAN_OR_EQUAL
+  LESS_THAN
+  LESS_THAN_OR_EQUAL
+}
+
+type ListCommentPayload {
+  nodes: [Comment]!
+}
+
+type ListMarketPayload {
+  nodes: [Market]!
+}
+
+type ListPostPayload {
+  nodes: [Post]!
+}
+
+type ListPostVotePayload {
+  nodes: [PostVote]!
+}
+
+type ListUserPayload {
+  nodes: [User]!
+}
+
+type Market implements Node {
+  slug: String!
+  name: String!
+  fullName: String!
+  description: String
+  imageUrl: String
+  exchange: MarketExchangeEnum
+  price: Float
+  numberOfPosts: Float
+  id: ID!
+  createdAt: String
+  updatedAt: String
+}
+
+input MarketCreatedAtFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input MarketDescriptionFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+enum MarketExchangeEnum {
+  NYSE
+  NASDAQ
+}
+
+input MarketExchangeFilterInput {
+  value: MarketExchangeEnum!
+  comparator: FilterComparatorSymbol
+}
+
+input MarketFilterInput {
+  slug: MarketSlugFilterInput
+  name: MarketNameFilterInput
+  fullName: MarketFullNameFilterInput
+  description: MarketDescriptionFilterInput
+  imageUrl: MarketImageUrlFilterInput
+  exchange: MarketExchangeFilterInput
+  price: MarketPriceFilterInput
+  numberOfPosts: MarketNumberOfPostsFilterInput
+  id: MarketIdFilterInput
+  createdAt: MarketCreatedAtFilterInput
+  updatedAt: MarketUpdatedAtFilterInput
+  or: [MarketFilterInput]
+  and: [MarketFilterInput]
+}
+
+input MarketFullNameFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input MarketIdFilterInput {
+  value: ID!
+  comparator: FilterComparatorSymbol
+}
+
+input MarketImageUrlFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input MarketNameFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input MarketNumberOfPostsFilterInput {
+  value: Float!
+  comparator: FilterComparatorSymbol
+}
+
+input MarketOrderByInput {
+  slug: OrderByDirection
+  name: OrderByDirection
+  fullName: OrderByDirection
+  description: OrderByDirection
+  imageUrl: OrderByDirection
+  exchange: OrderByDirection
+  price: OrderByDirection
+  numberOfPosts: OrderByDirection
+  id: OrderByDirection
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
+}
+
+input MarketPriceFilterInput {
+  value: Float!
+  comparator: FilterComparatorSymbol
+}
+
+input MarketSlugFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input MarketUpdatedAtFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+type Mutation {
+  createUser(input: CreateUserInput): CreateUserPayload
+  updateUser(input: UpdateUserInput): UpdateUserPayload
+  deleteUser(input: DeleteUserInput): DeleteUserPayload
+  createComment(input: CreateCommentInput): CreateCommentPayload
+  updateComment(input: UpdateCommentInput): UpdateCommentPayload
+  deleteComment(input: DeleteCommentInput): DeleteCommentPayload
+  createMarket(input: CreateMarketInput): CreateMarketPayload
+  updateMarket(input: UpdateMarketInput): UpdateMarketPayload
+  deleteMarket(input: DeleteMarketInput): DeleteMarketPayload
+  createPostVote(input: CreatePostVoteInput): CreatePostVotePayload
+  updatePostVote(input: UpdatePostVoteInput): UpdatePostVotePayload
+  deletePostVote(input: DeletePostVoteInput): DeletePostVotePayload
+  createPost(input: CreatePostInput): CreatePostPayload
+  updatePost(input: UpdatePostInput): UpdatePostPayload
+  deletePost(input: DeletePostInput): DeletePostPayload
+}
+
+interface Node {
+  id: ID!
+}
+
+enum OrderByDirection {
+  DESC
+  ASC
+}
+
+type Post implements Node {
+  slug: String!
+  user: User!
+  title: String!
+  body: String!
+  market: Market!
+  numberOfComments: Float
+  votes: Float
+  id: ID!
+  createdAt: String
+  updatedAt: String
+  viewerVote: PostVote
+}
+
+input PostBodyFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input PostCreatedAtFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input PostFilterInput {
+  slug: PostSlugFilterInput
+  user: PostUserFilterInput
+  title: PostTitleFilterInput
+  body: PostBodyFilterInput
+  market: PostMarketFilterInput
+  numberOfComments: PostNumberOfCommentsFilterInput
+  votes: PostVotesFilterInput
+  id: PostIdFilterInput
+  createdAt: PostCreatedAtFilterInput
+  updatedAt: PostUpdatedAtFilterInput
+  or: [PostFilterInput]
+  and: [PostFilterInput]
+}
+
+input PostIdFilterInput {
+  value: ID!
+  comparator: FilterComparatorSymbol
+}
+
+input PostMarketFilterInput {
+  value: ID!
+  comparator: FilterComparatorSymbol
+}
+
+input PostNumberOfCommentsFilterInput {
+  value: Float!
+  comparator: FilterComparatorSymbol
+}
+
+input PostOrderByInput {
+  slug: OrderByDirection
+  user: OrderByDirection
+  title: OrderByDirection
+  body: OrderByDirection
+  market: OrderByDirection
+  numberOfComments: OrderByDirection
+  votes: OrderByDirection
+  id: OrderByDirection
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
+}
+
+input PostSlugFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input PostTitleFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input PostUpdatedAtFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input PostUserFilterInput {
+  value: ID!
+  comparator: FilterComparatorSymbol
+}
+
+type PostVote implements Node {
+  id: ID!
+  user: User!
+  post: Post!
+  value: PostVoteValueEnum!
+  createdAt: String
+  updatedAt: String
+}
+
+input PostVoteCreatedAtFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input PostVoteFilterInput {
+  id: PostVoteIdFilterInput
+  user: PostVoteUserFilterInput
+  post: PostVotePostFilterInput
+  value: PostVoteValueFilterInput
+  createdAt: PostVoteCreatedAtFilterInput
+  updatedAt: PostVoteUpdatedAtFilterInput
+  or: [PostVoteFilterInput]
+  and: [PostVoteFilterInput]
+}
+
+input PostVoteIdFilterInput {
+  value: ID!
+  comparator: FilterComparatorSymbol
+}
+
+input PostVoteOrderByInput {
+  id: OrderByDirection
+  user: OrderByDirection
+  post: OrderByDirection
+  value: OrderByDirection
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
+}
+
+input PostVotePostFilterInput {
+  value: ID!
+  comparator: FilterComparatorSymbol
+}
+
+input PostVotesFilterInput {
+  value: Float!
+  comparator: FilterComparatorSymbol
+}
+
+input PostVoteUpdatedAtFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input PostVoteUserFilterInput {
+  value: ID!
+  comparator: FilterComparatorSymbol
+}
+
+enum PostVoteValueEnum {
+  POSITIVE_1
+  NEGATIVE_1
+}
+
+input PostVoteValueFilterInput {
+  value: PostVoteValueEnum!
+  comparator: FilterComparatorSymbol
+}
+
+type Query {
+  users(first: Int, filter: UserFilterInput, orderBy: [UserOrderByInput]): ListUserPayload
+  user(username: String!): User!
+  viewer: User!
+  comments(first: Int, filter: CommentFilterInput, orderBy: [CommentOrderByInput]): ListCommentPayload
+  comment(id: String!): Comment!
+  markets(first: Int, filter: MarketFilterInput, orderBy: [MarketOrderByInput], search: String): ListMarketPayload
+  market(slug: String!): Market!
+  postVotes(first: Int, filter: PostVoteFilterInput, orderBy: [PostVoteOrderByInput]): ListPostVotePayload
+  postVote(id: String!): PostVote!
+  posts(first: Int, filter: PostFilterInput, orderBy: [PostOrderByInput]): ListPostPayload
+  post(slug: String!): Post!
+}
+
+input UpdateCommentInput {
+  id: ID!
+  post: ID
+  body: String
+}
+
+type UpdateCommentPayload {
+  comment: Comment
+}
+
+input UpdateMarketInput {
+  slug: String!
+  name: String
+  fullName: String
+  description: String
+  imageUrl: String
+  exchange: MarketExchangeEnum
+  price: Float
+  numberOfPosts: Float
+}
+
+type UpdateMarketPayload {
+  market: Market
+}
+
+input UpdatePostInput {
+  slug: String!
+  title: String
+  body: String
+}
+
+type UpdatePostPayload {
+  post: Post
+}
+
+input UpdatePostVoteInput {
+  id: ID!
+}
+
+type UpdatePostVotePayload {
+  postVote: PostVote
+}
+
+input UpdateUserInput {
+  username: String!
+  email: String
+  password: String
+  verified: Boolean
+  fullName: String
+  website: String
+}
+
+type UpdateUserPayload {
+  user: User
+}
+
+type User implements Node {
+  username: String!
+  id: ID!
+  email: String!
+  verified: Boolean
+  admin: Boolean
+  numberOfPosts: Float
+  numberOfComments: Float
+  fullName: String
+  website: String
+  createdAt: String
+  updatedAt: String
+}
+
+input UserAdminFilterInput {
+  value: Boolean!
+  comparator: FilterComparatorSymbol
+}
+
+input UserCreatedAtFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input UserEmailFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input UserFilterInput {
+  username: UserUsernameFilterInput
+  id: UserIdFilterInput
+  email: UserEmailFilterInput
+  verified: UserVerifiedFilterInput
+  admin: UserAdminFilterInput
+  numberOfPosts: UserNumberOfPostsFilterInput
+  numberOfComments: UserNumberOfCommentsFilterInput
+  fullName: UserFullNameFilterInput
+  website: UserWebsiteFilterInput
+  createdAt: UserCreatedAtFilterInput
+  updatedAt: UserUpdatedAtFilterInput
+  or: [UserFilterInput]
+  and: [UserFilterInput]
+}
+
+input UserFullNameFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input UserIdFilterInput {
+  value: ID!
+  comparator: FilterComparatorSymbol
+}
+
+input UserNumberOfCommentsFilterInput {
+  value: Float!
+  comparator: FilterComparatorSymbol
+}
+
+input UserNumberOfPostsFilterInput {
+  value: Float!
+  comparator: FilterComparatorSymbol
+}
+
+input UserOrderByInput {
+  username: OrderByDirection
+  id: OrderByDirection
+  email: OrderByDirection
+  verified: OrderByDirection
+  admin: OrderByDirection
+  numberOfPosts: OrderByDirection
+  numberOfComments: OrderByDirection
+  fullName: OrderByDirection
+  website: OrderByDirection
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
+}
+
+input UserUpdatedAtFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input UserUsernameFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input UserVerifiedFilterInput {
+  value: Boolean!
+  comparator: FilterComparatorSymbol
+}
+
+input UserWebsiteFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}

@@ -99,8 +99,8 @@
       "type": "findOne",
       "entity": "postVotes",
       "query": {
-        "user": "{user._id}",
-        "post": "{this._id}"
+        "user": "{user.id}",
+        "post": "{this.id}"
       }
     }
   }

@@ -10,11 +10,12 @@
     "watch": "tsc-watch --onSuccess \"node ./dist/server.js\""
   },
   "dependencies": {
-    "@commun/admin": "^0.2.5",
-    "@commun/core": "^0.2.5",
-    "@commun/dashboard": "^0.2.5",
-    "@commun/emails": "^0.2.5",
-    "@commun/users": "^0.2.5",
+    "@commun/admin": "^0.3.0",
+    "@commun/core": "^0.3.0",
+    "@commun/dashboard": "^0.3.0",
+    "@commun/emails": "^0.3.0",
+    "@commun/graphql": "^0.3.0",
+    "@commun/users": "^0.3.0",
     "dotenv": "^8.2.0"
   },
   "devDependencies": {
