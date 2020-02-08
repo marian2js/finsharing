@@ -1,0 +1,69 @@
+version: '3'
+
+services:
+  fs-mongo:
+    container_name: fs-mongo
+    image: mongo
+    restart: always
+    env_file:
+      - ./backend/.env
+    volumes:
+      - mongodb:/data/db
+      - mongoconfig:/data/configdb
+    networks:
+      - finsharing
+
+  fs-nginx:
+    container_name: fs-nginx
+    image: nginx
+    volumes:
+      - "./config/nginx/${NGINX_CONFIG_FILE}:/etc/nginx/conf.d/${NGINX_CONFIG_FILE}"
+    networks:
+      - finsharing
+    ports:
+      - 80:80
+    links:
+      - fs-frontend
+      - fs-service
+    depends_on:
+      - fs-frontend
+      - fs-service
+
+  fs-service:
+    container_name: fs-service
+    build: ./backend
+    volumes:
+      - ./backend/src:/app/finsharing-service/src
+    networks:
+      - finsharing
+    env_file:
+      - ./backend/.env
+    ports:
+      - 8000:8000
+    expose:
+      - 8000
+    links:
+      - fs-mongo
+    depends_on:
+      - fs-mongo
+
+  fs-frontend:
+    container_name: fs-frontend
+    build: ./frontend
+    networks:
+      - finsharing
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
+    links:
+      - fs-service
+    depends_on:
+      - fs-service
+
+volumes:
+  mongodb:
+  mongoconfig:
+
+networks:
+  finsharing:

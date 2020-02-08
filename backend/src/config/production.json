@@ -3,7 +3,7 @@
   "endpoint": "https://finsharing.com",
   "port": 8000,
   "mongoDB": {
-    "uri": "mongodb://localhost:27017",
+    "uri": "mongodb://fs-mongo:27017",
     "dbName": "finsharing",
     "options": {}
   }
