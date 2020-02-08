@@ -1,7 +1,7 @@
 {
   "entityName": "markets",
   "collectionName": "markets",
-  "apiKey": "slug",
+  "apiKey": "symbol",
   "permissions": {
     "get": "anyone",
     "create": "admin",
@@ -9,7 +9,7 @@
     "delete": "admin"
   },
   "attributes": {
-    "slug": {
+    "symbol": {
       "type": "string",
       "required": true,
       "unique": true
@@ -47,7 +47,7 @@
   "indexes": [
     {
       "keys": {
-        "slug": "text",
+        "symbol": "text",
         "name": "text"
       }
     }
