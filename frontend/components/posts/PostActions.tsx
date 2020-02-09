@@ -8,6 +8,7 @@ import Link from 'next/link'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete'
+import CommentIcon from '@material-ui/icons/Comment'
 
 interface Props {
   post: Post
@@ -42,7 +43,7 @@ export const PostActions = (props: Props) => {
 
   return (
     <CardActions>
-      <Button size="small">
+      <Button size="small" startIcon={<CommentIcon/>}>
         {post.numberOfComments} comments
       </Button>
       {/*<Button size="small" onClick={handleShareClick}>

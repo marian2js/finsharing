@@ -126,7 +126,7 @@ function PostPage (props: Props) {
           {
             authUserId ?
               <CommentForm post={post} onCommentAdd={handleCommentAdded}/> :
-              <div>You need <Link href="/register"><a>a free account</a></Link> to comment.</div>
+              <CardContent>You need <Link href="/register"><a>a free account</a></Link> to comment.</CardContent>
           }
         </Card>
       </Box>
