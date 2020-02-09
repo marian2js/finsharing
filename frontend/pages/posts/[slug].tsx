@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Post } from '../../src/types/Post'
 import { Comment } from '../../src/types/Comment'
-import { Box, Card, CardContent, CircularProgress, Divider, Grid, makeStyles, Typography } from '@material-ui/core'
+import { Box, Card, CardContent, CircularProgress, Divider, Grid, Typography } from '@material-ui/core'
 import { Layout } from '../../components/PageLayout/Layout'
 import { MarkdownContent } from '../../components/MarkdownContent'
 import { CommentForm } from '../../components/comments/CommentForm'
@@ -17,16 +17,7 @@ import { PostVotes } from '../../components/posts/PostVotes'
 import { PostActions } from '../../components/posts/PostActions'
 import { CommentList } from '../../components/comments/CommentList'
 import { PostHeader } from '../../components/posts/PostHeader'
-
-const useStyles = makeStyles(theme => ({
-  marketLink: {
-    textDecoration: 'none',
-    color: theme.palette.text.primary,
-    '&:hover': {
-      textDecoration: 'underline'
-    }
-  }
-}))
+import { getImage, getPlainText } from '../../src/utils/markdown'
 
 interface Props {
   slug: string
@@ -51,7 +42,6 @@ const POST_QUERY = gql`
 `
 
 function PostPage (props: Props) {
-  const classes = useStyles()
   const { loading, error, data } = useQuery(
     POST_QUERY,
     {
@@ -81,19 +71,35 @@ function PostPage (props: Props) {
     setLastCommentAddedId(comment.id)
   }
 
+  const postFullUrl = `https://finsharing.com/posts/${post.slug}`
+  const postImage = getImage(post.body, 'large')
+  const postDescription = getPlainText(post.body)
+  let shortDescription = postDescription.slice(0, 300).trim()
+  if (postDescription.length > shortDescription.length) {
+    shortDescription += '...'
+  }
+
   return (
     <Layout>
       <Head>
         <title>{post.title} - FinSharing.com</title>
+        <meta name="description" content={shortDescription}/>
+        <meta property="og:title" content={post.title}/>
+        <meta property="og:url" content={postFullUrl}/>
+        <meta name="twitter:title" content={post.title}/>
+        <meta name="twitter:description" content={shortDescription}/>
+        <link rel="canonical" href={postFullUrl}/>
+        {
+          postImage && (
+            <>
+              <meta property="og:image" content={postImage}/>
+              <meta name="twitter:image" content={postImage}/>
+            </>
+          )
+        }
       </Head>
 
       <Card>
-        {/*<CardMedia
-                component="img"
-                alt="Contemplative Reptile"
-                height="140"
-                image="/static/images/cards/contemplative-reptile.jpg"
-                title="Contemplative Reptile"/>*/}
         <Grid container>
           <Grid item xs={2} sm={1}>
             <PostVotes post={post}/>
