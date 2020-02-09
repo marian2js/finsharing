@@ -52,6 +52,7 @@ function RegisterPage () {
 
     try {
       await new UserService().register({ email, username, password })
+      await new UserService().login({ username, password })
       await Router.push('/')
     } catch (e) {
       setMessage({ text: e.message, severity: 'error' })
