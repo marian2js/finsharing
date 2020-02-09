@@ -53,7 +53,12 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     contentPadding: {
       padding: theme.spacing(3),
-    }
+    },
+    siteNameLink: {
+      '&:hover': {
+        textDecoration: 'none'
+      }
+    },
   }),
 )
 
@@ -183,11 +188,13 @@ export function Layout (props: Props) {
             className={classes.menuButton}>
             <MenuIcon/>
           </IconButton>
-          <Link href="/">
-            <Typography variant="h6" noWrap className={classes.title}>
-              FinSharing.com 📈
-            </Typography>
-          </Link>
+          <Typography variant="h6" noWrap className={classes.title}>
+            <Link href="/">
+              <a className={classes.siteNameLink}>
+                FinSharing.com 📈
+              </a>
+            </Link>
+          </Typography>
 
           {
             viewerLoggedIn ? getUserMenu() : getGuestMenu()
