@@ -10,7 +10,6 @@ import Container from '@material-ui/core/Container'
 import { UserService } from '../src/services/UserService'
 import { Layout } from '../components/PageLayout/Layout'
 import { MessageSnackbar } from '../components/MessageSnackbar'
-import Router from 'next/router'
 import Head from 'next/head'
 import { withApollo } from '../src/apollo'
 
@@ -53,7 +52,6 @@ function RegisterPage () {
     try {
       await new UserService().register({ email, username, password })
       await new UserService().login({ username, password })
-      await Router.push('/')
     } catch (e) {
       setMessage({ text: e.message, severity: 'error' })
     }

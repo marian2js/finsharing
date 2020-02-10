@@ -13,6 +13,10 @@ import { UserTokens } from './types/UserTokens'
 
 let globalApolloClient: ApolloClient<NormalizedCacheObject> | null = null
 
+export function refreshApolloClient () {
+  globalApolloClient = null
+}
+
 type ApolloPageContext = NextPageContext & { apolloClient: ApolloClient<NormalizedCacheObject> }
 
 interface WithApolloProps {
