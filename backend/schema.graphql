@@ -1,5 +1,3 @@
-# Generated with Commun - https://github.com/commundev/commun
-
 type Comment implements Node {
   id: ID!
   user: User!
@@ -77,6 +75,8 @@ input CreateMarketInput {
   exchange: MarketExchangeEnum
   price: Float
   numberOfPosts: Float
+  partnerId: String
+  icId: String
 }
 
 type CreateMarketPayload {
@@ -193,6 +193,8 @@ type Market implements Node {
   exchange: MarketExchangeEnum
   price: Float
   numberOfPosts: Float
+  partnerId: String
+  icId: String
   id: ID!
   createdAt: String
   updatedAt: String
@@ -227,6 +229,8 @@ input MarketFilterInput {
   exchange: MarketExchangeFilterInput
   price: MarketPriceFilterInput
   numberOfPosts: MarketNumberOfPostsFilterInput
+  partnerId: MarketPartnerIdFilterInput
+  icId: MarketIcIdFilterInput
   id: MarketIdFilterInput
   createdAt: MarketCreatedAtFilterInput
   updatedAt: MarketUpdatedAtFilterInput
@@ -235,6 +239,11 @@ input MarketFilterInput {
 }
 
 input MarketFullNameFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input MarketIcIdFilterInput {
   value: String!
   comparator: FilterComparatorSymbol
 }
@@ -268,9 +277,16 @@ input MarketOrderByInput {
   exchange: OrderByDirection
   price: OrderByDirection
   numberOfPosts: OrderByDirection
+  partnerId: OrderByDirection
+  icId: OrderByDirection
   id: OrderByDirection
   createdAt: OrderByDirection
   updatedAt: OrderByDirection
+}
+
+input MarketPartnerIdFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
 }
 
 input MarketPriceFilterInput {
@@ -504,6 +520,8 @@ input UpdateMarketInput {
   exchange: MarketExchangeEnum
   price: Float
   numberOfPosts: Float
+  partnerId: String
+  icId: String
 }
 
 type UpdateMarketPayload {

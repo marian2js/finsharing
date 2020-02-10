@@ -42,6 +42,12 @@
     "numberOfPosts": {
       "type": "number",
       "default": 0
+    },
+    "partnerId": {
+      "type": "string"
+    },
+    "icId": {
+      "type": "string"
     }
   },
   "indexes": [
