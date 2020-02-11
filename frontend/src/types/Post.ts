@@ -1,17 +1,15 @@
+import { Market } from './Market'
+import { User } from './User'
+
 export type Post = {
   id: string
-  user: {
-    id: string
-    username: string
-  }
+  user: User
   title: string
   slug: string
   body: string
-  market: {
-    id: string
-    symbol: string
-    name: string
-  }
+  smImageUrl: string
+  lgImageUrl: string
+  market: Market
   viewerVote: {
     id: string
     value: string

@@ -1,6 +1,15 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import { Card, CardActionArea, CardContent, CircularProgress, Grid, makeStyles, Typography } from '@material-ui/core'
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  CircularProgress,
+  Grid,
+  makeStyles,
+  Typography
+} from '@material-ui/core'
 import Link from 'next/link'
 import { useQuery } from '@apollo/react-hooks'
 import { Market } from '../../src/types/Market'
@@ -55,6 +64,17 @@ export const PostList = (props: Props) => {
           <Link key={post.slug} href="/posts/[slug]" as={`/posts/${post.slug}`}>
             <Card className={classes.card}>
               <CardActionArea component="div">
+                {
+                  post.smImageUrl && post.smImageUrl.startsWith('http') && (
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={post.smImageUrl}
+                      title={post.title}
+                    />
+                  )
+                }
+
                 <Grid container>
                   <Grid item xs={2} sm={1}>
                     <PostVotes post={post}/>
@@ -88,6 +108,7 @@ PostList.fragments = {
     fragment PostList on Post {
       title
       slug
+      smImageUrl
       ...PostHeader
       ...PostVotes
       ...PostActions

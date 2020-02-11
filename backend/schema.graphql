@@ -88,6 +88,8 @@ input CreatePostInput {
   title: String!
   body: String!
   market: ID!
+  smImageUrl: String
+  lgImageUrl: String
 }
 
 type CreatePostPayload {
@@ -375,6 +377,8 @@ type Post implements Node {
   market: Market!
   numberOfComments: Float
   votes: Float
+  smImageUrl: String
+  lgImageUrl: String
   id: ID!
   createdAt: String
   updatedAt: String
@@ -399,6 +403,8 @@ input PostFilterInput {
   market: PostMarketFilterInput
   numberOfComments: PostNumberOfCommentsFilterInput
   votes: PostVotesFilterInput
+  smImageUrl: PostSmImageUrlFilterInput
+  lgImageUrl: PostLgImageUrlFilterInput
   id: PostIdFilterInput
   createdAt: PostCreatedAtFilterInput
   updatedAt: PostUpdatedAtFilterInput
@@ -408,6 +414,11 @@ input PostFilterInput {
 
 input PostIdFilterInput {
   value: ID!
+  comparator: FilterComparatorSymbol
+}
+
+input PostLgImageUrlFilterInput {
+  value: String!
   comparator: FilterComparatorSymbol
 }
 
@@ -429,12 +440,19 @@ input PostOrderByInput {
   market: OrderByDirection
   numberOfComments: OrderByDirection
   votes: OrderByDirection
+  smImageUrl: OrderByDirection
+  lgImageUrl: OrderByDirection
   id: OrderByDirection
   createdAt: OrderByDirection
   updatedAt: OrderByDirection
 }
 
 input PostSlugFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input PostSmImageUrlFilterInput {
   value: String!
   comparator: FilterComparatorSymbol
 }
@@ -591,6 +609,8 @@ input UpdatePostInput {
   slug: String!
   title: String
   body: String
+  smImageUrl: String
+  lgImageUrl: String
 }
 
 type UpdatePostPayload {

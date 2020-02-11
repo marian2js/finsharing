@@ -17,7 +17,7 @@ import { PostVotes } from '../../components/posts/PostVotes'
 import { PostActions } from '../../components/posts/PostActions'
 import { CommentList } from '../../components/comments/CommentList'
 import { PostHeader } from '../../components/posts/PostHeader'
-import { getImage, getPlainText } from '../../src/utils/markdown'
+import { getPlainText } from '../../src/utils/markdown'
 
 interface Props {
   slug: string
@@ -31,6 +31,7 @@ const POST_QUERY = gql`
       title
       slug
       body
+      lgImageUrl
       ...PostVotes
       ...PostActions
       ...PostHeader
@@ -72,7 +73,6 @@ function PostPage (props: Props) {
   }
 
   const postFullUrl = `https://finsharing.com/posts/${post.slug}`
-  const postImage = getImage(post.body, 'large')
   const postDescription = getPlainText(post.body)
   let shortDescription = postDescription.slice(0, 300).trim()
   if (postDescription.length > shortDescription.length) {
@@ -90,10 +90,10 @@ function PostPage (props: Props) {
         <meta name="twitter:description" content={shortDescription}/>
         <link rel="canonical" href={postFullUrl}/>
         {
-          postImage && (
+          post.lgImageUrl && post.lgImageUrl.startsWith('http') && (
             <>
-              <meta property="og:image" content={postImage}/>
-              <meta name="twitter:image" content={postImage}/>
+              <meta property="og:image" content={post.lgImageUrl}/>
+              <meta name="twitter:image" content={post.lgImageUrl}/>
             </>
           )
         }

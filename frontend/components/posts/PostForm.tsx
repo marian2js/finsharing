@@ -6,6 +6,7 @@ import { MarketSelector } from '../markets/MarketSelector'
 import { Post } from '../../src/types/Post'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
+import { getImage } from '../../src/utils/markdown'
 
 const useStyles = makeStyles(theme => ({
   bodyField: {
@@ -27,8 +28,8 @@ interface Props {
 }
 
 const CREATE_COMMENT_MUTATION = gql`
-  mutation ($marketId: ID!, $title: String!, $body: String!) {
-    createPost (input: { market: $marketId, title: $title, body: $body }) {
+  mutation ($marketId: ID!, $title: String!, $body: String!, $smImageUrl: String, $lgImageUrl: String!) {
+    createPost (input: { market: $marketId, title: $title, body: $body, smImageUrl: $smImageUrl, lgImageUrl: $lgImageUrl }) {
       post {
         slug
       }
@@ -37,8 +38,8 @@ const CREATE_COMMENT_MUTATION = gql`
 `
 
 const UPDATE_COMMENT_MUTATION = gql`
-  mutation ($slug: String!, $title: String!, $body: String!) {
-    updatePost (input: { slug: $slug, title: $title, body: $body }) {
+  mutation ($slug: String!, $title: String!, $body: String!, $smImageUrl: String, $lgImageUrl: String!) {
+    updatePost (input: { slug: $slug, title: $title, body: $body, smImageUrl: $smImageUrl, lgImageUrl: $lgImageUrl }) {
       post {
         slug
       }
@@ -65,7 +66,9 @@ export const PostForm = (props: Props) => {
           variables: {
             slug: props.post.slug,
             title,
-            body
+            body,
+            smImageUrl: getImage(body, 'small') || undefined,
+            lgImageUrl: getImage(body, 'large') || undefined,
           }
         })
         postSlug = res.data.updatePost.post.slug
@@ -74,7 +77,9 @@ export const PostForm = (props: Props) => {
           variables: {
             marketId: market,
             title,
-            body
+            body,
+            smImageUrl: getImage(body, 'small') || undefined,
+            lgImageUrl: getImage(body, 'large') || undefined,
           }
         })
         postSlug = res.data.createPost.post.slug

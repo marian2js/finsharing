@@ -66,6 +66,12 @@
         "create": "system",
         "update": "system"
       }
+    },
+    "smImageUrl": {
+      "type": "string"
+    },
+    "lgImageUrl": {
+      "type": "string"
     }
   },
   "hooks": {

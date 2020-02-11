@@ -23,14 +23,14 @@ describe('Markdown Utils', () => {
 
     it('should return the image from a YouTube video', async () => {
       expect(getImage('`youtube:J2U9Hmmpqhc`'))
-        .toBe('http://i3.ytimg.com/vi/J2U9Hmmpqhc/maxresdefault.jpg')
+        .toBe('https://i3.ytimg.com/vi/J2U9Hmmpqhc/maxresdefault.jpg')
       expect(getImage('![image](http://example.org/image.jpg) `youtube:J2U9Hmmpqhc`'))
-        .toBe('http://i3.ytimg.com/vi/J2U9Hmmpqhc/maxresdefault.jpg')
+        .toBe('https://i3.ytimg.com/vi/J2U9Hmmpqhc/maxresdefault.jpg')
     })
 
     it('should return a small image from a video from youtube', async () => {
       expect(getImage('`youtube:J2U9Hmmpqhc`', 'small'))
-        .toBe('http://i3.ytimg.com/vi/J2U9Hmmpqhc/hqdefault.jpg')
+        .toBe('https://i3.ytimg.com/vi/J2U9Hmmpqhc/hqdefault.jpg')
     })
 
     it('should return null if there are no images', async () => {
