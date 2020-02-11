@@ -1,3 +1,4 @@
+"""A single Comment."""
 type Comment implements Node {
   id: ID!
   user: User!
@@ -155,6 +156,7 @@ type DeleteUserPayload {
   result: Boolean!
 }
 
+"""Specify how 2 values are going to be compared."""
 enum FilterComparatorSymbol {
   EQUAL
   NOT_EQUAL
@@ -184,6 +186,7 @@ type ListUserPayload {
   nodes: [User]!
 }
 
+"""A single Market."""
 type Market implements Node {
   symbol: String!
   name: String!
@@ -304,33 +307,66 @@ input MarketUpdatedAtFilterInput {
   comparator: FilterComparatorSymbol
 }
 
+"""The root query for implementing GraphQL mutations."""
 type Mutation {
+  """Create a User."""
   createUser(input: CreateUserInput): CreateUserPayload
+
+  """Update a User."""
   updateUser(input: UpdateUserInput): UpdateUserPayload
+
+  """Delete a User."""
   deleteUser(input: DeleteUserInput): DeleteUserPayload
+
+  """Create a Comment."""
   createComment(input: CreateCommentInput): CreateCommentPayload
+
+  """Update a Comment."""
   updateComment(input: UpdateCommentInput): UpdateCommentPayload
+
+  """Delete a Comment."""
   deleteComment(input: DeleteCommentInput): DeleteCommentPayload
+
+  """Create a Market."""
   createMarket(input: CreateMarketInput): CreateMarketPayload
+
+  """Update a Market."""
   updateMarket(input: UpdateMarketInput): UpdateMarketPayload
+
+  """Delete a Market."""
   deleteMarket(input: DeleteMarketInput): DeleteMarketPayload
+
+  """Create a PostVote."""
   createPostVote(input: CreatePostVoteInput): CreatePostVotePayload
+
+  """Update a PostVote."""
   updatePostVote(input: UpdatePostVoteInput): UpdatePostVotePayload
+
+  """Delete a PostVote."""
   deletePostVote(input: DeletePostVoteInput): DeletePostVotePayload
+
+  """Create a Post."""
   createPost(input: CreatePostInput): CreatePostPayload
+
+  """Update a Post."""
   updatePost(input: UpdatePostInput): UpdatePostPayload
+
+  """Delete a Post."""
   deletePost(input: DeletePostInput): DeletePostPayload
 }
 
+"""An object with an ID."""
 interface Node {
   id: ID!
 }
 
+"""Specify the direction on which the items are going to be returned."""
 enum OrderByDirection {
   DESC
   ASC
 }
 
+"""A single Post."""
 type Post implements Node {
   slug: String!
   user: User!
@@ -418,6 +454,7 @@ input PostUserFilterInput {
   comparator: FilterComparatorSymbol
 }
 
+"""A single PostVote."""
 type PostVote implements Node {
   id: ID!
   user: User!
@@ -487,17 +524,39 @@ input PostVoteValueFilterInput {
   comparator: FilterComparatorSymbol
 }
 
+"""The query root of the GraphQL interface."""
 type Query {
+  """Find Users."""
   users(first: Int, filter: UserFilterInput, orderBy: [UserOrderByInput]): ListUserPayload
+
+  """Find a User by username."""
   user(username: String!): User!
+
+  """The currently authenticated user."""
   viewer: User!
+
+  """Find Comments."""
   comments(first: Int, filter: CommentFilterInput, orderBy: [CommentOrderByInput]): ListCommentPayload
+
+  """Find a Comment by id."""
   comment(id: String!): Comment!
+
+  """Find Markets."""
   markets(first: Int, filter: MarketFilterInput, orderBy: [MarketOrderByInput], search: String): ListMarketPayload
+
+  """Find a Market by symbol."""
   market(symbol: String!): Market!
+
+  """Find PostVotes."""
   postVotes(first: Int, filter: PostVoteFilterInput, orderBy: [PostVoteOrderByInput]): ListPostVotePayload
+
+  """Find a PostVote by id."""
   postVote(id: String!): PostVote!
+
+  """Find Posts."""
   posts(first: Int, filter: PostFilterInput, orderBy: [PostOrderByInput]): ListPostPayload
+
+  """Find a Post by slug."""
   post(slug: String!): Post!
 }
 
@@ -559,6 +618,7 @@ type UpdateUserPayload {
   user: User
 }
 
+"""A single User."""
 type User implements Node {
   username: String!
   id: ID!
