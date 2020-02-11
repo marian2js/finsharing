@@ -12,10 +12,13 @@ import { Layout } from '../components/PageLayout/Layout'
 import { MessageSnackbar } from '../components/MessageSnackbar'
 import Head from 'next/head'
 import { withApollo } from '../src/apollo'
+import { SocialAuth } from '../components/users/SocialAuth'
+import { Box } from '@material-ui/core'
+import { AcceptTermsCheckbox } from '../components/users/AcceptTermsCheckbox'
 
 const useStyles = makeStyles(theme => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(5),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -39,6 +42,7 @@ function RegisterPage () {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [confirmPassword, setConfirmPassword] = useState<string>('')
+  const [acceptTerms, setAcceptTerms] = useState<boolean>(false)
   const [message, setMessage] = useState()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -46,6 +50,14 @@ function RegisterPage () {
 
     if (password !== confirmPassword) {
       setMessage({ text: 'Passwords do not match', severity: 'error' })
+      return
+    }
+
+    if (!acceptTerms) {
+      setMessage({
+        text: 'You need to accept the terms and conditions and privacy policy to continue',
+        severity: 'error'
+      })
       return
     }
 
@@ -74,6 +86,8 @@ function RegisterPage () {
           </Typography>
 
           <form className={classes.form} onSubmit={handleSubmit}>
+            <SocialAuth/>
+
             <TextField
               onChange={e => setEmail(e.target.value)}
               variant="outlined"
@@ -119,6 +133,10 @@ function RegisterPage () {
               type="password"
               id="confirmPassword"
               autoComplete="new-password"/>
+
+            <Box mt={2}>
+              <AcceptTermsCheckbox onChange={() => setAcceptTerms(!acceptTerms)}/>
+            </Box>
 
             <Button
               type="submit"

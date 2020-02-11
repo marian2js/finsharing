@@ -5,5 +5,17 @@
   },
   "refreshToken": {
     "enabled": true
+  },
+  "externalAuth": {
+    "callbackUrl": "https://finsharing.com/complete-auth",
+    "autoGenerateUsername": false,
+    "providers": {
+      "google": {
+        "enabled": true
+      },
+      "facebook": {
+        "enabled": true
+      }
+    }
   }
 }

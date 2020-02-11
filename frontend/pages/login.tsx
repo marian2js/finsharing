@@ -15,10 +15,11 @@ import Head from 'next/head'
 import { withApollo } from '../src/apollo'
 import Link from 'next/link'
 import { Box } from '@material-ui/core'
+import { SocialAuth } from '../components/users/SocialAuth'
 
 const useStyles = makeStyles(theme => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(5),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -69,6 +70,8 @@ function LoginPage () {
           </Typography>
 
           <form className={classes.form} onSubmit={handleSubmit}>
+            <SocialAuth/>
+
             <TextField
               onChange={e => setUsername(e.target.value)}
               variant="outlined"
