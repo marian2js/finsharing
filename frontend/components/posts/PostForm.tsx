@@ -28,7 +28,7 @@ interface Props {
 }
 
 const CREATE_COMMENT_MUTATION = gql`
-  mutation ($marketId: ID!, $title: String!, $body: String!, $smImageUrl: String, $lgImageUrl: String!) {
+  mutation ($marketId: ID!, $title: String!, $body: String!, $smImageUrl: String, $lgImageUrl: String) {
     createPost (input: { market: $marketId, title: $title, body: $body, smImageUrl: $smImageUrl, lgImageUrl: $lgImageUrl }) {
       post {
         slug
@@ -38,7 +38,7 @@ const CREATE_COMMENT_MUTATION = gql`
 `
 
 const UPDATE_COMMENT_MUTATION = gql`
-  mutation ($slug: String!, $title: String!, $body: String!, $smImageUrl: String, $lgImageUrl: String!) {
+  mutation ($slug: String!, $title: String!, $body: String!, $smImageUrl: String, $lgImageUrl: String) {
     updatePost (input: { slug: $slug, title: $title, body: $body, smImageUrl: $smImageUrl, lgImageUrl: $lgImageUrl }) {
       post {
         slug
