@@ -69,7 +69,7 @@ function EditPostPage (props: Props) {
 }
 
 EditPostPage.getInitialProps = async (ctx: NextPageContext): Promise<Props> => ({
-  slug: Array.isArray(ctx.query.slug) ? ctx.query.slug[0] : ctx.query.slug
+  slug: (Array.isArray(ctx.query.slug) ? ctx.query.slug[0] : ctx.query.slug).toLowerCase()
 })
 
 export default withApollo(EditPostPage)

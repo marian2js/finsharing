@@ -143,7 +143,7 @@ function PostPage (props: Props) {
 }
 
 PostPage.getInitialProps = async (ctx: NextPageContext): Promise<Props> => {
-  const slug = Array.isArray(ctx.query.slug) ? ctx.query.slug[0] : ctx.query.slug
+  const slug = (Array.isArray(ctx.query.slug) ? ctx.query.slug[0] : ctx.query.slug).toLowerCase()
   return {
     authUserId: new UserService(ctx).getViewer()?.id,
     slug,

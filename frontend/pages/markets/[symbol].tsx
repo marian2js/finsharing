@@ -66,7 +66,7 @@ function MarketPage (props: Props) {
 }
 
 MarketPage.getInitialProps = async (ctx: NextPageContext): Promise<Props> => ({
-  symbol: Array.isArray(ctx.query.symbol) ? ctx.query.symbol[0] : ctx.query.symbol
+  symbol: (Array.isArray(ctx.query.symbol) ? ctx.query.symbol[0] : ctx.query.symbol).toUpperCase()
 })
 
 export default withApollo(MarketPage)
