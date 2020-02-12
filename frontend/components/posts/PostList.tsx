@@ -17,6 +17,7 @@ import { PostVotes } from './PostVotes'
 import { PostActions } from './PostActions'
 import { Post } from '../../src/types/Post'
 import { PostHeader } from './PostHeader'
+import { parseUrl } from '../../src/utils/string'
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -60,44 +61,48 @@ export const PostList = (props: Props) => {
   return (
     <>
       {
-        posts.map(post => (
-          <Link key={post.slug} href="/posts/[slug]" as={`/posts/${post.slug}`}>
-            <Card className={classes.card}>
-              <CardActionArea component="div">
-                {
-                  post.smImageUrl && post.smImageUrl.startsWith('http') && (
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image={post.smImageUrl}
-                      title={post.title}
-                    />
-                  )
-                }
+        posts.map(post => {
+          const imageUrl = post.smImageUrl && parseUrl(post.smImageUrl)
 
-                <Grid container>
-                  <Grid item xs={2} sm={1}>
-                    <PostVotes post={post}/>
-                  </Grid>
-                  <Grid item xs={10} sm={11}>
-                    <CardContent>
-                      <PostHeader post={post}/>
+          return (
+            <Link key={post.slug} href="/posts/[slug]" as={`/posts/${post.slug}`}>
+              <Card className={classes.card}>
+                <CardActionArea component="div">
+                  {
+                    imageUrl && (
+                      <CardMedia
+                        component="img"
+                        height="140"
+                        image={imageUrl}
+                        title={post.title}
+                      />
+                    )
+                  }
 
-                      <Link key={post.slug} href="/posts/[slug]" as={`/posts/${post.slug}`}>
-                        <a className={classes.titleLink}>
-                          <Typography gutterBottom variant="h5" component="h2">
-                            {post.title}
-                          </Typography>
-                        </a>
-                      </Link>
-                    </CardContent>
-                    <PostActions post={post}/>
+                  <Grid container>
+                    <Grid item xs={2} sm={1}>
+                      <PostVotes post={post}/>
+                    </Grid>
+                    <Grid item xs={10} sm={11}>
+                      <CardContent>
+                        <PostHeader post={post}/>
+
+                        <Link key={post.slug} href="/posts/[slug]" as={`/posts/${post.slug}`}>
+                          <a className={classes.titleLink}>
+                            <Typography gutterBottom variant="h5" component="h2">
+                              {post.title}
+                            </Typography>
+                          </a>
+                        </Link>
+                      </CardContent>
+                      <PostActions post={post}/>
+                    </Grid>
                   </Grid>
-                </Grid>
-              </CardActionArea>
-            </Card>
-          </Link>
-        ))
+                </CardActionArea>
+              </Card>
+            </Link>
+          )
+        })
       }
     </>
   )

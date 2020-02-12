@@ -4,6 +4,7 @@ import ReactMarkdown, { MarkdownAbstractSyntaxTree } from 'react-markdown'
 import TweetEmbed from 'react-tweet-embed'
 import { makeStyles } from '@material-ui/core'
 import { Youtube } from './YouTube'
+import { LinkCard } from './LinkCard'
 
 const useStyles = makeStyles({
   markdown: {
@@ -30,7 +31,8 @@ export const MarkdownContent = (props: Props) => {
                    source={content}
                    linkTarget={(url) => url.startsWith('http') ? '_blank' : '_self'}
                    renderers={{
-                     inlineCode: InlineCode
+                     inlineCode: InlineCode,
+                     code: CodeBlock,
                    }}/>
   )
 }
@@ -72,4 +74,23 @@ function InlineCode (props: MarkdownAbstractSyntaxTree) {
   }
 
   return createElement('code', props, props.children)
+}
+
+function CodeBlock (props: { language: string, value: string }) {
+  if (props.language.trim() === 'card') {
+    const lines = props.value.split('\n').map(line => line.trim())
+    const titleLine = lines.find(line => line.toLowerCase().startsWith('title='))
+    const imageLine = lines.find(line => line.toLowerCase().startsWith('image='))
+    const linkLine = lines.find(line => line.toLowerCase().startsWith('link='))
+    const title = titleLine?.split('=').slice(1).join('=')
+    const image = imageLine?.split('=').slice(1).join('=')
+    const link = linkLine?.split('=').slice(1).join('=')
+    if (title || image || link) {
+      return <LinkCard title={title} image={image} link={link}/>
+    }
+  }
+
+  const className = props.language && `language-${props.language}`
+  const code = createElement('code', className ? { className: className } : null, props.value)
+  return createElement('pre', props, code)
 }
