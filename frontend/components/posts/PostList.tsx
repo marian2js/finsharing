@@ -8,7 +8,8 @@ import {
   CircularProgress,
   Grid,
   makeStyles,
-  Typography
+  Typography,
+  useMediaQuery
 } from '@material-ui/core'
 import Link from 'next/link'
 import { useQuery } from '@apollo/react-hooks'
@@ -18,14 +19,27 @@ import { PostActions } from './PostActions'
 import { Post } from '../../src/types/Post'
 import { PostHeader } from './PostHeader'
 import { parseUrl } from '../../src/utils/string'
+import theme from '../../src/theme'
 
 const useStyles = makeStyles(theme => ({
   card: {
+    display: 'flex',
     marginBottom: theme.spacing(2)
   },
   titleLink: {
     textDecoration: 'none',
     color: theme.palette.text.primary,
+  },
+  details: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  content: {
+    flex: '1 0 auto',
+  },
+  imageRight: {
+    width: 150,
   },
 }))
 
@@ -48,6 +62,9 @@ export const PostList = (props: Props) => {
     }
   )
 
+  // xs screens show the image at the top of the card, larger screens do it at the right
+  const showImageOnTop = useMediaQuery(theme.breakpoints.down('xs'))
+
   if (error) {
     return <div>Unknown error rendering the list of posts</div>
   }
@@ -67,38 +84,49 @@ export const PostList = (props: Props) => {
           return (
             <Link key={post.slug} href="/posts/[slug]" as={`/posts/${post.slug}`}>
               <Card className={classes.card}>
-                <CardActionArea component="div">
-                  {
-                    imageUrl && (
-                      <CardMedia
-                        component="img"
-                        height="140"
-                        image={imageUrl}
-                        title={post.title}
-                      />
-                    )
-                  }
+                <div className={classes.details}>
+                  <CardActionArea component="div">
+                    {
+                      showImageOnTop && imageUrl && (
+                        <CardMedia
+                          component="img"
+                          height="140"
+                          image={imageUrl}
+                          title={post.title}
+                        />
+                      )
+                    }
 
-                  <Grid container>
-                    <Grid item xs={2} sm={1}>
-                      <PostVotes post={post}/>
-                    </Grid>
-                    <Grid item xs={10} sm={11}>
-                      <CardContent>
-                        <PostHeader post={post}/>
+                    <Grid container>
+                      <Grid item xs={2} sm={1}>
+                        <PostVotes post={post}/>
+                      </Grid>
+                      <Grid item xs={10} sm={11}>
+                        <CardContent className={classes.content}>
+                          <PostHeader post={post}/>
 
-                        <Link key={post.slug} href="/posts/[slug]" as={`/posts/${post.slug}`}>
-                          <a className={classes.titleLink}>
-                            <Typography gutterBottom variant="h5" component="h2">
-                              {post.title}
-                            </Typography>
-                          </a>
-                        </Link>
-                      </CardContent>
-                      <PostActions post={post}/>
+                          <Link key={post.slug} href="/posts/[slug]" as={`/posts/${post.slug}`}>
+                            <a className={classes.titleLink}>
+                              <Typography gutterBottom variant="h5" component="h2">
+                                {post.title}
+                              </Typography>
+                            </a>
+                          </Link>
+                        </CardContent>
+                        <PostActions post={post}/>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </CardActionArea>
+                  </CardActionArea>
+                </div>
+                {
+                  !showImageOnTop && imageUrl && (
+                    <CardMedia
+                      className={classes.imageRight}
+                      image={imageUrl}
+                      title={post.title}
+                    />
+                  )
+                }
               </Card>
             </Link>
           )
