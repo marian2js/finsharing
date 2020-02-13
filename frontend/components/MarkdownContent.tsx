@@ -39,15 +39,15 @@ export const MarkdownContent = (props: Props) => {
 
 function InlineCode (props: MarkdownAbstractSyntaxTree) {
   if (props.value) {
-    if (props.value.startsWith('youtube:')) {
+    if (props.value.toLowerCase().startsWith('youtube:')) {
       const youtubeId = props.value.split(':')[1].trim()
       return <Youtube id={youtubeId}/>
     }
-    if (props.value.startsWith('twitter:')) {
+    if (props.value.toLowerCase().startsWith('twitter:')) {
       const twitterId = props.value.split(':')[1].trim()
       return <TweetEmbed id={twitterId}/>
     }
-    if (props.value.startsWith('facebook:')) {
+    if (props.value.toLowerCase().startsWith('facebook:')) {
       const facebookId = encodeURIComponent(props.value.split(':')[1].trim())
       return (
         <div className="center-block text-center">
@@ -58,8 +58,8 @@ function InlineCode (props: MarkdownAbstractSyntaxTree) {
         </div>
       )
     }
-    if (props.value.startsWith('yahoofinancevideo:')) {
-      const id = props.value.split('yahoofinancevideo:')[1].trim()
+    if (props.value.toLowerCase().startsWith('yahoofinancevideo:')) {
+      const id = props.value.toLowerCase().split('yahoofinancevideo:')[1].trim()
       const url = /^https:\/\/finance.yahoo.com\/video\//.test(id) ? id : `https://finance.yahoo.com/video/${id}`
       return (
         <div style={{ position: 'relative', width: '100%', height: 0, paddingBottom: '56.25%' }}>
