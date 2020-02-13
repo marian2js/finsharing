@@ -33,6 +33,15 @@ describe('Markdown Utils', () => {
         .toBe('https://i3.ytimg.com/vi/J2U9Hmmpqhc/hqdefault.jpg')
     })
 
+    it('should return an image from a card', async () => {
+      const card = '```card\n' +
+        'title=test\n' +
+        'image=http://example.org/image.jpg\n' +
+        'link=http://example.org\n' +
+        '```'
+      expect(getImage(card)).toBe('http://example.org/image.jpg')
+    })
+
     it('should return null if there are no images', async () => {
       expect(getImage(`
         # Test markdown file containing an image

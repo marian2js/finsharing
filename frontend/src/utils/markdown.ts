@@ -5,9 +5,19 @@ export function getImage (markdown: string, size: 'small' | 'large' = 'large'): 
       `https://i3.ytimg.com/vi/${youtubeMatch[1]}/maxresdefault.jpg` :
       `https://i3.ytimg.com/vi/${youtubeMatch[1]}/hqdefault.jpg`
   }
+
   const imgMatch = markdown.match(/!\[[^\]]*]\(([^)]+)\)/)
   if (imgMatch && imgMatch.length === 2) {
     return imgMatch[1]
+  }
+
+  const cardMatch = markdown.match(/```card([^`]+)```/)
+  if (cardMatch && cardMatch.length === 2) {
+    const image = cardMatch[1].split('\n')
+      .find(line => line.toLowerCase().startsWith('image='))
+    if (image) {
+      return image.split('=').slice(1).join('=') || null
+    }
   }
   return null
 }
