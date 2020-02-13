@@ -15,6 +15,9 @@ import { withApollo } from '../src/apollo'
 import { SocialAuth } from '../components/users/SocialAuth'
 import { Box } from '@material-ui/core'
 import { AcceptTermsCheckbox } from '../components/users/AcceptTermsCheckbox'
+import gql from 'graphql-tag'
+import { useMutation } from '@apollo/react-hooks'
+import Router from 'next/router'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -44,6 +47,7 @@ function RegisterPage () {
   const [confirmPassword, setConfirmPassword] = useState<string>('')
   const [acceptTerms, setAcceptTerms] = useState<boolean>(false)
   const [message, setMessage] = useState()
+  const [createUser] = useMutation(CREATE_USER_MUTATION)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -62,8 +66,15 @@ function RegisterPage () {
     }
 
     try {
-      await new UserService().register({ email, username, password })
+      await createUser({
+        variables: {
+          email,
+          username,
+          password,
+        }
+      })
       await new UserService().login({ username, password })
+      await Router.push('/')
     } catch (e) {
       setMessage({ text: e.message, severity: 'error' })
     }
@@ -155,5 +166,15 @@ function RegisterPage () {
     </Layout>
   )
 }
+
+const CREATE_USER_MUTATION = gql`
+  mutation CreateUser ($email: String!, $username: String!, $password: String!) {
+    createUser(input: { email: $email, username: $username, password: $password }) {
+      user {
+        id
+      }
+    }
+  }
+`
 
 export default withApollo(RegisterPage)

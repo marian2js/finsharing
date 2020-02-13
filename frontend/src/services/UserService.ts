@@ -15,10 +15,6 @@ export class UserService extends ApiService {
     return null
   }
 
-  register (data: { username: string, email: string, password: string }) {
-    return this.request('POST', '/users', data)
-  }
-
   async completeSocialAuth (provider: string, data: { code: string, username?: string }) {
     const res = await this.request('POST', `/auth/${provider}/token`, data)
     this.setCookie(TOKENS_COOKIE_NAME, JSON.stringify(res.tokens))
