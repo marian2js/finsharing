@@ -89,11 +89,26 @@ export function useCompleteSocialAuthentication () {
   const mutation = gql`
     mutation completeSocialAuthentication ($provider: String!, $code: String!, $username: String) {
       completeSocialAuthentication(provider: $provider, code: $code, username: $username) {
-        result
+        user {
+          id
+          username
+        }
+        tokens {
+          accessToken
+          refreshToken
+        }
       }
     }
   `
-  return useMutation(mutation)
+  const [completeSocialAuthentication] = useMutation(mutation)
+  return [
+    async <TData, TVariables> (options?: MutationFunctionOptions<TData, TVariables>) => {
+      const res = await completeSocialAuthentication(options)
+      setCookie(null, TOKENS_COOKIE_NAME, JSON.stringify(res.data.completeSocialAuthentication.tokens), {})
+      setCookie(null, USER_COOKIE_NAME, JSON.stringify(res.data.completeSocialAuthentication.user), {})
+      refreshApolloClient()
+    }
+  ]
 }
 
 function destroyCookie (name: string) {
