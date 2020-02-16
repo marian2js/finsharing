@@ -17,12 +17,13 @@ import {
 } from '@material-ui/core'
 import { SideMenu } from './SideMenu'
 import Link from 'next/link'
-import { UserService } from '../../src/services/UserService'
+import { AuthService } from '../../src/services/AuthService'
 import { AccountCircle } from '@material-ui/icons'
 import CreateIcon from '@material-ui/icons/Create'
 import theme from '../../src/theme'
 import Router from 'next/router'
 import { User } from '../../src/types/User'
+import { useLogout } from '../../src/services/UserHooks'
 
 const drawerWidth = 240
 
@@ -75,12 +76,13 @@ export function Layout (props: Props) {
   const [viewer, setViewer] = React.useState<User | null>(null)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const [loadingRoute, setLoadingRoute] = React.useState(false)
+  const [logout] = useLogout()
 
   const smDown = useMediaQuery(theme.breakpoints.down('sm'))
 
   useEffect(() => {
-    setViewerLoggedIn(new UserService().isLoggedIn())
-    setViewer(new UserService().getViewer())
+    setViewerLoggedIn(new AuthService().isLoggedIn())
+    setViewer(new AuthService().getViewer())
     Router.events.on('routeChangeStart', () => setLoadingRoute(true))
     Router.events.on('routeChangeComplete', () => setLoadingRoute(false))
     Router.events.on('routeChangeError', () => setLoadingRoute(false))
@@ -111,7 +113,7 @@ export function Layout (props: Props) {
 
   const handleLogoutClick = async () => {
     handleUserMenuClose()
-    await new UserService().logout()
+    await logout()
     await Router.reload()
   }
 

@@ -1,3 +1,8 @@
+type AccessToken {
+  accessToken: String!
+  accessTokenExpiration: String
+}
+
 """A single Comment."""
 type Comment implements Node {
   id: ID!
@@ -11,6 +16,11 @@ type Comment implements Node {
 input CommentBodyFilterInput {
   value: String!
   comparator: FilterComparatorSymbol
+}
+
+type CommentConnection {
+  nodes: [Comment]!
+  pageInfo: PageInfo
 }
 
 input CommentCreatedAtFilterInput {
@@ -56,6 +66,11 @@ input CommentUpdatedAtFilterInput {
 input CommentUserFilterInput {
   value: ID!
   comparator: FilterComparatorSymbol
+}
+
+type CompleteSocialAuthenticationPayload {
+  tokens: Tokens
+  user: User!
 }
 
 input CreateCommentInput {
@@ -168,24 +183,13 @@ enum FilterComparatorSymbol {
   LESS_THAN_OR_EQUAL
 }
 
-type ListCommentPayload {
-  nodes: [Comment]!
+type LoginPayload {
+  tokens: Tokens
+  user: User!
 }
 
-type ListMarketPayload {
-  nodes: [Market]!
-}
-
-type ListPostPayload {
-  nodes: [Post]!
-}
-
-type ListPostVotePayload {
-  nodes: [PostVote]!
-}
-
-type ListUserPayload {
-  nodes: [User]!
+type LogoutPayload {
+  result: Boolean
 }
 
 """A single Market."""
@@ -203,6 +207,11 @@ type Market implements Node {
   id: ID!
   createdAt: String
   updatedAt: String
+}
+
+type MarketConnection {
+  nodes: [Market]!
+  pageInfo: PageInfo
 }
 
 input MarketCreatedAtFilterInput {
@@ -320,6 +329,24 @@ type Mutation {
   """Delete a User."""
   deleteUser(input: DeleteUserInput): DeleteUserPayload
 
+  """Login using username/email and password."""
+  login(username: String!, password: String!): LoginPayload
+
+  """Logout the current user."""
+  logout: LogoutPayload
+
+  """Verify an email using the verification code."""
+  verifyEmail(username: String!, code: String!): VerifyPayload
+
+  """Send an email with a link for resetting the password."""
+  sendResetPasswordEmail(username: String!): SendResetPasswordEmailPayload
+
+  """Reset a password using a verification code."""
+  resetPassword(username: String!, password: String!, code: String!): ResetPasswordPayload
+
+  """Reset a password using a verification code."""
+  completeSocialAuthentication(provider: String!, code: String!, username: String): CompleteSocialAuthenticationPayload
+
   """Create a Comment."""
   createComment(input: CreateCommentInput): CreateCommentPayload
 
@@ -368,6 +395,11 @@ enum OrderByDirection {
   ASC
 }
 
+type PageInfo {
+  startCursor: String
+  endCursor: String
+}
+
 """A single Post."""
 type Post implements Node {
   slug: String!
@@ -388,6 +420,11 @@ type Post implements Node {
 input PostBodyFilterInput {
   value: String!
   comparator: FilterComparatorSymbol
+}
+
+type PostConnection {
+  nodes: [Post]!
+  pageInfo: PageInfo
 }
 
 input PostCreatedAtFilterInput {
@@ -482,6 +519,11 @@ type PostVote implements Node {
   updatedAt: String
 }
 
+type PostVoteConnection {
+  nodes: [PostVote]!
+  pageInfo: PageInfo
+}
+
 input PostVoteCreatedAtFilterInput {
   value: String!
   comparator: FilterComparatorSymbol
@@ -545,7 +587,7 @@ input PostVoteValueFilterInput {
 """The query root of the GraphQL interface."""
 type Query {
   """Find Users."""
-  users(first: Int, filter: UserFilterInput, orderBy: [UserOrderByInput]): ListUserPayload
+  users(first: Int, last: Int, before: String, after: String, filter: UserFilterInput, orderBy: [UserOrderByInput]): UserConnection
 
   """Find a User by username."""
   user(username: String!): User!
@@ -553,29 +595,46 @@ type Query {
   """The currently authenticated user."""
   viewer: User!
 
+  """Get a new access token given a refresh token."""
+  accessToken(username: String!, refreshToken: String!): AccessToken
+
   """Find Comments."""
-  comments(first: Int, filter: CommentFilterInput, orderBy: [CommentOrderByInput]): ListCommentPayload
+  comments(first: Int, last: Int, before: String, after: String, filter: CommentFilterInput, orderBy: [CommentOrderByInput]): CommentConnection
 
   """Find a Comment by id."""
   comment(id: String!): Comment!
 
   """Find Markets."""
-  markets(first: Int, filter: MarketFilterInput, orderBy: [MarketOrderByInput], search: String): ListMarketPayload
+  markets(first: Int, last: Int, before: String, after: String, filter: MarketFilterInput, orderBy: [MarketOrderByInput], search: String): MarketConnection
 
   """Find a Market by symbol."""
   market(symbol: String!): Market!
 
   """Find PostVotes."""
-  postVotes(first: Int, filter: PostVoteFilterInput, orderBy: [PostVoteOrderByInput]): ListPostVotePayload
+  postVotes(first: Int, last: Int, before: String, after: String, filter: PostVoteFilterInput, orderBy: [PostVoteOrderByInput]): PostVoteConnection
 
   """Find a PostVote by id."""
   postVote(id: String!): PostVote!
 
   """Find Posts."""
-  posts(first: Int, filter: PostFilterInput, orderBy: [PostOrderByInput]): ListPostPayload
+  posts(first: Int, last: Int, before: String, after: String, filter: PostFilterInput, orderBy: [PostOrderByInput]): PostConnection
 
   """Find a Post by slug."""
   post(slug: String!): Post!
+}
+
+type ResetPasswordPayload {
+  result: Boolean
+}
+
+type SendResetPasswordEmailPayload {
+  result: Boolean
+}
+
+type Tokens {
+  accessToken: String!
+  accessTokenExpiration: String
+  refreshToken: String
 }
 
 input UpdateCommentInput {
@@ -658,6 +717,11 @@ input UserAdminFilterInput {
   comparator: FilterComparatorSymbol
 }
 
+type UserConnection {
+  nodes: [User]!
+  pageInfo: PageInfo
+}
+
 input UserCreatedAtFilterInput {
   value: String!
   comparator: FilterComparatorSymbol
@@ -736,4 +800,8 @@ input UserVerifiedFilterInput {
 input UserWebsiteFilterInput {
   value: String!
   comparator: FilterComparatorSymbol
+}
+
+type VerifyPayload {
+  result: Boolean
 }

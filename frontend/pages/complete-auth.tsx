@@ -3,7 +3,6 @@ import { withApollo } from '../src/apollo'
 import { Layout } from '../components/PageLayout/Layout'
 import Head from 'next/head'
 import { NextPageContext } from 'next'
-import { UserService } from '../src/services/UserService'
 import Router from 'next/router'
 import { Box, CircularProgress } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField'
@@ -14,6 +13,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import { MessageSnackbar } from '../components/MessageSnackbar'
+import { useCompleteSocialAuthentication } from '../src/services/UserHooks'
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -36,12 +36,16 @@ function CompleteAuthPage (props: Props) {
   const [username, setUsername] = useState()
   const [acceptTerms, setAcceptTerms] = useState<boolean>(false)
   const [message, setMessage] = useState()
+  const [completeSocialAuthentication] = useCompleteSocialAuthentication()
 
   useEffect(() => {
     (async () => {
       if (!props.newUser) {
-        await new UserService().completeSocialAuth(props.provider, {
-          code: props.code,
+        await completeSocialAuthentication({
+          variables: {
+            provider: props.provider,
+            code: props.code
+          }
         })
         await Router.push('/')
       }
@@ -59,9 +63,12 @@ function CompleteAuthPage (props: Props) {
       return
     }
 
-    await new UserService().completeSocialAuth(props.provider, {
-      username,
-      code: props.code,
+    await completeSocialAuthentication({
+      variables: {
+        username,
+        provider: props.provider,
+        code: props.code
+      }
     })
     await Router.push('/')
   }

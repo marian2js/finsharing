@@ -8,7 +8,7 @@ import fetch from 'isomorphic-unfetch'
 import { NormalizedCacheObject } from 'apollo-cache-inmemory/lib/types'
 import { NextPageContext } from 'next'
 import { parseCookies } from 'nookies'
-import { TOKENS_COOKIE_NAME } from './services/ApiService'
+import { TOKENS_COOKIE_NAME } from './services/AuthService'
 import { UserTokens } from './types/UserTokens'
 
 let globalApolloClient: ApolloClient<NormalizedCacheObject> | null = null

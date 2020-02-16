@@ -9,13 +9,13 @@ import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import { MessageSnackbar } from '../components/MessageSnackbar'
 import { Layout } from '../components/PageLayout/Layout'
-import { UserService } from '../src/services/UserService'
 import Router from 'next/router'
 import Head from 'next/head'
 import { withApollo } from '../src/apollo'
 import Link from 'next/link'
 import { Box } from '@material-ui/core'
 import { SocialAuth } from '../components/users/SocialAuth'
+import { useLogin } from '../src/services/UserHooks'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -42,11 +42,14 @@ function LoginPage () {
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [message, setMessage] = useState()
+  const [login] = useLogin()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
-      await new UserService().login({ username, password })
+      await login({
+        variables: { username, password }
+      })
       await Router.push('/')
     } catch (e) {
       setMessage({ text: e.message, severity: 'error' })

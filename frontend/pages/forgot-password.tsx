@@ -5,8 +5,8 @@ import Head from 'next/head'
 import TextField from '@material-ui/core/TextField'
 import { Button, Card, CardContent, Grid, makeStyles } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
-import { UserService } from '../src/services/UserService'
 import { MessageSnackbar } from '../components/MessageSnackbar'
+import { useSendResetPasswordEmail } from '../src/services/UserHooks'
 
 const useStyles = makeStyles(theme => ({
   submitButton: {
@@ -19,11 +19,14 @@ const ForgotPasswordPage = () => {
   const classes = useStyles()
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState()
+  const [sendResetPasswordEmail] = useSendResetPasswordEmail()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
-      await new UserService().sendForgotPassword({ username: email })
+      await sendResetPasswordEmail({
+        variables: { username: email }
+      })
       setMessage({ text: 'Reset password email sent', severity: 'success' })
     } catch (e) {
       setMessage({ text: e.message, severity: 'error' })

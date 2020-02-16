@@ -4,9 +4,10 @@ import { Layout } from '../components/PageLayout/Layout'
 import Head from 'next/head'
 import { Button, Card, CardContent, Grid, makeStyles } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField'
-import { UserService } from '../src/services/UserService'
 import { NextPageContext } from 'next'
 import Router from 'next/router'
+import { useLogin, useResetPassword } from '../src/services/UserHooks'
+import { MessageSnackbar } from '../components/MessageSnackbar'
 
 const useStyles = makeStyles(theme => ({
   submitButton: {
@@ -26,6 +27,8 @@ const ResetPasswordPage = (props: Props) => {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [message, setMessage] = useState()
+  const [login] = useLogin()
+  const [resetPassword] = useResetPassword()
 
   const formValid = () => {
     return password && password === confirmPassword
@@ -38,13 +41,16 @@ const ResetPasswordPage = (props: Props) => {
     }
 
     try {
-      const userService = new UserService()
-      await userService.resetPassword({
-        password,
-        username,
-        code,
+      await resetPassword({
+        variables: {
+          password,
+          username,
+          code,
+        }
       })
-      await userService.login({ username, password })
+      await login({
+        variables: { username, password }
+      })
       setMessage({ text: 'Password successfully changed', severity: 'success' })
       await Router.push('/')
     } catch (e) {
@@ -99,6 +105,8 @@ const ResetPasswordPage = (props: Props) => {
           </form>
         </CardContent>
       </Card>
+
+      <MessageSnackbar message={message}/>
     </Layout>
   )
 }

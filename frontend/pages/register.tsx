@@ -7,7 +7,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-import { UserService } from '../src/services/UserService'
 import { Layout } from '../components/PageLayout/Layout'
 import { MessageSnackbar } from '../components/MessageSnackbar'
 import Head from 'next/head'
@@ -18,6 +17,7 @@ import { AcceptTermsCheckbox } from '../components/users/AcceptTermsCheckbox'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 import Router from 'next/router'
+import { useLogin } from '../src/services/UserHooks'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -48,6 +48,7 @@ function RegisterPage () {
   const [acceptTerms, setAcceptTerms] = useState<boolean>(false)
   const [message, setMessage] = useState()
   const [createUser] = useMutation(CREATE_USER_MUTATION)
+  const [login] = useLogin()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -73,7 +74,9 @@ function RegisterPage () {
           password,
         }
       })
-      await new UserService().login({ username, password })
+      await login({
+        variables: { username, password }
+      })
       await Router.push('/')
     } catch (e) {
       setMessage({ text: e.message, severity: 'error' })

@@ -12,7 +12,7 @@ import { withApollo } from '../../src/apollo'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import { NextPageContext } from 'next'
-import { UserService } from '../../src/services/UserService'
+import { AuthService } from '../../src/services/AuthService'
 import { PostVotes } from '../../components/posts/PostVotes'
 import { PostActions } from '../../components/posts/PostActions'
 import { CommentList } from '../../components/comments/CommentList'
@@ -147,7 +147,7 @@ function PostPage (props: Props) {
 PostPage.getInitialProps = async (ctx: NextPageContext): Promise<Props> => {
   const slug = (Array.isArray(ctx.query.slug) ? ctx.query.slug[0] : ctx.query.slug).toLowerCase()
   return {
-    authUserId: new UserService(ctx).getViewer()?.id,
+    authUserId: new AuthService(ctx).getViewer()?.id,
     slug,
   }
 }

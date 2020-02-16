@@ -3,9 +3,9 @@ import { withApollo } from '../src/apollo'
 import Head from 'next/head'
 import { CircularProgress } from '@material-ui/core'
 import { NextPageContext } from 'next'
-import { UserService } from '../src/services/UserService'
 import Router from 'next/router'
 import { Layout } from '../components/PageLayout/Layout'
+import { useVerifyEmail } from '../src/services/UserHooks'
 
 interface Props {
   username: string
@@ -14,12 +14,15 @@ interface Props {
 
 const CompleteSignUpPage = (props: Props) => {
   const { username, code } = props
+  const [verifyEmail] = useVerifyEmail()
 
   useEffect(() => {
     (async () => {
-      await new UserService().verify({
-        username,
-        code,
+      await verifyEmail({
+        variables: {
+          username,
+          code,
+        }
       })
       await Router.push('/')
     })()
