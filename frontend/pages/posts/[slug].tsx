@@ -104,7 +104,7 @@ function PostPage (props: Props) {
       <Card>
         <Grid container>
           <Grid item xs={2} sm={1}>
-            <PostVotes post={post}/>
+            <PostVotes post={post} userId={authUserId}/>
           </Grid>
           <Grid item xs={10} sm={11}>
             <CardContent>

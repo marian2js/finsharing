@@ -99,7 +99,7 @@ export const PostList = (props: Props) => {
 
                     <Grid container>
                       <Grid item xs={2} sm={1}>
-                        <PostVotes post={post}/>
+                        <PostVotes post={post} userId={userId}/>
                       </Grid>
                       <Grid item xs={10} sm={11}>
                         <CardContent className={classes.content}>
