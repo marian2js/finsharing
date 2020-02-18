@@ -16,15 +16,11 @@ const LAST_COMMENTS_QUERY = gql`
   query Comments ($postId: ID!) {
     comments (filter: { post: { value: $postId } }, orderBy: [{ createdAt: DESC }]) {
       nodes {
-        id
-        body
-        user {
-          id
-          username
-        }
+        ...CommentListItem
       }
     }
   }
+  ${CommentListItem.fragments.comment}
 `
 
 export const CommentList = (props: Props) => {

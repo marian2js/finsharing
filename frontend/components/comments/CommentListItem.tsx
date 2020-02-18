@@ -7,10 +7,18 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import { ConfirmCommentDeleteDialog } from '../posts/ConfirmCommentDeleteDialog'
 import { CommentForm } from './CommentForm'
 import { Post } from '../../src/types/Post'
+import Link from 'next/link'
+import moment from 'moment'
+import gql from 'graphql-tag'
 
 const useStyles = makeStyles(theme => ({
   commentCard: {
     marginBottom: theme.spacing(2)
+  },
+  usernameLink: {
+    '&:hover': {
+      color: theme.palette.text.secondary,
+    }
   },
 }))
 
@@ -42,8 +50,16 @@ export const CommentListItem = (props: Props) => {
     return (
       <>
         <CardContent>
-          <Typography variant="subtitle2" color="textSecondary">
-            {comment.user.username}
+          <Link href="/users/[username]" as={`/users/${comment.user.username}`}>
+            <a className={classes.usernameLink}>
+              <Typography variant="subtitle2" color="textSecondary" component="span">
+                {comment.user.username}
+              </Typography>
+            </a>
+          </Link>
+          &nbsp; - &nbsp;
+          <Typography variant="subtitle2" color="textSecondary" component="span">
+            {moment(Number(comment.createdAt)).fromNow()}
           </Typography>
           <MarkdownContent content={comment.body}/>
         </CardContent>
@@ -84,4 +100,18 @@ export const CommentListItem = (props: Props) => {
                                   onCancel={() => setConfirmCommentDeleteDialogOpen(false)}/>
     </Card>
   )
+}
+
+CommentListItem.fragments = {
+  comment: gql`
+    fragment CommentListItem on Comment {
+      id
+      body
+      createdAt
+      user {
+        id
+        username
+      }
+    }
+  `
 }
