@@ -46,11 +46,12 @@ const useStyles = makeStyles(theme => ({
 interface Props {
   market?: Market
   userId?: string
+  viewerId: string | undefined
 }
 
 export const PostList = (props: Props) => {
   const classes = useStyles()
-  const { market, userId } = props
+  const { market, userId, viewerId } = props
   const { loading, error, data, fetchMore, networkStatus } = useQuery(
     market ? MARKET_LAST_POSTS_QUERY : (userId ? USER_LAST_POSTS_QUERY : LAST_POSTS_QUERY),
     {
@@ -99,7 +100,7 @@ export const PostList = (props: Props) => {
 
                     <Grid container>
                       <Grid item xs={2} sm={1}>
-                        <PostVotes post={post} userId={userId}/>
+                        <PostVotes post={post} viewerId={viewerId}/>
                       </Grid>
                       <Grid item xs={10} sm={11}>
                         <CardContent className={classes.content}>

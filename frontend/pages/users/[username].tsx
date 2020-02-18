@@ -6,9 +6,10 @@ import { NextPageContext } from 'next'
 import { withApollo } from '../../src/apollo'
 import { useQuery } from '@apollo/react-hooks'
 import Error from 'next/error'
-import { Box, CircularProgress, Grid, Typography } from '@material-ui/core'
+import { Box, CircularProgress, Typography } from '@material-ui/core'
 import { User } from '../../src/types/User'
 import { PostList } from '../../components/posts/PostList'
+import { AuthService } from '../../src/services/AuthService'
 
 const USER_QUERY = gql`
   query ($username: String!) {
@@ -23,6 +24,7 @@ const USER_QUERY = gql`
 
 interface Props {
   username: string
+  viewerId: string | undefined
 }
 
 const UserPage = (props: Props) => {
@@ -64,7 +66,7 @@ const UserPage = (props: Props) => {
         </Typography>
       </Box>
 
-      <PostList userId={user.id}/>
+      <PostList viewerId={props.viewerId}/>
     </Layout>
   )
 }
@@ -73,6 +75,7 @@ UserPage.getInitialProps = async (ctx: NextPageContext): Promise<Props> => {
   const username = Array.isArray(ctx.query.username) ? ctx.query.username[0] : ctx.query.username
   return {
     username,
+    viewerId: new AuthService(ctx).getViewer()?.id,
   }
 }
 

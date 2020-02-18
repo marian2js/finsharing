@@ -22,7 +22,7 @@ import { parseUrl } from '../../src/utils/string'
 
 interface Props {
   slug: string
-  authUserId?: string
+  viewerId: string | undefined
 }
 
 const POST_QUERY = gql`
@@ -53,7 +53,7 @@ function PostPage (props: Props) {
       notifyOnNetworkStatusChange: true,
     }
   )
-  const { authUserId } = props
+  const { viewerId } = props
   const [post, setPost] = useState<Post>(data?.post)
   const [lastCommentAddedId, setLastCommentAddedId] = useState('')
 
@@ -104,7 +104,7 @@ function PostPage (props: Props) {
       <Card>
         <Grid container>
           <Grid item xs={2} sm={1}>
-            <PostVotes post={post} userId={authUserId}/>
+            <PostVotes post={post} viewerId={viewerId}/>
           </Grid>
           <Grid item xs={10} sm={11}>
             <CardContent>
@@ -118,7 +118,7 @@ function PostPage (props: Props) {
 
             <Divider variant="middle"/>
 
-            <PostActions post={post} authUserId={authUserId}/>
+            <PostActions post={post} authUserId={viewerId}/>
           </Grid>
         </Grid>
       </Card>
@@ -126,7 +126,7 @@ function PostPage (props: Props) {
       <Box mt={2}>
         <Card>
           {
-            authUserId ?
+            viewerId ?
               <CommentForm post={post} onCommentAdd={handleCommentAdded}/> :
               <CardContent>You need <Link href="/register"><a>a free account</a></Link> to comment.</CardContent>
           }
@@ -135,7 +135,7 @@ function PostPage (props: Props) {
 
       <Box mt={2}>
         <CommentList post={post}
-                     authUserId={authUserId}
+                     authUserId={viewerId}
                      lastCommentAddedId={lastCommentAddedId}/>
       </Box>
 
@@ -147,7 +147,7 @@ function PostPage (props: Props) {
 PostPage.getInitialProps = async (ctx: NextPageContext): Promise<Props> => {
   const slug = (Array.isArray(ctx.query.slug) ? ctx.query.slug[0] : ctx.query.slug).toLowerCase()
   return {
-    authUserId: new AuthService(ctx).getViewer()?.id,
+    viewerId: new AuthService(ctx).getViewer()?.id,
     slug,
   }
 }

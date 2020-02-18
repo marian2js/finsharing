@@ -9,9 +9,11 @@ import { withApollo } from '../../src/apollo'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import { Market } from '../../src/types/Market'
+import { AuthService } from '../../src/services/AuthService'
 
 interface Props {
   symbol: string
+  viewerId: string | undefined
 }
 
 const MARKET_QUERY = gql`
@@ -60,13 +62,14 @@ function MarketPage (props: Props) {
         {market.symbol.toUpperCase()}
       </Typography>
 
-      <PostList market={market}/>
+      <PostList market={market} viewerId={props.viewerId}/>
     </Layout>
   )
 }
 
 MarketPage.getInitialProps = async (ctx: NextPageContext): Promise<Props> => ({
-  symbol: (Array.isArray(ctx.query.symbol) ? ctx.query.symbol[0] : ctx.query.symbol).toUpperCase()
+  symbol: (Array.isArray(ctx.query.symbol) ? ctx.query.symbol[0] : ctx.query.symbol).toUpperCase(),
+  viewerId: new AuthService(ctx).getViewer()?.id,
 })
 
 export default withApollo(MarketPage)
