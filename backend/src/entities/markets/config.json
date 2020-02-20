@@ -39,6 +39,12 @@
     "price": {
       "type": "number"
     },
+    "priceClose": {
+      "type": "number"
+    },
+    "priceUpdatedAt": {
+      "type": "date"
+    },
     "numberOfPosts": {
       "type": "number",
       "default": 0

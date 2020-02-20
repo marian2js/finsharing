@@ -90,6 +90,8 @@ input CreateMarketInput {
   imageUrl: String
   exchange: MarketExchangeEnum
   price: Float
+  priceClose: Float
+  priceUpdatedAt: String
   numberOfPosts: Float
   partnerId: String
   icId: String
@@ -201,6 +203,8 @@ type Market implements Node {
   imageUrl: String
   exchange: MarketExchangeEnum
   price: Float
+  priceClose: Float
+  priceUpdatedAt: String
   numberOfPosts: Float
   partnerId: String
   icId: String
@@ -242,6 +246,8 @@ input MarketFilterInput {
   imageUrl: MarketImageUrlFilterInput
   exchange: MarketExchangeFilterInput
   price: MarketPriceFilterInput
+  priceClose: MarketPriceCloseFilterInput
+  priceUpdatedAt: MarketPriceUpdatedAtFilterInput
   numberOfPosts: MarketNumberOfPostsFilterInput
   partnerId: MarketPartnerIdFilterInput
   icId: MarketIcIdFilterInput
@@ -290,6 +296,8 @@ input MarketOrderByInput {
   imageUrl: OrderByDirection
   exchange: OrderByDirection
   price: OrderByDirection
+  priceClose: OrderByDirection
+  priceUpdatedAt: OrderByDirection
   numberOfPosts: OrderByDirection
   partnerId: OrderByDirection
   icId: OrderByDirection
@@ -303,8 +311,18 @@ input MarketPartnerIdFilterInput {
   comparator: FilterComparatorSymbol
 }
 
+input MarketPriceCloseFilterInput {
+  value: Float!
+  comparator: FilterComparatorSymbol
+}
+
 input MarketPriceFilterInput {
   value: Float!
+  comparator: FilterComparatorSymbol
+}
+
+input MarketPriceUpdatedAtFilterInput {
+  value: String!
   comparator: FilterComparatorSymbol
 }
 
@@ -655,6 +673,8 @@ input UpdateMarketInput {
   imageUrl: String
   exchange: MarketExchangeEnum
   price: Float
+  priceClose: Float
+  priceUpdatedAt: String
   numberOfPosts: Float
   partnerId: String
   icId: String

@@ -9,6 +9,7 @@ import gql from 'graphql-tag'
 import Link from 'next/link'
 import { useQuery } from '@apollo/react-hooks'
 import { Market } from '../../src/types/Market'
+import { roundDecimals } from '../../src/utils/number.utils'
 
 export const drawerWidth = 240
 
@@ -47,21 +48,22 @@ const LIST_MARKETS_QUERY = gql`
 export function SideMenu (props: Props) {
   const { loading, error, data } = useQuery(
     LIST_MARKETS_QUERY, {
+      pollInterval: 1000 * 60,
       notifyOnNetworkStatusChange: true,
     }
   )
   const classes = useStyles()
   const theme = useTheme()
+  const markets: Market[] = data?.markets?.nodes || []
 
   if (error) {
     return <div>Error loading markets, please try again</div>
   }
 
-  if (loading) {
+  if (!markets.length) {
     return <CircularProgress/>
   }
 
-  const markets: Market[] = data?.markets?.nodes || []
   const drawer = (
     <div>
       <div className={classes.toolbar}/>
@@ -72,6 +74,9 @@ export function SideMenu (props: Props) {
             <Link key={market.symbol} href="/markets/[symbol]" as={`/markets/${market.symbol}`}>
               <ListItem button>
                 <ListItemText primary={market.symbol} secondary={market.name}/>
+                {
+                  market.price && `$${roundDecimals(market.price, 2)}`
+                }
               </ListItem>
             </Link>
           ))

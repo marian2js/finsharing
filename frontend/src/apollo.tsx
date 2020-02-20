@@ -164,9 +164,10 @@ function createApolloClient (initialState: NormalizedCacheObject = {}, tokens?: 
         switch (node.__typename) {
           case 'User':
             return node.username || node.id
-          case 'Market':
           case 'Post':
             return node.slug || node.id
+          case 'Market':
+            return node.symbol || node.id
         }
         return node.id
       }

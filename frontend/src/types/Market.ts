@@ -6,4 +6,7 @@ export type Market = {
   description: string
   imageUrl: string
   exchange: 'NASDAQ' | 'NYSE'
+  price: number
+  priceClose: number
+  priceUpdatedAt: number
 }
