@@ -1,32 +1,37 @@
 import Hidden from '@material-ui/core/Hidden'
 import Drawer from '@material-ui/core/Drawer'
 import React from 'react'
-import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core/styles'
+import { makeStyles, Theme, useTheme } from '@material-ui/core/styles'
 import Divider from '@material-ui/core/Divider'
 import List from '@material-ui/core/List'
-import { CircularProgress, ListItem, ListItemText } from '@material-ui/core'
+import { CircularProgress, ListItem, ListItemText, Typography } from '@material-ui/core'
 import gql from 'graphql-tag'
 import Link from 'next/link'
 import { useQuery } from '@apollo/react-hooks'
 import { Market } from '../../src/types/Market'
-import { roundDecimals } from '../../src/utils/number.utils'
+import { roundDecimals } from '../../src/utils/number'
+import { MarketPriceChange } from '../markets/MarketPriceChange'
 
 export const drawerWidth = 240
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    drawer: {
-      [theme.breakpoints.up('sm')]: {
-        width: drawerWidth,
-        flexShrink: 0,
-      },
-    },
-    toolbar: theme.mixins.toolbar as any,
-    drawerPaper: {
+const useStyles = makeStyles((theme: Theme) => ({
+  drawer: {
+    [theme.breakpoints.up('sm')]: {
       width: drawerWidth,
+      flexShrink: 0,
     },
-  }),
-)
+  },
+  toolbar: theme.mixins.toolbar as any,
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  priceColumn: {
+    textAlign: 'right',
+    '& p': {
+      fontWeight: 500,
+    },
+  },
+}))
 
 interface Props {
   open: boolean
@@ -40,13 +45,14 @@ const LIST_MARKETS_QUERY = gql`
         symbol
         name
         price
+        priceClose
       }
     }
   }
 `
 
 export function SideMenu (props: Props) {
-  const { loading, error, data } = useQuery(
+  const { error, data } = useQuery(
     LIST_MARKETS_QUERY, {
       pollInterval: 1000 * 60,
       notifyOnNetworkStatusChange: true,
@@ -74,9 +80,16 @@ export function SideMenu (props: Props) {
             <Link key={market.symbol} href="/markets/[symbol]" as={`/markets/${market.symbol}`}>
               <ListItem button>
                 <ListItemText primary={market.symbol} secondary={market.name}/>
-                {
-                  market.price && `$${roundDecimals(market.price, 2)}`
-                }
+                <div className={classes.priceColumn}>
+                  <Typography variant="body2">
+                    {
+                      market.price && `$${roundDecimals(market.price, 2)}`
+                    }
+                  </Typography>
+                  {
+                    market.price && market.priceClose && <MarketPriceChange market={market} variant="body2"/>
+                  }
+                </div>
               </ListItem>
             </Link>
           ))
