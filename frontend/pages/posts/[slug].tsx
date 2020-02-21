@@ -19,6 +19,7 @@ import { CommentList } from '../../components/comments/CommentList'
 import { PostHeader } from '../../components/posts/PostHeader'
 import { getPlainText } from '../../src/utils/markdown'
 import { parseUrl } from '../../src/utils/string'
+import { MarketHeader } from '../../components/markets/MarketHeader'
 
 interface Props {
   slug: string
@@ -36,11 +37,15 @@ const POST_QUERY = gql`
       ...PostVotes
       ...PostActions
       ...PostHeader
+      market {
+        ...MarketHeader
+      }
     }
   }
   ${PostVotes.fragments.post}
   ${PostActions.fragments.post}
   ${PostHeader.fragments.post}
+  ${MarketHeader.fragments.market}
 `
 
 function PostPage (props: Props) {
@@ -100,6 +105,8 @@ function PostPage (props: Props) {
           )
         }
       </Head>
+
+      <MarketHeader market={post.market}/>
 
       <Card>
         <Grid container>

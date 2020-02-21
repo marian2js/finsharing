@@ -4,13 +4,13 @@ import Error from 'next/error'
 import Head from 'next/head'
 import { Layout } from '../../components/PageLayout/Layout'
 import { PostList } from '../../components/posts/PostList'
-import { CircularProgress, Grid, Typography } from '@material-ui/core'
+import { CircularProgress } from '@material-ui/core'
 import { withApollo } from '../../src/apollo'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import { Market } from '../../src/types/Market'
 import { AuthService } from '../../src/services/AuthService'
-import { roundDecimals } from '../../src/utils/number.utils'
+import { MarketHeader } from '../../components/markets/MarketHeader'
 
 interface Props {
   symbol: string
@@ -20,14 +20,10 @@ interface Props {
 const MARKET_QUERY = gql`
   query Market ($symbol: String!) {
     market (symbol: $symbol) {
-      id
-      symbol
-      name
-      fullName
-      description
-      price
+      ...MarketHeader
     }
   }
+  ${MarketHeader.fragments.market}
 `
 
 function MarketPage (props: Props) {
@@ -55,26 +51,7 @@ function MarketPage (props: Props) {
       <Head>
         <title>{market.name} - FinSharing.com</title>
       </Head>
-
-      <Grid container>
-        <Grid item xs={4} sm={1}>
-          <Typography gutterBottom variant="subtitle1" component="p">
-            {market.fullName}
-          </Typography>
-          <Typography gutterBottom variant="h4" component="h1">
-            {market.symbol.toUpperCase()}
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Typography gutterBottom variant="h5" component="p">
-            {
-              market.price && `$${roundDecimals(market.price, 2)}`
-            }
-          </Typography>
-        </Grid>
-      </Grid>
-
-
+      <MarketHeader market={market}/>
       <PostList market={market} viewerId={props.viewerId}/>
     </Layout>
   )
