@@ -1,14 +1,31 @@
 import React from 'react'
-import { Grid, Typography } from '@material-ui/core'
+import { Button, Grid, Typography, useMediaQuery } from '@material-ui/core'
 import { roundDecimals } from '../../src/utils/number'
 import { MarketPriceChange } from './MarketPriceChange'
 import { makeStyles } from '@material-ui/core/styles'
 import { Market } from '../../src/types/Market'
 import gql from 'graphql-tag'
+import BarChartIcon from '@material-ui/icons/BarChart'
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney'
+import theme from '../../src/theme'
+import { getPartnerLink } from '../../src/utils/partner'
 
 const useStyles = makeStyles(theme => ({
   priceChange: {
     marginLeft: theme.spacing(1)
+  },
+  analysisButton: {
+    textAlign: 'right',
+    marginBottom: theme.spacing(1),
+    '& a:hover': {
+      textDecoration: 'none',
+    },
+  },
+  investButton: {
+    textAlign: 'right',
+    '& a:hover': {
+      textDecoration: 'none',
+    },
   },
 }))
 
@@ -19,14 +36,15 @@ interface Props {
 export const MarketHeader = (props: Props) => {
   const classes = useStyles()
   const { market } = props
+  const xsDown = useMediaQuery(theme.breakpoints.down('sm'))
 
   return (
     <Grid container>
-      <Grid item>
+      <Grid item xs={6}>
         <Typography gutterBottom variant="subtitle1" component="h1">
           {market.symbol.toUpperCase()} - {market.fullName}
         </Typography>
-        <Typography gutterBottom variant="h4">
+        <Typography gutterBottom variant={xsDown ? 'h5' : 'h4'}>
           {
             market.price && `$${roundDecimals(market.price, 2)}`
           }
@@ -36,6 +54,30 @@ export const MarketHeader = (props: Props) => {
             }
           </span>
         </Typography>
+      </Grid>
+      <Grid item xs={6}>
+        {
+          market.icId && (
+            <div className={classes.analysisButton}>
+              <a href={`http://inspectcompany.com/${market.icId}`}>
+                <Button variant="contained" color="default" startIcon={!xsDown && <BarChartIcon/>}>
+                  Company analysis
+                </Button>
+              </a>
+            </div>
+          )
+        }
+        {
+          market.partnerId && (
+            <div className={classes.investButton}>
+              <a href={getPartnerLink(market.partnerId)} target="_blank" rel="nofollow noopener noreferrer">
+                <Button variant="contained" color="primary" startIcon={!xsDown && <AttachMoneyIcon/>}>
+                  Invest on {market.symbol}
+                </Button>
+              </a>
+            </div>
+          )
+        }
       </Grid>
     </Grid>
   )
@@ -49,6 +91,8 @@ MarketHeader.fragments = {
       fullName
       price
       priceClose
+      icId
+      partnerId
     }
   `
 }

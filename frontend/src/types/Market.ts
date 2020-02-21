@@ -9,4 +9,6 @@ export type Market = {
   price: number
   priceClose: number
   priceUpdatedAt: number
+  icId: string
+  partnerId: string
 }

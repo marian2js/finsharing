@@ -4,7 +4,7 @@ import Error from 'next/error'
 import Head from 'next/head'
 import { Layout } from '../../components/PageLayout/Layout'
 import { PostList } from '../../components/posts/PostList'
-import { CircularProgress } from '@material-ui/core'
+import { Box, CircularProgress } from '@material-ui/core'
 import { withApollo } from '../../src/apollo'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
@@ -51,7 +51,9 @@ function MarketPage (props: Props) {
       <Head>
         <title>{market.name} - FinSharing.com</title>
       </Head>
-      <MarketHeader market={market}/>
+      <Box mb={3}>
+        <MarketHeader market={market}/>
+      </Box>
       <PostList market={market} viewerId={props.viewerId}/>
     </Layout>
   )
