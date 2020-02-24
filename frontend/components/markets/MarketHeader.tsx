@@ -72,7 +72,7 @@ export const MarketHeader = (props: Props) => {
             <div className={classes.investButton}>
               <a href={getPartnerLink(market.partnerId)} target="_blank" rel="nofollow noopener noreferrer">
                 <Button variant="contained" color="primary" startIcon={!xsDown && <AttachMoneyIcon/>}>
-                  Invest on {market.symbol}
+                  Invest on {market.partnerId.toUpperCase()}
                 </Button>
               </a>
             </div>
