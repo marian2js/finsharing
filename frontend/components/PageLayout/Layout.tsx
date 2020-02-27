@@ -56,6 +56,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(3),
     },
     siteNameLink: {
+      color: theme.palette.text.primary,
       '&:hover': {
         textDecoration: 'none'
       }
@@ -193,7 +194,7 @@ export function Layout (props: Props) {
           <Typography variant="h6" noWrap className={classes.title}>
             <Link href="/">
               <a className={classes.siteNameLink}>
-                FinSharing.com 📈
+                FinSharing.com
               </a>
             </Link>
           </Typography>
