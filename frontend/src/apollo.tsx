@@ -125,7 +125,7 @@ export function withApollo (PageComponent: any, { ssr = true } = {}) {
  * Always creates a new apollo client on the server
  * Creates or reuses apollo client in the browser.
  */
-function initApolloClient (initialState: NormalizedCacheObject = {}, tokens?: UserTokens) {
+export function initApolloClient (initialState: NormalizedCacheObject = {}, tokens?: UserTokens) {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (typeof window === 'undefined') {
