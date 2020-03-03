@@ -27,6 +27,14 @@
       "type": "string",
       "maxLength": 5000,
       "required": true
+    },
+    "votes": {
+      "type": "number",
+      "default": 0,
+      "permissions": {
+        "create": "system",
+        "update": "system"
+      }
     }
   },
   "hooks": {
@@ -54,5 +62,15 @@
         "value": -1
       }
     ]
+  },
+  "joinAttributes": {
+    "viewerVote": {
+      "type": "findOne",
+      "entity": "commentVotes",
+      "query": {
+        "user": "{user.id}",
+        "comment": "{this.id}"
+      }
+    }
   }
 }

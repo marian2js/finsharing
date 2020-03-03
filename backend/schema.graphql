@@ -9,8 +9,10 @@ type Comment implements Node {
   user: User!
   post: Post!
   body: String!
+  votes: Float
   createdAt: String
   updatedAt: String
+  viewerVote: CommentVote
 }
 
 input CommentBodyFilterInput {
@@ -33,6 +35,7 @@ input CommentFilterInput {
   user: CommentUserFilterInput
   post: CommentPostFilterInput
   body: CommentBodyFilterInput
+  votes: CommentVotesFilterInput
   createdAt: CommentCreatedAtFilterInput
   updatedAt: CommentUpdatedAtFilterInput
   or: [CommentFilterInput]
@@ -49,6 +52,7 @@ input CommentOrderByInput {
   user: OrderByDirection
   post: OrderByDirection
   body: OrderByDirection
+  votes: OrderByDirection
   createdAt: OrderByDirection
   updatedAt: OrderByDirection
 }
@@ -68,6 +72,81 @@ input CommentUserFilterInput {
   comparator: FilterComparatorSymbol
 }
 
+"""A single CommentVote."""
+type CommentVote implements Node {
+  id: ID!
+  user: User!
+  comment: Comment!
+  value: CommentVoteValueEnum!
+  createdAt: String
+  updatedAt: String
+}
+
+input CommentVoteCommentFilterInput {
+  value: ID!
+  comparator: FilterComparatorSymbol
+}
+
+type CommentVoteConnection {
+  nodes: [CommentVote]!
+  pageInfo: PageInfo
+}
+
+input CommentVoteCreatedAtFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input CommentVoteFilterInput {
+  id: CommentVoteIdFilterInput
+  user: CommentVoteUserFilterInput
+  comment: CommentVoteCommentFilterInput
+  value: CommentVoteValueFilterInput
+  createdAt: CommentVoteCreatedAtFilterInput
+  updatedAt: CommentVoteUpdatedAtFilterInput
+  or: [CommentVoteFilterInput]
+  and: [CommentVoteFilterInput]
+}
+
+input CommentVoteIdFilterInput {
+  value: ID!
+  comparator: FilterComparatorSymbol
+}
+
+input CommentVoteOrderByInput {
+  id: OrderByDirection
+  user: OrderByDirection
+  comment: OrderByDirection
+  value: OrderByDirection
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
+}
+
+input CommentVotesFilterInput {
+  value: Float!
+  comparator: FilterComparatorSymbol
+}
+
+input CommentVoteUpdatedAtFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input CommentVoteUserFilterInput {
+  value: ID!
+  comparator: FilterComparatorSymbol
+}
+
+enum CommentVoteValueEnum {
+  POSITIVE_1
+  NEGATIVE_1
+}
+
+input CommentVoteValueFilterInput {
+  value: CommentVoteValueEnum!
+  comparator: FilterComparatorSymbol
+}
+
 type CompleteSocialAuthenticationPayload {
   tokens: Tokens
   user: User!
@@ -80,6 +159,15 @@ input CreateCommentInput {
 
 type CreateCommentPayload {
   comment: Comment
+}
+
+input CreateCommentVoteInput {
+  comment: ID!
+  value: CommentVoteValueEnum!
+}
+
+type CreateCommentVotePayload {
+  commentVote: CommentVote
 }
 
 input CreateMarketInput {
@@ -140,6 +228,14 @@ input DeleteCommentInput {
 }
 
 type DeleteCommentPayload {
+  result: Boolean!
+}
+
+input DeleteCommentVoteInput {
+  id: ID!
+}
+
+type DeleteCommentVotePayload {
   result: Boolean!
 }
 
@@ -364,6 +460,15 @@ type Mutation {
 
   """Reset a password using a verification code."""
   completeSocialAuthentication(provider: String!, code: String!, username: String): CompleteSocialAuthenticationPayload
+
+  """Create a CommentVote."""
+  createCommentVote(input: CreateCommentVoteInput): CreateCommentVotePayload
+
+  """Update a CommentVote."""
+  updateCommentVote(input: UpdateCommentVoteInput): UpdateCommentVotePayload
+
+  """Delete a CommentVote."""
+  deleteCommentVote(input: DeleteCommentVoteInput): DeleteCommentVotePayload
 
   """Create a Comment."""
   createComment(input: CreateCommentInput): CreateCommentPayload
@@ -618,6 +723,12 @@ type Query {
   """Get a new access token given a refresh token."""
   accessToken(username: String!, refreshToken: String!): AccessToken
 
+  """Find CommentVotes."""
+  commentVotes(first: Int, last: Int, before: String, after: String, filter: CommentVoteFilterInput, orderBy: [CommentVoteOrderByInput]): CommentVoteConnection
+
+  """Find a CommentVote by id."""
+  commentVote(id: String!): CommentVote!
+
   """Find Comments."""
   comments(first: Int, last: Int, before: String, after: String, filter: CommentFilterInput, orderBy: [CommentOrderByInput]): CommentConnection
 
@@ -665,6 +776,16 @@ input UpdateCommentInput {
 
 type UpdateCommentPayload {
   comment: Comment
+}
+
+input UpdateCommentVoteInput {
+  id: ID!
+  comment: ID
+  value: CommentVoteValueEnum
+}
+
+type UpdateCommentVotePayload {
+  commentVote: CommentVote
 }
 
 input UpdateMarketInput {

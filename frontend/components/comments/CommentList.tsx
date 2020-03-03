@@ -65,7 +65,7 @@ export const CommentList = (props: Props) => {
       {
         comments.map(comment => <CommentListItem key={comment.id}
                                                  comment={comment}
-                                                 authUserId={authUserId}
+                                                 viewerId={authUserId}
                                                  post={props.post}
                                                  onCommentDelete={handleCommentDeleted}/>)
       }

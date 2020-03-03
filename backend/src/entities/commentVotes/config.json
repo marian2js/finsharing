@@ -1,12 +1,6 @@
 {
-  "entityName": "postVotes",
-  "collectionName": "postVotes",
-  "permissions": {
-    "get": "anyone",
-    "create": "user",
-    "update": "system",
-    "delete": "own"
-  },
+  "entityName": "commentVotes",
+  "collectionName": "commentVotes",
   "attributes": {
     "user": {
       "type": "user",
@@ -18,12 +12,10 @@
         "update": "system"
       }
     },
-    "post": {
+    "comment": {
       "type": "ref",
-      "entity": "posts",
       "required": true,
-      "readonly": true,
-      "permissions": {}
+      "entity": "comments"
     },
     "value": {
       "type": "enum",
@@ -38,24 +30,30 @@
   "indexes": [
     {
       "keys": {
-        "post": 1,
+        "comment": 1,
         "user": 1
       },
       "unique": true
     }
   ],
+  "permissions": {
+    "get": "anyone",
+    "create": "user",
+    "update": "own",
+    "delete": "own"
+  },
   "hooks": {
     "afterCreate": [
       {
         "action": "increment",
-        "target": "this.post.votes",
+        "target": "this.comment.votes",
         "value": "{this.value}"
       }
     ],
     "afterDelete": [
       {
         "action": "increment",
-        "target": "this.post.votes",
+        "target": "this.comment.votes",
         "value": "{-this.value}"
       }
     ]
