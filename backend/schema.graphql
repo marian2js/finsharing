@@ -1,6 +1,6 @@
 type AccessToken {
   accessToken: String!
-  accessTokenExpiration: String
+  accessTokenExpiration: Int
 }
 
 """A single Comment."""
@@ -764,7 +764,7 @@ type SendResetPasswordEmailPayload {
 
 type Tokens {
   accessToken: String!
-  accessTokenExpiration: String
+  accessTokenExpiration: Int
   refreshToken: String
 }
 
