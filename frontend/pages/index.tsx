@@ -5,19 +5,38 @@ import { PostList } from '../components/posts/PostList'
 import { withApollo } from '../src/apollo'
 import { NextPageContext } from 'next'
 import { AuthService } from '../src/services/AuthService'
+import { Alert } from '@material-ui/lab'
+import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer'
+import { Box } from '@material-ui/core'
+import Link from 'next/link'
 
 interface Props {
   viewerId: string | undefined
 }
 
 function IndexPage (props: Props) {
+  const { viewerId } = props
+
+  const welcomeMessage = !viewerId && (
+    <Box mb={2}>
+      <Alert color="warning" icon={<QuestionAnswerIcon/>}>
+        Welcome to our community for investors. <Link href="/register"><a style={{ display: 'contents' }}>Sign
+        Up</a></Link> for free to get started.
+      </Alert>
+    </Box>
+  )
+
   return (
     <Layout>
       <Head>
         <title>FinSharing.com</title>
       </Head>
 
-      <PostList viewerId={props.viewerId}/>
+      <div>
+        {welcomeMessage}
+      </div>
+
+      <PostList viewerId={viewerId}/>
     </Layout>
   )
 }
