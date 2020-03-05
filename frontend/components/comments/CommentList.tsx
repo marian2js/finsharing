@@ -14,7 +14,7 @@ interface Props {
 
 const LAST_COMMENTS_QUERY = gql`
   query Comments ($postId: ID!) {
-    comments (filter: { post: { value: $postId } }, orderBy: [{ createdAt: DESC }]) {
+    comments (filter: { post: { value: $postId } }, orderBy: [{ createdAt: ASC }]) {
       nodes {
         ...CommentListItem
       }
