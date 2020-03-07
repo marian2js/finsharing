@@ -6,10 +6,12 @@ module.exports = {
     endpoint: process.env.ENDPOINT
   },
   webpack: (config, { isServer }) => {
-    // Fixes npm packages that depend on `fs` module
     if (!isServer) {
       config.node = {
-        fs: 'empty'
+        fs: 'empty',
+        redis: 'empty',
+        net: 'empty',
+        tls: 'empty',
       }
     }
 

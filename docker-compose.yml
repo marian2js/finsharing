@@ -29,6 +29,16 @@ services:
       - fs-frontend
       - fs-service
 
+  fs-redis:
+    container_name: fs-redis
+    image: redis
+    networks:
+      - finsharing
+    ports:
+      - "${REDIS_EXPOSE_PORT}:${REDIS_EXPOSE_PORT}"
+    expose:
+      - 6379
+
   fs-service:
     container_name: fs-service
     build: ./backend
