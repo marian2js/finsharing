@@ -11,6 +11,7 @@ import { NextPageContext } from 'next'
 import Error from 'next/error'
 import LinearChart from '../../components/charts/LinearChart'
 import moment from 'moment'
+import { Alert } from '@material-ui/lab'
 
 const useStyles = makeStyles({})
 
@@ -44,6 +45,29 @@ function CountryCoronavirus (props: Props) {
       dailyCasesValues.push(itCases ? itCases[1] : 0)
       itDate += 1000 * 60 * 60 * 24
     }
+  }
+
+  function renderProgressComparison () {
+    if (dailyCasesValues.length < 10) {
+      return <></>
+    }
+    const current = dailyCasesValues.slice(-5).reduce((prev, curr) => prev + curr, 0)
+    const previous = dailyCasesValues.slice(-10, -5).reduce((prev, curr) => prev + curr, 0)
+    return (
+      <Box mt={3}>
+        <Alert severity={current > previous ? 'error' : 'info'}>
+          During the last 5 days, {country!.name} reported&nbsp;
+          <strong style={{ display: 'contents' }}>
+            {
+              current === previous ?
+                'the same number of cases' :
+                `${Math.abs(current - previous).toLocaleString()} ${current > previous ? 'more' : 'less'} cases`
+            }&nbsp;
+          </strong>
+          than during the previous 5 days.
+        </Alert>
+      </Box>
+    )
   }
 
   const title = `Coronavirus cases in ${country.name} ${country.emoji}`
@@ -96,6 +120,8 @@ function CountryCoronavirus (props: Props) {
         </Grid>
       </Grid>
 
+      {renderProgressComparison()}
+
       <>
         {
           cases[countryKey] && (
@@ -131,7 +157,7 @@ function CountryCoronavirus (props: Props) {
 }
 
 CountryCoronavirus.getInitialProps = async (ctx: NextPageContext): Promise<Props> => {
-  const countryKey = (Array.isArray(ctx.query.country) ? ctx.query.country[0] : ctx.query.country).toLowerCase()
+  const countryKey = (Array.isArray(ctx.query.country) ? ctx.query.country[0] : ctx.query.country)?.toLowerCase()
   const country = Object.values(countries)
     .find(country => country.name.toLowerCase().replace(/\s/g, '-') === countryKey)
   if (!country) {
