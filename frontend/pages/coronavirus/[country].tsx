@@ -47,6 +47,11 @@ function CountryCoronavirus (props: Props) {
     }
   }
 
+  if (!dailyCasesValues[dailyCasesValues.length - 1]) {
+    dailyCasesValues.pop()
+    dailyCasesDates.pop()
+  }
+
   function renderProgressComparison () {
     if (dailyCasesValues.length < 10) {
       return <></>
