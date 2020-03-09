@@ -172,6 +172,14 @@ function CoronavirusPage (props: Props) {
       </TableContainer>
 
       <Box mt={3}>
+        <Typography variant="body1">
+          <a href="/posts/stocks-that-could-benefit-from-the-coronavirus-outbreak-ff13b5bd">
+            📈 Stocks that could benefit from the Coronavirus outbreak
+          </a>
+        </Typography>
+      </Box>
+
+      <Box mt={3}>
         <Typography variant="subtitle2">
           Data source: <a href="https://www.ecdc.europa.eu" target="_blank" rel="nofollow noopener noreferrer">ECDC</a>
         </Typography>

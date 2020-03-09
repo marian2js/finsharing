@@ -150,6 +150,13 @@ function CountryCoronavirus (props: Props) {
           </a>
         </Typography>
       </Box>
+      <Box mt={3}>
+        <Typography variant="body1">
+          <a href="/posts/stocks-that-could-benefit-from-the-coronavirus-outbreak-ff13b5bd">
+            📈 Stocks that could benefit from the Coronavirus outbreak
+          </a>
+        </Typography>
+      </Box>
 
       <Box mt={3}>
         <Typography variant="subtitle2">
