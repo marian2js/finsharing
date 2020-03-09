@@ -66,7 +66,7 @@ function CountryCoronavirus (props: Props) {
             {
               current === previous ?
                 'the same number of cases' :
-                `${Math.abs(current - previous).toLocaleString()} ${current > previous ? 'more' : 'less'} cases`
+                `${Math.abs(current - previous).toLocaleString()} ${current > previous ? 'more' : 'fewer'} cases`
             }&nbsp;
           </strong>
           than during the previous 5 days.
