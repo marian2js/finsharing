@@ -23,6 +23,7 @@ import { countries } from 'countries-list'
 import Link from 'next/link'
 import { makeStyles } from '@material-ui/styles'
 import { getComparator, stableSort } from '../../src/utils/arrays'
+import { roundDecimals } from '../../src/utils/number'
 
 const useStyles = makeStyles({
   countryTableRow: {
@@ -62,6 +63,7 @@ function CoronavirusPage (props: Props) {
         emoji: country.emoji,
         cases: cases[countryKey] || 0,
         deaths: deaths[countryKey] || 0,
+        change: cases[`change_${countryKey}`] || -Infinity,
       }
     })
 
@@ -76,6 +78,7 @@ function CoronavirusPage (props: Props) {
     { id: 'name', label: 'Country' },
     { id: 'cases', label: 'Total cases' },
     { id: 'deaths', label: 'Total deaths' },
+    { id: 'change', label: '5 days change' },
   ]
 
   const title = 'Cases of coronavirus by country'
@@ -162,6 +165,9 @@ function CoronavirusPage (props: Props) {
                     </TableCell>
                     <TableCell align="right">{country.cases.toLocaleString()}</TableCell>
                     <TableCell align="right">{country.deaths.toLocaleString()}</TableCell>
+                    <TableCell align="right">
+                      {country.change && Number.isFinite(country.change) && `${roundDecimals(country.change, 2)}%`}
+                    </TableCell>
                   </TableRow>
                 </Link>
               )
