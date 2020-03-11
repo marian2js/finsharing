@@ -184,7 +184,14 @@ function CoronavirusPage (props: Props) {
           </a>
         </Typography>
       </Box>
-
+      <Box mt={3}>
+        <Typography variant="body1">
+          <a href="http://partners.etoro.com/B13055_A78726_TClick_Sfs1.aspx" target="_blank"
+             rel="nofollow noopener noreferrer">
+            📊 Time to buy the dip or time to buy gold? What about oil? Check out this trading app.
+          </a>
+        </Typography>
+      </Box>
       <Box mt={3}>
         <Typography variant="subtitle2">
           Data source: <a href="https://www.ecdc.europa.eu" target="_blank" rel="nofollow noopener noreferrer">ECDC</a>
