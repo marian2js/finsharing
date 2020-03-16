@@ -50,8 +50,8 @@ interface Props {
 function CoronavirusPage (props: Props) {
   const classes = useStyles()
   const { cases, deaths } = props
-  const [order, setOrder] = useState<'asc' | 'desc'>('asc')
-  const [orderBy, setOrderBy] = useState<string>('name')
+  const [order, setOrder] = useState<'asc' | 'desc'>('desc')
+  const [orderBy, setOrderBy] = useState<string>('cases')
 
   const countryList = Object.values(countries)
     .sort((a, b) => a.name > b.name ? 1 : -1)
