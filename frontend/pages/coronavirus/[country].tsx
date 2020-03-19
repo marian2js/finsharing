@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { Layout } from '../../components/PageLayout/Layout'
 import { withApollo } from '../../src/apollo'
 import { RedisClient } from '../../src/clients/redis'
-import { Box, Card, CardContent, Grid } from '@material-ui/core'
+import { Box, Card, CardContent, Divider, Grid } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import { countries, Country } from 'countries-list'
 import { makeStyles } from '@material-ui/styles'
@@ -20,11 +20,12 @@ interface Props {
   countryKey: string
   cases: { [key: string]: number }
   deaths: { [key: string]: number }
+  travelRestrictions?: string
 }
 
 function CountryCoronavirus (props: Props) {
   const classes = useStyles()
-  const { country, countryKey, cases, deaths } = props
+  const { country, countryKey, cases, deaths, travelRestrictions } = props
 
   if (!country) {
     return <Error statusCode={404} message={'Country not found'}/>
@@ -143,6 +144,24 @@ function CountryCoronavirus (props: Props) {
         }
       </>
 
+      <>
+        {
+          travelRestrictions && (
+            <Box mt={3}>
+              <Typography variant="h4">
+                Travel restrictions
+              </Typography>
+              <Box mt={1} mb={1}>
+                <Typography variant="body1">
+                  {travelRestrictions}
+                </Typography>
+              </Box>
+              <Divider/>
+            </Box>
+          )
+        }
+      </>
+
       <Box mt={3}>
         <Typography variant="body1">
           <a href="/coronavirus">
@@ -205,6 +224,7 @@ CountryCoronavirus.getInitialProps = async (ctx: NextPageContext): Promise<Props
     countryKey,
     cases,
     deaths,
+    travelRestrictions: await RedisClient.get(`travel_${countryKey}`),
   }
 }
 
