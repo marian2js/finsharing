@@ -127,6 +127,14 @@ function CoronavirusPage (props: Props) {
         </Grid>
       </Box>
 
+      <Box mb={3}>
+        <a href="/coronavirus/travel-restrictions">
+          <Typography variant="subtitle2">
+            🛬 Travel restrictions by country due to COVID-19
+          </Typography>
+        </a>
+      </Box>
+
       <TableContainer component={Paper}>
         <Table aria-label="country table">
           <TableHead>
