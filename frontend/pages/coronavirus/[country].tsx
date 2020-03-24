@@ -34,23 +34,30 @@ function CountryCoronavirus (props: Props) {
   const dailyCases = Object.entries(cases)
     .filter(([key]) => /_\d{13}$/.test(key))
     .sort((a, b) => a[0] > b[0] ? 1 : -1)
+  const dailyDeaths = Object.entries(deaths)
+    .filter(([key]) => /_\d{13}$/.test(key))
+    .sort((a, b) => a[0] > b[0] ? 1 : -1)
 
-  const dailyCasesDates: string[] = []
+  const dataDates: string[] = []
   const dailyCasesValues: number[] = []
+  const dailyDeathsValues: number[] = []
 
   if (dailyCases.length) {
     let itDate = Number(dailyCases[0][0].replace(/.+_(\d{13})$/, '$1'))
     while (itDate < Date.now()) {
       const itCases = dailyCases.find(([key]) => key.endsWith(itDate.toString()))
-      dailyCasesDates.push(moment(new Date(itDate)).utc().format('D MMM \'YY'))
+      const itDeaths = dailyDeaths.find(([key]) => key.endsWith(itDate.toString()))
+      dataDates.push(moment(new Date(itDate)).utc().format('D MMM \'YY'))
       dailyCasesValues.push(itCases ? itCases[1] : 0)
+      dailyDeathsValues.push(itDeaths ? itDeaths[1] : 0)
       itDate += 1000 * 60 * 60 * 24
     }
   }
 
   if (!dailyCasesValues[dailyCasesValues.length - 1]) {
     dailyCasesValues.pop()
-    dailyCasesDates.pop()
+    dailyDeathsValues.pop()
+    dataDates.pop()
   }
 
   function renderProgressComparison () {
@@ -132,12 +139,15 @@ function CountryCoronavirus (props: Props) {
         {
           cases[countryKey] && (
             <Box mt={3}>
-              <LinearChart title={`New cases reported by day in ${country.name}`}
-                           xaxis={dailyCasesDates}
+              <LinearChart title={`Daily reports in ${country.name}`}
+                           xaxis={dataDates}
                            yaxis={[]}
                            data={[{
                              title: 'New cases',
-                             values: dailyCasesValues
+                             values: dailyCasesValues,
+                           }, {
+                             title: 'New deaths',
+                             values: dailyDeathsValues,
                            }]}/>
             </Box>
           )
