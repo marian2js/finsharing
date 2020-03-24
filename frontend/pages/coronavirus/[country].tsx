@@ -32,10 +32,10 @@ function CountryCoronavirus (props: Props) {
   }
 
   const dailyCases = Object.entries(cases)
-    .filter(([key]) => /_\d{13}$/.test(key))
+    .filter(([key]) => key.startsWith(`${countryKey}_`) && /_\d{13}$/.test(key))
     .sort((a, b) => a[0] > b[0] ? 1 : -1)
   const dailyDeaths = Object.entries(deaths)
-    .filter(([key]) => /_\d{13}$/.test(key))
+    .filter(([key]) => key.startsWith(`${countryKey}_`) && /_\d{13}$/.test(key))
     .sort((a, b) => a[0] > b[0] ? 1 : -1)
 
   const dataDates: string[] = []
