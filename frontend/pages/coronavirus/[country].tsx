@@ -240,7 +240,10 @@ function CountryCoronavirus (props: Props) {
       </Box>
       <Box mt={3}>
         <Typography variant="subtitle2">
-          Data source: <a href="https://www.ecdc.europa.eu" target="_blank" rel="nofollow noopener noreferrer">ECDC</a>
+          Data sources:&nbsp;
+          <a href="https://www.ecdc.europa.eu" target="_blank" rel="nofollow noopener noreferrer">ECDC</a>,&nbsp;
+          <a href="https://www.who.int" target="_blank" rel="nofollow noopener noreferrer">WHO</a>,&nbsp;
+          <a href="https://www.cdc.gov" target="_blank" rel="nofollow noopener noreferrer">CDC</a>
         </Typography>
       </Box>
 
