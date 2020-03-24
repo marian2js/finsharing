@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { Layout } from '../../components/PageLayout/Layout'
 import { withApollo } from '../../src/apollo'
 import { RedisClient } from '../../src/clients/redis'
-import { Box, Card, CardContent, Divider, Grid } from '@material-ui/core'
+import { AppBar, Box, Card, CardContent, Divider, Grid, Tab, Tabs } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import { countries, Country } from 'countries-list'
 import { makeStyles } from '@material-ui/styles'
@@ -12,6 +12,7 @@ import Error from 'next/error'
 import LinearChart from '../../components/charts/LinearChart'
 import moment from 'moment'
 import { Alert } from '@material-ui/lab'
+import { TabPanel, tabProps } from '../../components/TabPanel'
 
 const useStyles = makeStyles({})
 
@@ -26,6 +27,7 @@ interface Props {
 function CountryCoronavirus (props: Props) {
   const classes = useStyles()
   const { country, countryKey, cases, deaths, travelRestrictions } = props
+  const [tabValue, setTabValue] = React.useState(0)
 
   if (!country) {
     return <Error statusCode={404} message={'Country not found'}/>
@@ -41,15 +43,26 @@ function CountryCoronavirus (props: Props) {
   const dataDates: string[] = []
   const dailyCasesValues: number[] = []
   const dailyDeathsValues: number[] = []
+  const totalCasesValues: number[] = []
+  const totalDeathsValues: number[] = []
 
   if (dailyCases.length) {
     let itDate = Number(dailyCases[0][0].replace(/.+_(\d{13})$/, '$1'))
     while (itDate < Date.now()) {
       const itCases = dailyCases.find(([key]) => key.endsWith(itDate.toString()))
       const itDeaths = dailyDeaths.find(([key]) => key.endsWith(itDate.toString()))
+      const casesValue = itCases ? itCases[1] : 0
+      const deathsValue = itDeaths ? itDeaths[1] : 0
       dataDates.push(moment(new Date(itDate)).utc().format('D MMM \'YY'))
-      dailyCasesValues.push(itCases ? itCases[1] : 0)
-      dailyDeathsValues.push(itDeaths ? itDeaths[1] : 0)
+      dailyCasesValues.push(casesValue)
+      dailyDeathsValues.push(deathsValue)
+      if (totalCasesValues.length) {
+        totalCasesValues.push(totalCasesValues[totalCasesValues.length - 1] + (casesValue))
+        totalDeathsValues.push(totalDeathsValues[totalDeathsValues.length - 1] + (deathsValue))
+      } else {
+        totalCasesValues.push(casesValue)
+        totalDeathsValues.push(deathsValue)
+      }
       itDate += 1000 * 60 * 60 * 24
     }
   }
@@ -57,6 +70,8 @@ function CountryCoronavirus (props: Props) {
   if (!dailyCasesValues[dailyCasesValues.length - 1]) {
     dailyCasesValues.pop()
     dailyDeathsValues.pop()
+    totalCasesValues.pop()
+    totalDeathsValues.pop()
     dataDates.pop()
   }
 
@@ -81,6 +96,11 @@ function CountryCoronavirus (props: Props) {
         </Alert>
       </Box>
     )
+  }
+
+  const handleTabChange = (e: React.ChangeEvent<{}>, newValue: number) => {
+    e.preventDefault()
+    setTabValue(newValue)
   }
 
   const title = `Coronavirus cases in ${country.name} ${country.emoji}`
@@ -133,23 +153,47 @@ function CountryCoronavirus (props: Props) {
         </Grid>
       </Grid>
 
-      {renderProgressComparison()}
+      <Box mb={3}>
+        {renderProgressComparison()}
+      </Box>
 
       <>
         {
           cases[countryKey] && (
-            <Box mt={3}>
-              <LinearChart title={`Daily reports in ${country.name}`}
-                           xaxis={dataDates}
-                           yaxis={[]}
-                           data={[{
-                             title: 'New cases',
-                             values: dailyCasesValues,
-                           }, {
-                             title: 'New deaths',
-                             values: dailyDeathsValues,
-                           }]}/>
-            </Box>
+            <>
+              <AppBar position="static" color="default">
+                <Tabs value={tabValue} onChange={handleTabChange} aria-label="simple tabs example">
+                  <Tab label="Daily cases" {...tabProps(0)} />
+                  <Tab label="Total cases" {...tabProps(1)} />
+                </Tabs>
+              </AppBar>
+              <TabPanel value={tabValue} index={0}>
+                <LinearChart title={`Daily cases in ${country.name}`}
+                             xaxis={dataDates}
+                             yaxis={[]}
+                             data={[{
+                               title: 'New cases',
+                               values: dailyCasesValues,
+                             }, {
+                               title: 'New deaths',
+                               values: dailyDeathsValues,
+                             }]}
+                />
+              </TabPanel>
+              <TabPanel value={tabValue} index={1}>
+                <LinearChart title={`Total cases in ${country.name}`}
+                             xaxis={dataDates}
+                             yaxis={[]}
+                             data={[{
+                               title: 'Total cases',
+                               values: totalCasesValues,
+                             }, {
+                               title: 'Total deaths',
+                               values: totalDeathsValues,
+                             }]}
+                />
+              </TabPanel>
+            </>
           )
         }
       </>
