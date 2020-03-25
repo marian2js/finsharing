@@ -3,30 +3,37 @@ import Head from 'next/head'
 import { Layout } from '../../components/PageLayout/Layout'
 import { withApollo } from '../../src/apollo'
 import { RedisClient } from '../../src/clients/redis'
-import { AppBar, Box, Card, CardContent, Divider, Grid, Tab, Tabs } from '@material-ui/core'
+import { AppBar, Box, Card, CardContent, Divider, Grid, makeStyles, Tab, Tabs } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import { countries, Country } from 'countries-list'
-import { makeStyles } from '@material-ui/styles'
 import { NextPageContext } from 'next'
 import Error from 'next/error'
 import LinearChart from '../../components/charts/LinearChart'
 import moment from 'moment'
 import { Alert } from '@material-ui/lab'
 import { TabPanel, tabProps } from '../../components/TabPanel'
+import { roundDecimals } from '../../src/utils/number'
 
-const useStyles = makeStyles({})
+const useStyles = makeStyles(theme => ({
+  statistics: {
+    '& li': {
+      marginBottom: theme.spacing(2)
+    }
+  }
+}))
 
 interface Props {
   country?: Country
   countryKey: string
   cases: { [key: string]: number }
   deaths: { [key: string]: number }
+  population?: number
   travelRestrictions?: string
 }
 
 function CountryCoronavirus (props: Props) {
   const classes = useStyles()
-  const { country, countryKey, cases, deaths, travelRestrictions } = props
+  const { country, countryKey, cases, deaths, population, travelRestrictions } = props
   const [tabValue, setTabValue] = React.useState(0)
 
   if (!country) {
@@ -45,6 +52,10 @@ function CountryCoronavirus (props: Props) {
   const dailyDeathsValues: number[] = []
   const totalCasesValues: number[] = []
   const totalDeathsValues: number[] = []
+  let maxCases = 0
+  let maxCasesDate
+  let maxDeaths = 0
+  let maxDeathsDate
 
   if (dailyCases.length) {
     let itDate = Number(dailyCases[0][0].replace(/.+_(\d{13})$/, '$1'))
@@ -62,6 +73,14 @@ function CountryCoronavirus (props: Props) {
       } else {
         totalCasesValues.push(casesValue)
         totalDeathsValues.push(deathsValue)
+      }
+      if (casesValue > maxCases) {
+        maxCases = casesValue
+        maxCasesDate = itDate
+      }
+      if (deathsValue > maxDeaths) {
+        maxDeaths = deathsValue
+        maxDeathsDate = itDate
       }
       itDate += 1000 * 60 * 60 * 24
     }
@@ -165,6 +184,7 @@ function CountryCoronavirus (props: Props) {
                 <Tabs value={tabValue} onChange={handleTabChange} aria-label="simple tabs example">
                   <Tab label="Daily cases" {...tabProps(0)} />
                   <Tab label="Total cases" {...tabProps(1)} />
+                  <Tab label="Statistics" {...tabProps(2)} />
                 </Tabs>
               </AppBar>
               <TabPanel value={tabValue} index={0}>
@@ -192,6 +212,49 @@ function CountryCoronavirus (props: Props) {
                                values: totalDeathsValues,
                              }]}
                 />
+              </TabPanel>
+              <TabPanel value={tabValue} index={2}>
+                <ul className={classes.statistics}>
+                  {
+                    Number(population) ? (
+                      <>
+                        <li>
+                          {country.name} had <strong>
+                          {roundDecimals(cases[countryKey] / (Number(population) / 1000000), 2)} cases
+                        </strong> per million inhabitants.
+                        </li>
+                        <li>
+                          {country.name} had <strong>
+                          {roundDecimals(deaths[countryKey] / (Number(population) / 1000000), 2)} deaths
+                        </strong> per million inhabitants.
+                        </li>
+                      </>
+                    ) : ''
+                  }
+                  {
+                    maxCases ? (
+                      <li>
+                        The peak in daily cases was {moment(maxCasesDate).fromNow()} with
+                        <strong> {maxCases.toLocaleString()} cases</strong>.
+                      </li>
+                    ) : ''
+                  }
+                  {
+                    maxDeaths ? (
+                      <li>
+                        The peak in daily deaths was {moment(maxDeathsDate).fromNow()} with
+                        <strong> {maxDeaths.toLocaleString()} deaths</strong>.
+                      </li>
+                    ) : ''
+                  }
+                  {
+                    cases[countryKey] && deaths[countryKey] ? (
+                      <li>
+                        The death rate is {roundDecimals(deaths[countryKey] * 100 / cases[countryKey], 2)}%.
+                      </li>
+                    ) : ''
+                  }
+                </ul>
               </TabPanel>
             </>
           )
@@ -281,6 +344,7 @@ CountryCoronavirus.getInitialProps = async (ctx: NextPageContext): Promise<Props
     countryKey,
     cases,
     deaths,
+    population: await RedisClient.get(`population_${countryKey}`),
     travelRestrictions: await RedisClient.get(`travel_${countryKey}`),
   }
 }
