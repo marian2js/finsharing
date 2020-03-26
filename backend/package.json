@@ -10,12 +10,12 @@
     "watch": "tsc-watch --onSuccess \"node ./dist/server.js\""
   },
   "dependencies": {
-    "@commun/admin": "^0.3.5",
-    "@commun/core": "^0.3.5",
-    "@commun/dashboard": "^0.3.5",
-    "@commun/emails": "^0.3.5",
-    "@commun/graphql": "^0.3.5",
-    "@commun/users": "^0.3.5",
+    "@commun/admin": "^0.3.6",
+    "@commun/core": "^0.3.6",
+    "@commun/dashboard": "^0.3.6",
+    "@commun/emails": "^0.3.6",
+    "@commun/graphql": "^0.3.6",
+    "@commun/users": "^0.3.6",
     "aws-sdk": "^2.614.0",
     "dotenv": "^8.2.0"
   },

@@ -1,6 +1,6 @@
 type AccessToken {
   accessToken: String!
-  accessTokenExpiration: Int
+  accessTokenExpiration: Float
 }
 
 """A single Comment."""
@@ -764,7 +764,7 @@ type SendResetPasswordEmailPayload {
 
 type Tokens {
   accessToken: String!
-  accessTokenExpiration: Int
+  accessTokenExpiration: Float
   refreshToken: String
 }
 
@@ -844,7 +844,7 @@ type UpdateUserPayload {
 type User implements Node {
   username: String!
   id: ID!
-  email: String!
+  email: String
   verified: Boolean
   admin: Boolean
   numberOfPosts: Float
