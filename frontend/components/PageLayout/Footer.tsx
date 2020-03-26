@@ -3,6 +3,7 @@ import { Box, makeStyles, Typography, useMediaQuery } from '@material-ui/core'
 import theme from '../../src/theme'
 import { drawerWidth } from './SideMenu'
 import Link from 'next/link'
+import TwitterIcon from '@material-ui/icons/Twitter'
 
 const useStyles = makeStyles(theme => ({
   footer: {
@@ -22,11 +23,11 @@ export const Footer = () => {
 
   return (
     <footer className={`${classes.footer} ${smUp && classes.footerSmallScreenUp}`}>
-      <Link href="/">
+      <a href="https://twitter.com/finsharing" target="_blank">
         <Typography variant="h6" align="center" gutterBottom>
-          FinSharing.com
+          <TwitterIcon/>
         </Typography>
-      </Link>
+      </a>
 
       <Typography variant="subtitle2" align="center" color="textSecondary" component="p">
         <a href="https://github.com/marian2js/finsharing" target="_blank">Open Source</a> project
