@@ -7,8 +7,8 @@ import { HttpLink } from 'apollo-link-http'
 import fetch from 'isomorphic-unfetch'
 import { NormalizedCacheObject } from 'apollo-cache-inmemory/lib/types'
 import { NextPageContext } from 'next'
-import { parseCookies } from 'nookies'
-import { TOKENS_COOKIE_NAME } from './services/AuthService'
+import { destroyCookie, parseCookies, setCookie } from 'nookies'
+import { TOKENS_COOKIE_NAME, USER_COOKIE_NAME } from './services/AuthService'
 import { UserTokens } from './types/UserTokens'
 
 let globalApolloClient: ApolloClient<NormalizedCacheObject> | null = null
@@ -60,6 +60,14 @@ export function withApollo (PageComponent: any, { ssr = true } = {}) {
       let tokens: UserTokens | undefined
       if (tokensJson) {
         tokens = JSON.parse(tokensJson)
+        if (tokens && tokens.refreshToken && (!tokens.accessTokenExpiration || tokens.accessTokenExpiration < new Date().getTime())) {
+          const userJson = parseCookies(ctx || null)[USER_COOKIE_NAME]
+          if (userJson) {
+            const user = JSON.parse(userJson)
+            await refreshCredentials(ctx, user.username, tokens)
+            tokens = JSON.parse(tokensJson)
+          }
+        }
       }
 
       // Initialize ApolloClient, add it to the ctx object so
@@ -173,4 +181,32 @@ function createApolloClient (initialState: NormalizedCacheObject = {}, tokens?: 
       }
     }).restore(initialState),
   })
+}
+
+async function refreshCredentials (ctx: ApolloPageContext, username: string, tokens: UserTokens) {
+  const endpoint = typeof window === 'undefined' ? process.env.ENDPOINT! : ''
+  const res = await fetch(`${endpoint}/api/v1/auth/token`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      username,
+      refreshToken: tokens.refreshToken,
+    })
+  })
+
+  if (res.status >= 200 && res.status < 300) {
+    setCookie(ctx, TOKENS_COOKIE_NAME, JSON.stringify({
+      ...tokens,
+      ...(await res.json()),
+      __typename: undefined,
+    }), {})
+  } else {
+    // invalid refresh token, remove all cookies
+    destroyCookie(ctx, USER_COOKIE_NAME)
+    destroyCookie(ctx, TOKENS_COOKIE_NAME)
+    refreshApolloClient()
+  }
 }
