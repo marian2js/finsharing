@@ -20,6 +20,7 @@ interface Props {
 const MARKET_QUERY = gql`
   query Market ($symbol: String!) {
     market (symbol: $symbol) {
+      name
       ...MarketHeader
     }
   }
@@ -45,11 +46,20 @@ function MarketPage (props: Props) {
   }
 
   const market: Market = data.market
+  const title = `${market.name} Posts`
+  const description = `List of posts about ${market.name}`
+  const url = `https://finsharing.com/markets/${market.symbol}`
 
   return (
     <Layout>
       <Head>
-        <title>{market.name} - FinSharing.com</title>
+        <title>{title} - FinSharing.com</title>
+        <meta name="description" content={description}/>
+        <meta property="og:title" content={title}/>
+        <meta property="og:url" content={url}/>
+        <meta name="twitter:title" content={title}/>
+        <meta name="twitter:description" content={description}/>
+        <link rel="canonical" href={url}/>
       </Head>
       <Box mb={3}>
         <MarketHeader market={market}/>
