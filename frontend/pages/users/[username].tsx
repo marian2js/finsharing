@@ -66,7 +66,7 @@ const UserPage = (props: Props) => {
         </Typography>
       </Box>
 
-      <PostList viewerId={props.viewerId}/>
+      <PostList viewerId={props.viewerId} userId={user.id}/>
     </Layout>
   )
 }
