@@ -24,6 +24,7 @@ import theme from '../../src/theme'
 import Router from 'next/router'
 import { User } from '../../src/types/User'
 import { useLogout } from '../../src/services/UserHooks'
+import { SearchBar } from './SearchBar'
 
 const drawerWidth = 240
 
@@ -47,7 +48,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     toolbar: theme.mixins.toolbar as any,
     title: {
+      display: 'none',
       flexGrow: 1,
+      [theme.breakpoints.up('sm')]: {
+        display: 'inherit',
+      },
     },
     content: {
       flexGrow: 1,
@@ -198,6 +203,8 @@ export function Layout (props: Props) {
               </a>
             </Link>
           </Typography>
+
+          <SearchBar/>
 
           {
             viewerLoggedIn ? getUserMenu() : getGuestMenu()

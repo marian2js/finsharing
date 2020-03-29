@@ -100,7 +100,7 @@ export const PostForm = (props: Props) => {
         {
           !props.post && (
             <Grid item xs={12}>
-              <MarketSelector value={market} onChange={setMarket}/>
+              <MarketSelector value={market} onChange={market => setMarket(market.id)}/>
             </Grid>
           )
         }

@@ -11,6 +11,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { Market } from '../../src/types/Market'
 import { roundDecimals } from '../../src/utils/number'
 import { MarketPriceChange } from '../markets/MarketPriceChange'
+import HomeIcon from '@material-ui/icons/Home'
 
 export const drawerWidth = 240
 
@@ -29,6 +30,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     textAlign: 'right',
     '& p': {
       fontWeight: 500,
+    },
+  },
+  homeButton: {
+    textAlign: 'center',
+  },
+  homeLink: {
+    color: theme.palette.text.primary,
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
     },
   },
 }))
@@ -72,7 +82,15 @@ export function SideMenu (props: Props) {
 
   const drawer = (
     <div>
-      <div className={classes.toolbar}/>
+      <div className={classes.toolbar}>
+        <Typography variant="h3" noWrap className={classes.homeButton}>
+          <Link href="/">
+            <a className={classes.homeLink}>
+              <HomeIcon/>
+            </a>
+          </Link>
+        </Typography>
+      </div>
       <Divider/>
       <List>
         {
