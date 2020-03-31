@@ -12,7 +12,7 @@
   "dependencies": {
     "@commun/admin": "^0.3.6",
     "@commun/core": "^0.3.6",
-    "@commun/dashboard": "^0.3.6",
+    "@commun/dashboard": "^0.3.7",
     "@commun/emails": "^0.3.6",
     "@commun/graphql": "^0.3.6",
     "@commun/users": "^0.3.6",
