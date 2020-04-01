@@ -42,24 +42,6 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const FOLLOW_MARKET_MUTATION = gql`
-  mutation ($marketId: ID!) {
-    createMarketFollow (input: { market: $marketId }) {
-      marketFollow {
-        id
-      }
-    }
-  }
-`
-
-const UNFOLLOW_MARKET_MUTATION = gql`
-  mutation ($followId: ID!) {
-    deleteMarketFollow (input: {id: $followId}) {
-      result
-    }
-  }
-`
-
 interface Props {
   market: Market
   viewerId: string | undefined
@@ -77,16 +59,26 @@ export const MarketHeader = (props: Props) => {
     setViewerFollowId(market.viewerFollow?.id || null)
   }, [market])
 
-  const updateNumberOfFollowers = (proxy: DataProxy, numberOfFollowers: number) => {
+  const updateMarketFollowers = (proxy: DataProxy, marketFollowId: string | null) => {
     proxy.writeFragment({
       id: market.symbol,
       fragment: gql`
         fragment MarketFollowers on Market {
+          __typename
           numberOfFollowers
+          viewerFollow {
+            id
+            __typename
+          }
         }
       `,
       data: {
-        numberOfFollowers,
+        __typename: 'Market',
+        numberOfFollowers: market.numberOfFollowers + (marketFollowId ? 1 : -1),
+        viewerFollow: marketFollowId ? {
+          id: marketFollowId,
+          __typename: 'MarketFollow'
+        } : null
       },
     })
   }
@@ -101,7 +93,9 @@ export const MarketHeader = (props: Props) => {
       variables: {
         marketId: market.id
       },
-      update: (proxy) => updateNumberOfFollowers(proxy, market.numberOfFollowers + 1),
+      update: (proxy, { data }) => {
+        updateMarketFollowers(proxy, data.createMarketFollow.marketFollow.id)
+      },
     })
     setViewerFollowId(res.data.createMarketFollow.marketFollow.id)
   }
@@ -111,7 +105,7 @@ export const MarketHeader = (props: Props) => {
       variables: {
         followId: viewerFollowId
       },
-      update: (proxy) => updateNumberOfFollowers(proxy, market.numberOfFollowers - 1),
+      update: (proxy) => updateMarketFollowers(proxy, null),
     })
     setViewerFollowId(null)
   }
@@ -180,6 +174,24 @@ export const MarketHeader = (props: Props) => {
     </Grid>
   )
 }
+
+const FOLLOW_MARKET_MUTATION = gql`
+  mutation ($marketId: ID!) {
+    createMarketFollow (input: { market: $marketId }) {
+      marketFollow {
+        id
+      }
+    }
+  }
+`
+
+const UNFOLLOW_MARKET_MUTATION = gql`
+  mutation ($followId: ID!) {
+    deleteMarketFollow (input: {id: $followId}) {
+      result
+    }
+  }
+`
 
 MarketHeader.fragments = {
   market: gql`
