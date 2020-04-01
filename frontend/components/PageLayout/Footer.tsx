@@ -8,7 +8,7 @@ import TwitterIcon from '@material-ui/icons/Twitter'
 const useStyles = makeStyles(theme => ({
   footer: {
     backgroundColor: theme.palette.background.paper,
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(3),
     padding: theme.spacing(3),
   },
   footerSmallScreenUp: {

@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   toolbar: theme.mixins.toolbar as any,
   drawerPaper: {
     width: drawerWidth,
+    background: theme.palette.background.default,
   },
   priceColumn: {
     textAlign: 'right',
