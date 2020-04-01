@@ -62,7 +62,7 @@ function MarketPage (props: Props) {
         <link rel="canonical" href={url}/>
       </Head>
       <Box mb={3}>
-        <MarketHeader market={market}/>
+        <MarketHeader market={market} viewerId={props.viewerId}/>
       </Box>
       <PostList market={market} viewerId={props.viewerId}/>
     </Layout>

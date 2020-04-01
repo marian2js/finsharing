@@ -1,0 +1,54 @@
+{
+  "entityName": "marketFollows",
+  "collectionName": "marketFollows",
+  "attributes": {
+    "user": {
+      "type": "user",
+      "required": true,
+      "index": true,
+      "readonly": true,
+      "permissions": {
+        "create": "system",
+        "update": "system"
+      }
+    },
+    "market": {
+      "type": "ref",
+      "entity": "markets",
+      "index": false,
+      "required": true,
+      "readonly": true
+    }
+  },
+  "permissions": {
+    "get": "anyone",
+    "create": "user",
+    "update": "own",
+    "delete": "own"
+  },
+  "indexes": [
+    {
+      "keys": {
+        "user": -1,
+        "market": -1
+      },
+      "unique": true
+    }
+  ],
+  "hooks": {
+    "afterCreate": [
+      {
+        "action": "increment",
+        "target": "this.market.numberOfFollowers",
+        "value": 1
+      }
+    ],
+    "afterDelete": [
+      {
+        "action": "increment",
+        "target": "this.market.numberOfFollowers",
+        "value": -1
+      }
+    ]
+  }
+}

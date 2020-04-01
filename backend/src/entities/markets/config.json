@@ -54,6 +54,10 @@
     },
     "icId": {
       "type": "string"
+    },
+    "numberOfFollowers": {
+      "type": "number",
+      "default": 0
     }
   },
   "indexes": [
@@ -63,5 +67,15 @@
         "name": "text"
       }
     }
-  ]
+  ],
+  "joinAttributes": {
+    "viewerFollow": {
+      "type": "findOne",
+      "entity": "marketFollows",
+      "query": {
+        "user": "{user.id}",
+        "market": "{this.id}"
+      }
+    }
+  }
 }

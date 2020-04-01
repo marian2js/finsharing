@@ -170,6 +170,14 @@ type CreateCommentVotePayload {
   commentVote: CommentVote
 }
 
+input CreateMarketFollowInput {
+  market: ID!
+}
+
+type CreateMarketFollowPayload {
+  marketFollow: MarketFollow
+}
+
 input CreateMarketInput {
   symbol: String!
   name: String!
@@ -183,6 +191,7 @@ input CreateMarketInput {
   numberOfPosts: Float
   partnerId: String
   icId: String
+  numberOfFollowers: Float
 }
 
 type CreateMarketPayload {
@@ -236,6 +245,14 @@ input DeleteCommentVoteInput {
 }
 
 type DeleteCommentVotePayload {
+  result: Boolean!
+}
+
+input DeleteMarketFollowInput {
+  id: ID!
+}
+
+type DeleteMarketFollowPayload {
   result: Boolean!
 }
 
@@ -304,9 +321,11 @@ type Market implements Node {
   numberOfPosts: Float
   partnerId: String
   icId: String
+  numberOfFollowers: Float
   id: ID!
   createdAt: String
   updatedAt: String
+  viewerFollow: MarketFollow
 }
 
 type MarketConnection {
@@ -347,11 +366,69 @@ input MarketFilterInput {
   numberOfPosts: MarketNumberOfPostsFilterInput
   partnerId: MarketPartnerIdFilterInput
   icId: MarketIcIdFilterInput
+  numberOfFollowers: MarketNumberOfFollowersFilterInput
   id: MarketIdFilterInput
   createdAt: MarketCreatedAtFilterInput
   updatedAt: MarketUpdatedAtFilterInput
   or: [MarketFilterInput]
   and: [MarketFilterInput]
+}
+
+"""A single MarketFollow."""
+type MarketFollow implements Node {
+  id: ID!
+  user: User!
+  market: Market!
+  createdAt: String
+  updatedAt: String
+}
+
+type MarketFollowConnection {
+  nodes: [MarketFollow]!
+  pageInfo: PageInfo
+}
+
+input MarketFollowCreatedAtFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input MarketFollowFilterInput {
+  id: MarketFollowIdFilterInput
+  user: MarketFollowUserFilterInput
+  market: MarketFollowMarketFilterInput
+  createdAt: MarketFollowCreatedAtFilterInput
+  updatedAt: MarketFollowUpdatedAtFilterInput
+  or: [MarketFollowFilterInput]
+  and: [MarketFollowFilterInput]
+}
+
+input MarketFollowIdFilterInput {
+  value: ID!
+  comparator: FilterComparatorSymbol
+}
+
+input MarketFollowMarketFilterInput {
+  value: ID!
+  comparator: FilterComparatorSymbol
+}
+
+input MarketFollowOrderByInput {
+  id: OrderByDirection
+  user: OrderByDirection
+  market: OrderByDirection
+  createdAt: OrderByDirection
+  updatedAt: OrderByDirection
+}
+
+input MarketFollowUpdatedAtFilterInput {
+  value: String!
+  comparator: FilterComparatorSymbol
+}
+
+input MarketFollowUserFilterInput {
+  value: ID!
+  comparator: FilterComparatorSymbol
 }
 
 input MarketFullNameFilterInput {
@@ -379,6 +456,11 @@ input MarketNameFilterInput {
   comparator: FilterComparatorSymbol
 }
 
+input MarketNumberOfFollowersFilterInput {
+  value: Float!
+  comparator: FilterComparatorSymbol
+}
+
 input MarketNumberOfPostsFilterInput {
   value: Float!
   comparator: FilterComparatorSymbol
@@ -397,6 +479,7 @@ input MarketOrderByInput {
   numberOfPosts: OrderByDirection
   partnerId: OrderByDirection
   icId: OrderByDirection
+  numberOfFollowers: OrderByDirection
   id: OrderByDirection
   createdAt: OrderByDirection
   updatedAt: OrderByDirection
@@ -478,6 +561,15 @@ type Mutation {
 
   """Delete a Comment."""
   deleteComment(input: DeleteCommentInput): DeleteCommentPayload
+
+  """Create a MarketFollow."""
+  createMarketFollow(input: CreateMarketFollowInput): CreateMarketFollowPayload
+
+  """Update a MarketFollow."""
+  updateMarketFollow(input: UpdateMarketFollowInput): UpdateMarketFollowPayload
+
+  """Delete a MarketFollow."""
+  deleteMarketFollow(input: DeleteMarketFollowInput): DeleteMarketFollowPayload
 
   """Create a Market."""
   createMarket(input: CreateMarketInput): CreateMarketPayload
@@ -735,6 +827,12 @@ type Query {
   """Find a Comment by id."""
   comment(id: String!): Comment!
 
+  """Find MarketFollows."""
+  marketFollows(first: Int, last: Int, before: String, after: String, filter: MarketFollowFilterInput, orderBy: [MarketFollowOrderByInput]): MarketFollowConnection
+
+  """Find a MarketFollow by id."""
+  marketFollow(id: String!): MarketFollow!
+
   """Find Markets."""
   markets(first: Int, last: Int, before: String, after: String, filter: MarketFilterInput, orderBy: [MarketOrderByInput], search: String): MarketConnection
 
@@ -788,6 +886,15 @@ type UpdateCommentVotePayload {
   commentVote: CommentVote
 }
 
+input UpdateMarketFollowInput {
+  id: ID!
+  market: ID
+}
+
+type UpdateMarketFollowPayload {
+  marketFollow: MarketFollow
+}
+
 input UpdateMarketInput {
   symbol: String!
   name: String
@@ -801,6 +908,7 @@ input UpdateMarketInput {
   numberOfPosts: Float
   partnerId: String
   icId: String
+  numberOfFollowers: Float
 }
 
 type UpdateMarketPayload {

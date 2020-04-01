@@ -107,7 +107,7 @@ function PostPage (props: Props) {
       </Head>
 
       <Box mb={3}>
-        <MarketHeader market={post.market}/>
+        <MarketHeader market={post.market} viewerId={viewerId}/>
       </Box>
 
       <Card>

@@ -11,4 +11,8 @@ export type Market = {
   priceUpdatedAt: number
   icId: string
   partnerId: string
+  numberOfFollowers: number
+  viewerFollow: {
+    id: string
+  }
 }
