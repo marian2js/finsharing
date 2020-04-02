@@ -1,17 +1,15 @@
 import Hidden from '@material-ui/core/Hidden'
 import Drawer from '@material-ui/core/Drawer'
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import { makeStyles, Theme, useTheme } from '@material-ui/core/styles'
 import Divider from '@material-ui/core/Divider'
-import List from '@material-ui/core/List'
-import { CircularProgress, ListItem, ListItemText, Typography } from '@material-ui/core'
-import gql from 'graphql-tag'
+import { AppBar, Box, Tab, Tabs, Typography } from '@material-ui/core'
 import Link from 'next/link'
-import { useQuery } from '@apollo/react-hooks'
-import { Market } from '../../src/types/Market'
-import { roundDecimals } from '../../src/utils/number'
-import { MarketPriceChange } from '../markets/MarketPriceChange'
 import HomeIcon from '@material-ui/icons/Home'
+import { TabPanel, tabProps } from '../TabPanel'
+import { SideMenuWatchlist } from './SideMenuWatchlist'
+import { SideMenuPopularList } from './SideMenuPopularList'
+import { ViewerContext } from '../providers/ViewerContextProvider'
 
 export const drawerWidth = 240
 
@@ -26,12 +24,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   drawerPaper: {
     width: drawerWidth,
     background: theme.palette.background.default,
-  },
-  priceColumn: {
-    textAlign: 'right',
-    '& p': {
-      fontWeight: 500,
-    },
   },
   homeButton: {
     textAlign: 'center',
@@ -49,36 +41,15 @@ interface Props {
   onDrawerToggle: () => void
 }
 
-const LIST_MARKETS_QUERY = gql`
-  {
-    markets (first: 30, orderBy: [{ numberOfPosts: DESC }]) {
-      nodes {
-        symbol
-        name
-        price
-        priceClose
-      }
-    }
-  }
-`
-
 export function SideMenu (props: Props) {
-  const { error, data } = useQuery(
-    LIST_MARKETS_QUERY, {
-      pollInterval: 1000 * 60,
-      notifyOnNetworkStatusChange: true,
-    }
-  )
   const classes = useStyles()
   const theme = useTheme()
-  const markets: Market[] = data?.markets?.nodes || []
+  const { viewer } = useContext(ViewerContext)
+  const [tabIndex, setTabIndex] = useState(viewer?.id ? 0 : 1)
 
-  if (error) {
-    return <div>Error loading markets, please try again</div>
-  }
-
-  if (!markets.length) {
-    return <CircularProgress/>
+  const handleTabChange = (e: React.ChangeEvent<{}>, newIndex: number) => {
+    e.preventDefault()
+    setTabIndex(newIndex)
   }
 
   const drawer = (
@@ -93,27 +64,27 @@ export function SideMenu (props: Props) {
         </Typography>
       </div>
       <Divider/>
-      <List>
+
+      <AppBar position="sticky" color="default">
+        <Tabs value={tabIndex}
+              variant="fullWidth"
+              indicatorColor="primary"
+              onChange={handleTabChange}
+              aria-label="market list tabs">
+          <Tab label="Watchlist" {...tabProps(0)} />
+          <Tab label="Popular" {...tabProps(1)} />
+        </Tabs>
+      </AppBar>
+      <TabPanel value={tabIndex} index={0}>
         {
-          markets.map(market => (
-            <Link key={market.symbol} href="/markets/[symbol]" as={`/markets/${market.symbol}`}>
-              <ListItem button>
-                <ListItemText primary={market.symbol} secondary={market.name}/>
-                <div className={classes.priceColumn}>
-                  <Typography variant="body2">
-                    {
-                      market.price && `$${roundDecimals(market.price, 2)}`
-                    }
-                  </Typography>
-                  {
-                    market.price && market.priceClose && <MarketPriceChange market={market} variant="body2"/>
-                  }
-                </div>
-              </ListItem>
-            </Link>
-          ))
+          viewer?.id ?
+            <SideMenuWatchlist viewerId={viewer?.id}/> :
+            <Box p={2}><p>You need a <Link href="/register"><a>free account</a></Link> to create a watchlist.</p></Box>
         }
-      </List>
+      </TabPanel>
+      <TabPanel value={tabIndex} index={1}>
+        <SideMenuPopularList/>
+      </TabPanel>
     </div>
   )
 

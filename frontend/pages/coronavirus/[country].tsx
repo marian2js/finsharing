@@ -181,80 +181,89 @@ function CountryCoronavirus (props: Props) {
           cases[countryKey] && (
             <>
               <AppBar position="static" color="default">
-                <Tabs value={tabValue} onChange={handleTabChange} aria-label="simple tabs example">
+                <Tabs value={tabValue}
+                      indicatorColor="primary"
+                      onChange={handleTabChange}
+                      aria-label="country section tabs">
                   <Tab label="Daily cases" {...tabProps(0)} />
                   <Tab label="Total cases" {...tabProps(1)} />
                   <Tab label="Statistics" {...tabProps(2)} />
                 </Tabs>
               </AppBar>
               <TabPanel value={tabValue} index={0}>
-                <LinearChart title={`Daily cases in ${country.name}`}
-                             xaxis={dataDates}
-                             yaxis={[]}
-                             data={[{
-                               title: 'New cases',
-                               values: dailyCasesValues,
-                             }, {
-                               title: 'New deaths',
-                               values: dailyDeathsValues,
-                             }]}
-                />
+                <Box pt={2} pb={2}>
+                  <LinearChart title={`Daily cases in ${country.name}`}
+                               xaxis={dataDates}
+                               yaxis={[]}
+                               data={[{
+                                 title: 'New cases',
+                                 values: dailyCasesValues,
+                               }, {
+                                 title: 'New deaths',
+                                 values: dailyDeathsValues,
+                               }]}
+                  />
+                </Box>
               </TabPanel>
               <TabPanel value={tabValue} index={1}>
-                <LinearChart title={`Total cases in ${country.name}`}
-                             xaxis={dataDates}
-                             yaxis={[]}
-                             data={[{
-                               title: 'Total cases',
-                               values: totalCasesValues,
-                             }, {
-                               title: 'Total deaths',
-                               values: totalDeathsValues,
-                             }]}
-                />
+                <Box pt={2} pb={2}>
+                  <LinearChart title={`Total cases in ${country.name}`}
+                               xaxis={dataDates}
+                               yaxis={[]}
+                               data={[{
+                                 title: 'Total cases',
+                                 values: totalCasesValues,
+                               }, {
+                                 title: 'Total deaths',
+                                 values: totalDeathsValues,
+                               }]}
+                  />
+                </Box>
               </TabPanel>
               <TabPanel value={tabValue} index={2}>
-                <ul className={classes.statistics}>
-                  {
-                    Number(population) ? (
-                      <>
+                <Box pt={2} pb={3}>
+                  <ul className={classes.statistics}>
+                    {
+                      Number(population) ? (
+                        <>
+                          <li>
+                            {country.name} had <strong>
+                            {roundDecimals(cases[countryKey] / (Number(population) / 1000000), 2)} cases
+                          </strong> per million inhabitants.
+                          </li>
+                          <li>
+                            {country.name} had <strong>
+                            {roundDecimals(deaths[countryKey] / (Number(population) / 1000000), 2)} deaths
+                          </strong> per million inhabitants.
+                          </li>
+                        </>
+                      ) : ''
+                    }
+                    {
+                      maxCases ? (
                         <li>
-                          {country.name} had <strong>
-                          {roundDecimals(cases[countryKey] / (Number(population) / 1000000), 2)} cases
-                        </strong> per million inhabitants.
+                          The peak in daily cases was {moment(maxCasesDate).fromNow()} with
+                          <strong> {maxCases.toLocaleString()} cases</strong>.
                         </li>
+                      ) : ''
+                    }
+                    {
+                      maxDeaths ? (
                         <li>
-                          {country.name} had <strong>
-                          {roundDecimals(deaths[countryKey] / (Number(population) / 1000000), 2)} deaths
-                        </strong> per million inhabitants.
+                          The peak in daily deaths was {moment(maxDeathsDate).fromNow()} with
+                          <strong> {maxDeaths.toLocaleString()} deaths</strong>.
                         </li>
-                      </>
-                    ) : ''
-                  }
-                  {
-                    maxCases ? (
-                      <li>
-                        The peak in daily cases was {moment(maxCasesDate).fromNow()} with
-                        <strong> {maxCases.toLocaleString()} cases</strong>.
-                      </li>
-                    ) : ''
-                  }
-                  {
-                    maxDeaths ? (
-                      <li>
-                        The peak in daily deaths was {moment(maxDeathsDate).fromNow()} with
-                        <strong> {maxDeaths.toLocaleString()} deaths</strong>.
-                      </li>
-                    ) : ''
-                  }
-                  {
-                    cases[countryKey] && deaths[countryKey] ? (
-                      <li>
-                        The death rate is {roundDecimals(deaths[countryKey] * 100 / cases[countryKey], 2)}%.
-                      </li>
-                    ) : ''
-                  }
-                </ul>
+                      ) : ''
+                    }
+                    {
+                      cases[countryKey] && deaths[countryKey] ? (
+                        <li>
+                          The death rate is {roundDecimals(deaths[countryKey] * 100 / cases[countryKey], 2)}%.
+                        </li>
+                      ) : ''
+                    }
+                  </ul>
+                </Box>
               </TabPanel>
             </>
           )
