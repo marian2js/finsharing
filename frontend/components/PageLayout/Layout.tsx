@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import IconButton from '@material-ui/core/IconButton'
@@ -17,14 +17,13 @@ import {
 } from '@material-ui/core'
 import { SideMenu } from './SideMenu'
 import Link from 'next/link'
-import { AuthService } from '../../src/services/AuthService'
 import { AccountCircle } from '@material-ui/icons'
 import CreateIcon from '@material-ui/icons/Create'
 import theme from '../../src/theme'
 import Router from 'next/router'
-import { User } from '../../src/types/User'
 import { useLogout } from '../../src/services/UserHooks'
 import { SearchBar } from './SearchBar'
+import { ViewerContext } from '../providers/ViewerContextProvider'
 
 const drawerWidth = 240
 
@@ -77,9 +76,8 @@ interface Props {
 export function Layout (props: Props) {
   const classes = useStyles()
   const { noPadding } = props
+  const { viewer, setViewer } = useContext(ViewerContext)
   const [mobileOpen, setMobileOpen] = React.useState(false)
-  const [viewerLoggedIn, setViewerLoggedIn] = React.useState(false)
-  const [viewer, setViewer] = React.useState<User | null>(null)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const [loadingRoute, setLoadingRoute] = React.useState(false)
   const [logout] = useLogout()
@@ -87,8 +85,6 @@ export function Layout (props: Props) {
   const smDown = useMediaQuery(theme.breakpoints.down('sm'))
 
   useEffect(() => {
-    setViewerLoggedIn(new AuthService().isLoggedIn())
-    setViewer(new AuthService().getViewer())
     Router.events.on('routeChangeStart', () => setLoadingRoute(true))
     Router.events.on('routeChangeComplete', () => setLoadingRoute(false))
     Router.events.on('routeChangeError', () => setLoadingRoute(false))
@@ -120,6 +116,7 @@ export function Layout (props: Props) {
   const handleLogoutClick = async () => {
     handleUserMenuClose()
     await logout()
+    setViewer(null)
     await Router.reload()
   }
 
@@ -207,7 +204,7 @@ export function Layout (props: Props) {
           <SearchBar/>
 
           {
-            viewerLoggedIn ? getUserMenu() : getGuestMenu()
+            !!viewer?.id ? getUserMenu() : getGuestMenu()
           }
 
         </Toolbar>

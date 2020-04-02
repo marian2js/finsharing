@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Layout } from '../../components/PageLayout/Layout'
 import Head from 'next/head'
 import gql from 'graphql-tag'
@@ -9,7 +9,7 @@ import Error from 'next/error'
 import { Box, CircularProgress, Typography } from '@material-ui/core'
 import { User } from '../../src/types/User'
 import { PostList } from '../../components/posts/PostList'
-import { AuthService } from '../../src/services/AuthService'
+import { ViewerContext } from '../../components/providers/ViewerContextProvider'
 
 const USER_QUERY = gql`
   query ($username: String!) {
@@ -24,10 +24,10 @@ const USER_QUERY = gql`
 
 interface Props {
   username: string
-  viewerId: string | undefined
 }
 
 const UserPage = (props: Props) => {
+  const { viewer } = useContext(ViewerContext)
   const { loading, error, data } = useQuery(
     USER_QUERY,
     {
@@ -66,7 +66,7 @@ const UserPage = (props: Props) => {
         </Typography>
       </Box>
 
-      <PostList viewerId={props.viewerId} userId={user.id}/>
+      <PostList viewerId={viewer?.id} userId={user.id}/>
     </Layout>
   )
 }
@@ -75,7 +75,6 @@ UserPage.getInitialProps = async (ctx: NextPageContext): Promise<Props> => {
   const username = Array.isArray(ctx.query.username) ? ctx.query.username[0] : ctx.query.username
   return {
     username,
-    viewerId: new AuthService(ctx).getViewer()?.id,
   }
 }
 

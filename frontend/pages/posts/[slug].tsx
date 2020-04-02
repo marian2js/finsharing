@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Post } from '../../src/types/Post'
 import { Comment } from '../../src/types/Comment'
 import { Box, Card, CardContent, CircularProgress, Divider, Grid, Typography } from '@material-ui/core'
@@ -12,7 +12,6 @@ import { withApollo } from '../../src/apollo'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import { NextPageContext } from 'next'
-import { AuthService } from '../../src/services/AuthService'
 import { PostVotes } from '../../components/posts/PostVotes'
 import { PostActions } from '../../components/posts/PostActions'
 import { CommentList } from '../../components/comments/CommentList'
@@ -20,10 +19,10 @@ import { PostHeader } from '../../components/posts/PostHeader'
 import { getPlainText } from '../../src/utils/markdown'
 import { parseUrl } from '../../src/utils/string'
 import { MarketHeader } from '../../components/markets/MarketHeader'
+import { ViewerContext } from '../../components/providers/ViewerContextProvider'
 
 interface Props {
   slug: string
-  viewerId: string | undefined
 }
 
 const POST_QUERY = gql`
@@ -58,7 +57,7 @@ function PostPage (props: Props) {
       notifyOnNetworkStatusChange: true,
     }
   )
-  const { viewerId } = props
+  const { viewer } = useContext(ViewerContext)
   const [post, setPost] = useState<Post>(data?.post)
   const [lastCommentAddedId, setLastCommentAddedId] = useState('')
 
@@ -107,13 +106,13 @@ function PostPage (props: Props) {
       </Head>
 
       <Box mb={3}>
-        <MarketHeader market={post.market} viewerId={viewerId}/>
+        <MarketHeader market={post.market} viewerId={viewer?.id}/>
       </Box>
 
       <Card>
         <Grid container>
           <Grid item xs={2} sm={1}>
-            <PostVotes post={post} viewerId={viewerId}/>
+            <PostVotes post={post} viewerId={viewer?.id}/>
           </Grid>
           <Grid item xs={10} sm={11}>
             <CardContent>
@@ -127,7 +126,7 @@ function PostPage (props: Props) {
 
             <Divider variant="middle"/>
 
-            <PostActions post={post} authUserId={viewerId}/>
+            <PostActions post={post} authUserId={viewer?.id}/>
           </Grid>
         </Grid>
       </Card>
@@ -135,7 +134,7 @@ function PostPage (props: Props) {
       <Box mt={2}>
         <Card>
           {
-            viewerId ?
+            viewer?.id ?
               <CommentForm post={post} onCommentAdd={handleCommentAdded}/> :
               <CardContent>You need <Link href="/register"><a>a free account</a></Link> to comment.</CardContent>
           }
@@ -144,7 +143,7 @@ function PostPage (props: Props) {
 
       <Box mt={2}>
         <CommentList post={post}
-                     authUserId={viewerId}
+                     authUserId={viewer?.id}
                      lastCommentAddedId={lastCommentAddedId}/>
       </Box>
 
@@ -156,7 +155,6 @@ function PostPage (props: Props) {
 PostPage.getInitialProps = async (ctx: NextPageContext): Promise<Props> => {
   const slug = (Array.isArray(ctx.query.slug) ? ctx.query.slug[0] : ctx.query.slug).toLowerCase()
   return {
-    viewerId: new AuthService(ctx).getViewer()?.id,
     slug,
   }
 }

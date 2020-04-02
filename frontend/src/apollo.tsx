@@ -8,8 +8,10 @@ import fetch from 'isomorphic-unfetch'
 import { NormalizedCacheObject } from 'apollo-cache-inmemory/lib/types'
 import { NextPageContext } from 'next'
 import { destroyCookie, parseCookies, setCookie } from 'nookies'
-import { TOKENS_COOKIE_NAME, USER_COOKIE_NAME } from './services/AuthService'
+import { AuthService, TOKENS_COOKIE_NAME, USER_COOKIE_NAME } from './services/AuthService'
 import { UserTokens } from './types/UserTokens'
+import { User } from './types/User'
+import ViewerContextProvider from '../components/providers/ViewerContextProvider'
 
 let globalApolloClient: ApolloClient<NormalizedCacheObject> | null = null
 
@@ -23,6 +25,7 @@ interface WithApolloProps {
   apolloClient?: ApolloClient<NormalizedCacheObject>
   apolloState?: NormalizedCacheObject
   tokens?: UserTokens
+  viewer?: User | null
 }
 
 /**
@@ -31,12 +34,20 @@ interface WithApolloProps {
  * your PageComponent via HOC pattern.
  */
 export function withApollo (PageComponent: any, { ssr = true } = {}) {
-  const WithApollo = ({ apolloClient, apolloState, tokens, ...pageProps }: WithApolloProps) => {
+  const WithApollo = ({
+    apolloClient,
+    apolloState,
+    tokens,
+    viewer,
+    ...pageProps
+  }: WithApolloProps) => {
     const client = apolloClient || initApolloClient(apolloState, tokens)
     return (
-      <ApolloProvider client={client}>
-        <PageComponent {...pageProps} />
-      </ApolloProvider>
+      <ViewerContextProvider viewer={viewer}>
+        <ApolloProvider client={client}>
+          <PageComponent {...pageProps} />
+        </ApolloProvider>
+      </ViewerContextProvider>
     )
   }
 
@@ -55,16 +66,15 @@ export function withApollo (PageComponent: any, { ssr = true } = {}) {
   if (ssr || PageComponent.getInitialProps) {
     WithApollo.getInitialProps = async (ctx: ApolloPageContext): Promise<WithApolloProps> => {
       const { AppTree } = ctx
+      const viewer = new AuthService(ctx).getViewer()
 
       const tokensJson = parseCookies(ctx || null)[TOKENS_COOKIE_NAME]
       let tokens: UserTokens | undefined
       if (tokensJson) {
         tokens = JSON.parse(tokensJson)
         if (tokens && tokens.refreshToken && (!tokens.accessTokenExpiration || tokens.accessTokenExpiration < new Date().getTime())) {
-          const userJson = parseCookies(ctx || null)[USER_COOKIE_NAME]
-          if (userJson) {
-            const user = JSON.parse(userJson)
-            await refreshCredentials(ctx, user.username, tokens)
+          if (viewer) {
+            await refreshCredentials(ctx, viewer.username, tokens)
             tokens = JSON.parse(tokensJson)
           }
         }
@@ -122,6 +132,7 @@ export function withApollo (PageComponent: any, { ssr = true } = {}) {
         ...pageProps,
         apolloState,
         tokens,
+        viewer,
       }
     }
   }
