@@ -26,7 +26,7 @@ export const SideMenuWatchlist = (props: Props) => {
     return <div>Error loading markets, please try again</div>
   }
 
-  if (loading) {
+  if (loading && !markets.length) {
     return <CircularProgress/>
   }
   if (!markets.length) {

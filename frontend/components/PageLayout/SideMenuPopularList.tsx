@@ -18,7 +18,7 @@ export const SideMenuPopularList = () => {
     return <div>Error loading markets, please try again</div>
   }
 
-  if (loading) {
+  if (loading && !markets.length) {
     return <CircularProgress/>
   }
 
