@@ -29,11 +29,12 @@ interface Props {
   deaths: { [key: string]: number }
   population?: number
   travelRestrictions?: string
+  doublingDays?: number
 }
 
 function CountryCoronavirus (props: Props) {
   const classes = useStyles()
-  const { country, countryKey, cases, deaths, population, travelRestrictions } = props
+  const { country, countryKey, cases, deaths, population, travelRestrictions, doublingDays } = props
   const [tabValue, setTabValue] = React.useState(0)
 
   if (!country) {
@@ -224,6 +225,13 @@ function CountryCoronavirus (props: Props) {
                 <Box pt={2} pb={3}>
                   <ul className={classes.statistics}>
                     {
+                      doublingDays ? (
+                        <li>
+                          Total number of cases doubled on the last <strong>{doublingDays} days</strong>.
+                        </li>
+                      ) : ''
+                    }
+                    {
                       Number(population) ? (
                         <>
                           <li>
@@ -355,6 +363,7 @@ CountryCoronavirus.getInitialProps = async (ctx: NextPageContext): Promise<Props
     deaths,
     population: await RedisClient.get(`population_${countryKey}`),
     travelRestrictions: await RedisClient.get(`travel_${countryKey}`),
+    doublingDays: await RedisClient.get(`cases_double_${countryKey}`) || undefined,
   }
 }
 

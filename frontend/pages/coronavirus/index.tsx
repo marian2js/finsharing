@@ -63,6 +63,7 @@ function CoronavirusPage (props: Props) {
         emoji: country.emoji,
         cases: cases[countryKey] || 0,
         deaths: deaths[countryKey] || 0,
+        doubling: cases[`double_${countryKey}`],
         change: cases[`change_${countryKey}`] || -Infinity,
       }
     })
@@ -78,6 +79,7 @@ function CoronavirusPage (props: Props) {
     { id: 'name', label: 'Country' },
     { id: 'cases', label: 'Total cases' },
     { id: 'deaths', label: 'Total deaths' },
+    { id: 'doubling', label: 'Cases doubling time' },
     { id: 'change', label: '5 days change' },
   ]
 
@@ -173,6 +175,7 @@ function CoronavirusPage (props: Props) {
                     </TableCell>
                     <TableCell align="right">{country.cases.toLocaleString()}</TableCell>
                     <TableCell align="right">{country.deaths.toLocaleString()}</TableCell>
+                    <TableCell align="right">{country.doubling ? `${country.doubling} days` : ''}</TableCell>
                     <TableCell align="right">
                       {country.change && Number.isFinite(country.change) && `${roundDecimals(country.change, 2)}%`}
                     </TableCell>
