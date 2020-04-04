@@ -63,8 +63,8 @@ function CoronavirusPage (props: Props) {
         emoji: country.emoji,
         cases: cases[countryKey] || 0,
         deaths: deaths[countryKey] || 0,
-        casesDoubling: cases[`double_${countryKey}`],
-        deathsDoubling: deaths[`double_${countryKey}`],
+        casesDoubling: cases[`double_${countryKey}`] || 0,
+        deathsDoubling: deaths[`double_${countryKey}`] || 0,
       }
     })
 
