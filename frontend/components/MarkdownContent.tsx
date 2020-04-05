@@ -5,6 +5,7 @@ import TweetEmbed from 'react-tweet-embed'
 import { makeStyles } from '@material-ui/core'
 import { Youtube } from './YouTube'
 import { LinkCard } from './LinkCard'
+import { GoogleTrends } from './charts/GoogleTrends'
 
 const useStyles = makeStyles({
   markdown: {
@@ -70,6 +71,10 @@ function InlineCode (props: MarkdownAbstractSyntaxTree) {
                   allow='autoplay; fullscreen; encrypted-media'/>
         </div>
       )
+    }
+    if (props.value.toLowerCase().startsWith('googletrends:')) {
+      const url = props.value.toLowerCase().split('googletrends:')[1].trim()
+      return <GoogleTrends url={url}/>
     }
   }
 
