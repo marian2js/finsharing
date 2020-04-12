@@ -27,26 +27,6 @@ interface Props {
   post?: Post
 }
 
-const CREATE_COMMENT_MUTATION = gql`
-  mutation ($marketId: ID!, $title: String!, $body: String!, $smImageUrl: String, $lgImageUrl: String) {
-    createPost (input: { market: $marketId, title: $title, body: $body, smImageUrl: $smImageUrl, lgImageUrl: $lgImageUrl }) {
-      post {
-        slug
-      }
-    }
-  }
-`
-
-const UPDATE_COMMENT_MUTATION = gql`
-  mutation ($slug: String!, $title: String!, $body: String!, $smImageUrl: String, $lgImageUrl: String) {
-    updatePost (input: { slug: $slug, title: $title, body: $body, smImageUrl: $smImageUrl, lgImageUrl: $lgImageUrl }) {
-      post {
-        slug
-      }
-    }
-  }
-`
-
 export const PostForm = (props: Props) => {
   const classes = useStyles()
 
@@ -54,8 +34,9 @@ export const PostForm = (props: Props) => {
   const [title, setTitle] = useState(props.post?.title || '')
   const [body, setBody] = useState(props.post?.body || '')
   const [message, setMessage] = useState()
-  const [createPost] = useMutation(CREATE_COMMENT_MUTATION)
-  const [updatePost] = useMutation(UPDATE_COMMENT_MUTATION)
+  const [createPost] = useMutation(CREATE_POST_MUTATION)
+  const [updatePost] = useMutation(UPDATE_POST_MUTATION)
+  const [upvotePost] = useMutation(UPVOTE_POST_MUTATION)
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -83,6 +64,16 @@ export const PostForm = (props: Props) => {
           }
         })
         postSlug = res.data.createPost.post.slug
+
+        // Up vote the post after creating it
+        try {
+          await upvotePost({
+            variables: {
+              postId: res.data.createPost.post.id
+            }
+          })
+        } catch (e) {}
+
       }
       await Router.push('/posts/[slug]', `/posts/${postSlug}`)
     } catch (e) {
@@ -152,3 +143,35 @@ export const PostForm = (props: Props) => {
     </form>
   )
 }
+
+const CREATE_POST_MUTATION = gql`
+  mutation ($marketId: ID!, $title: String!, $body: String!, $smImageUrl: String, $lgImageUrl: String) {
+    createPost (input: { market: $marketId, title: $title, body: $body, smImageUrl: $smImageUrl, lgImageUrl: $lgImageUrl }) {
+      post {
+        id
+        slug
+      }
+    }
+  }
+`
+
+const UPDATE_POST_MUTATION = gql`
+  mutation ($slug: String!, $title: String!, $body: String!, $smImageUrl: String, $lgImageUrl: String) {
+    updatePost (input: { slug: $slug, title: $title, body: $body, smImageUrl: $smImageUrl, lgImageUrl: $lgImageUrl }) {
+      post {
+        slug
+      }
+    }
+  }
+`
+
+const UPVOTE_POST_MUTATION = gql`
+  mutation ($postId: ID!) {
+    createPostVote (input: { post: $postId, value: POSITIVE_1 }) {
+      postVote {
+        id
+        value
+      }
+    }
+  }
+`

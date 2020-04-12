@@ -37,6 +37,7 @@ export const CommentForm = (props: Props) => {
   const classes = useStyles()
   const [createComment] = useMutation(CREATE_COMMENT_MUTATION)
   const [updateComment] = useMutation(UPDATE_COMMENT_MUTATION)
+  const [upvoteComment] = useMutation(UPVOTE_COMMENT_MUTATION)
 
   const [body, setBody] = useState((props as UpdateCommentProps).comment?.body || '')
   const [message, setMessage] = useState()
@@ -66,6 +67,16 @@ export const CommentForm = (props: Props) => {
             }
           }]
         })
+
+        // Up vote the comment after creating it
+        try {
+          await upvoteComment({
+            variables: {
+              commentId: res.data.createComment.comment.id,
+            }
+          })
+        } catch (e) {}
+
         newCommentProps.onCommentAdd(res.data.createComment.comment)
         setMessage({ text: 'Comment added', severity: 'success' })
         setBody('')
@@ -150,4 +161,15 @@ const UPDATE_COMMENT_MUTATION = gql`
     }
   }
   ${CommentForm.fragments.comment}
+`
+
+const UPVOTE_COMMENT_MUTATION = gql`
+  mutation ($commentId: ID!) {
+    createCommentVote (input: { comment: $commentId, value: POSITIVE_1 }) {
+      commentVote {
+        id
+        value
+      }
+    }
+  }
 `
