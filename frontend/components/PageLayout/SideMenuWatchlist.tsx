@@ -4,6 +4,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { Market } from '../../src/types/Market'
 import { Box, CircularProgress } from '@material-ui/core'
 import { SideMenuMarketList } from './SideMenuMarketList'
+import { getMarketPriceChange } from '../../src/utils/markets'
 
 interface Props {
   viewerId: string
@@ -20,7 +21,8 @@ export const SideMenuWatchlist = (props: Props) => {
       }
     }
   )
-  const markets: Market[] = data?.marketFollows?.nodes?.map((f: { market: Market }) => f.market) || []
+  const markets: Market[] = (data?.marketFollows?.nodes?.map((f: { market: Market }) => f.market) || [])
+    .sort((a: Market, b: Market) => getMarketPriceChange(b) - getMarketPriceChange(a))
 
   if (error) {
     return <div>Error loading markets, please try again</div>

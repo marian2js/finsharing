@@ -4,6 +4,7 @@ import { Typography } from '@material-ui/core'
 import { green, red } from '@material-ui/core/colors'
 import { roundDecimals } from '../../src/utils/number'
 import { Variant } from '@material-ui/core/styles/createTypography'
+import { getMarketPriceChange } from '../../src/utils/markets'
 
 interface Props {
   market: Market
@@ -16,7 +17,7 @@ export const MarketPriceChange = (props: Props) => {
   if (!market.price || !market.priceClose) {
     return <></>
   }
-  const change = ((market.price - market.priceClose) * 100) / market.priceClose
+  const change = getMarketPriceChange(market)
   return (
     <Typography variant={variant}
                 {...{ component }}
