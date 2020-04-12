@@ -214,7 +214,7 @@ async function refreshCredentials (ctx: ApolloPageContext, username: string, tok
       ...(await res.json()),
       __typename: undefined,
     }), {})
-  } else {
+  } else if (res.status === 401) {
     // invalid refresh token, remove all cookies
     destroyCookie(ctx, USER_COOKIE_NAME)
     destroyCookie(ctx, TOKENS_COOKIE_NAME)
