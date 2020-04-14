@@ -44,6 +44,11 @@ export default class FinSharingApp extends App {
           <meta name="msapplication-TileColor" content="#ffffff"/>
           <meta name="msapplication-TileImage" content="/ms-icon-144x144.png"/>
 
+          <meta property="og:site_name" content="FinSharing.com"/>
+          <meta name="twitter:card" content="summary_large_image"/>
+          <meta name="twitter:site" content="@finsharing"/>
+          <meta name="twitter:creator" content="@finsharing"/>
+
           <style>{`
             a {
               color: #2196f3;
