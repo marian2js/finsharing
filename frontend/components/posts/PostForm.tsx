@@ -160,6 +160,8 @@ const UPDATE_POST_MUTATION = gql`
     updatePost (input: { slug: $slug, title: $title, body: $body, smImageUrl: $smImageUrl, lgImageUrl: $lgImageUrl }) {
       post {
         slug
+        title
+        body
       }
     }
   }
