@@ -92,7 +92,7 @@ function PostPage (props: Props) {
         <meta name="description" content={shortDescription}/>
         <meta property="og:title" content={post.title}/>
         <meta property="og:url" content={postFullUrl}/>
-        <meta name="twitter:title" content={post.title}/>
+        <meta name="twitter:title" content={`${post.title} $${post.market.symbol.toUpperCase()}`}/>
         <meta name="twitter:description" content={shortDescription}/>
         <link rel="canonical" href={postFullUrl}/>
         {
