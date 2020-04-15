@@ -53,7 +53,7 @@ function MarketPage (props: Props) {
   return (
     <Layout>
       <Head>
-        <title>{title} - FinSharing.com</title>
+        <title>{title} - ${market.symbol.toUpperCase()}</title>
         <meta name="description" content={description}/>
         <meta property="og:title" content={title}/>
         <meta property="og:url" content={url}/>

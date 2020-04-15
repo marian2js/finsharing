@@ -88,11 +88,11 @@ function PostPage (props: Props) {
   return (
     <Layout>
       <Head>
-        <title>{post.title} - FinSharing.com</title>
+        <title>{post.title} - ${post.market.symbol.toUpperCase()}</title>
         <meta name="description" content={shortDescription}/>
         <meta property="og:title" content={post.title}/>
         <meta property="og:url" content={postFullUrl}/>
-        <meta name="twitter:title" content={`${post.title} $${post.market.symbol.toUpperCase()}`}/>
+        <meta name="twitter:title" content={post.title}/>
         <meta name="twitter:description" content={shortDescription}/>
         <link rel="canonical" href={postFullUrl}/>
         {

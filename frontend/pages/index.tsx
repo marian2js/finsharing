@@ -22,10 +22,23 @@ function IndexPage () {
     </Box>
   )
 
+  const url = 'https://finsharing.com'
+  const title = 'FinSharing.com'
+  const description = 'Community for Stock Market discussions, ideas and investment strategies.'
+  const image = 'https://finsharing.com/finsharing.png'
+
   return (
     <Layout>
       <Head>
-        <title>FinSharing.com</title>
+        <title>{title}</title>
+        <meta name="description" content={description}/>
+        <meta property="og:title" content={title}/>
+        <meta property="og:url" content={url}/>
+        <meta name="twitter:title" content={title}/>
+        <meta name="twitter:description" content={description}/>
+        <link rel="canonical" href={url}/>
+        <meta property="og:image" content={image}/>
+        <meta name="twitter:image" content={image}/>
       </Head>
 
       <div>
