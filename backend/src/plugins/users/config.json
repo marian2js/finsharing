@@ -1,6 +1,6 @@
 {
   "accessToken": {
-    "expiresIn": "3 days",
+    "expiresIn": "15 days",
     "algorithm": "RS256"
   },
   "refreshToken": {
