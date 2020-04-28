@@ -16,15 +16,6 @@ function IndexPage () {
   const { viewer } = useContext(ViewerContext)
   const [tabIndex, setTabIndex] = useState(viewer?.id ? 0 : 1)
 
-  const welcomeMessage = !viewer?.id && (
-    <Box mb={2}>
-      <Alert color="warning" icon={<QuestionAnswerIcon/>}>
-        Welcome to our community for investors. <Link href="/register"><a style={{ display: 'contents' }}>Sign
-        Up</a></Link> for free to get started.
-      </Alert>
-    </Box>
-  )
-
   const url = 'https://finsharing.com'
   const title = 'FinSharing.com'
   const description = 'Community for Stock Market discussions, ideas and investment strategies.'
@@ -44,29 +35,30 @@ function IndexPage () {
         <meta name="twitter:image" content={image}/>
       </Head>
 
-      <div>
-        {welcomeMessage}
-      </div>
-
-      {
-        viewer?.id && (
-          <>
+      <Box mb={2}>
+        <Tabs value={tabIndex} onChange={(_, i) => setTabIndex(i)}
+              indicatorColor="primary"
+              textColor="primary"
+              centered
+              aria-label="post list tabs">
+          <PostListTab label="Following"/>
+          <PostListTab label="All"/>
+        </Tabs>
+      </Box>
+      <TabPanel value={tabIndex} index={0}>
+        {
+          viewer?.id ? <FollowingPostList viewerId={viewer!.id}/> : (
             <Box mb={2}>
-              <Tabs value={tabIndex} onChange={(_, i) => setTabIndex(i)}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    centered
-                    aria-label="post list tabs">
-                <PostListTab label="Following"/>
-                <PostListTab label="All"/>
-              </Tabs>
+              <Alert color="warning" icon={<QuestionAnswerIcon/>}>
+                Welcome to the best community for investors.
+                You need a <Link href="/register"><a style={{ display: 'contents' }}>free account</a></Link>
+                &nbsp;in order to personalize your homepage.
+              </Alert>
             </Box>
-            <TabPanel value={tabIndex} index={0}>
-              <FollowingPostList viewerId={viewer!.id}/>
-            </TabPanel>
-          </>
-        )
-      }
+          )
+        }
+      </TabPanel>
+
       <TabPanel value={tabIndex} index={1}>
         <AllPostList viewerId={viewer?.id}/>
       </TabPanel>
