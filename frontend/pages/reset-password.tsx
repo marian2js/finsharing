@@ -1,6 +1,5 @@
 import React, { FormEvent, useState } from 'react'
 import { withApollo } from '../src/apollo'
-import { Layout } from '../components/PageLayout/Layout'
 import Head from 'next/head'
 import { Button, Card, CardContent, Grid, makeStyles } from '@material-ui/core'
 import TextField from '@material-ui/core/TextField'
@@ -59,7 +58,7 @@ const ResetPasswordPage = (props: Props) => {
   }
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>Reset your password</title>
       </Head>
@@ -107,7 +106,7 @@ const ResetPasswordPage = (props: Props) => {
       </Card>
 
       <MessageSnackbar message={message}/>
-    </Layout>
+    </>
   )
 }
 

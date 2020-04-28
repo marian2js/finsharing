@@ -8,7 +8,6 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import { MessageSnackbar } from '../components/MessageSnackbar'
-import { Layout } from '../components/PageLayout/Layout'
 import Router from 'next/router'
 import Head from 'next/head'
 import { withApollo } from '../src/apollo'
@@ -57,7 +56,7 @@ function LoginPage () {
   }
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>Sign In in FinSharing.com</title>
       </Head>
@@ -122,7 +121,7 @@ function LoginPage () {
       </Container>
 
       <MessageSnackbar message={message}/>
-    </Layout>
+    </>
   )
 }
 

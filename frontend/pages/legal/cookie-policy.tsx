@@ -1,12 +1,11 @@
 import React from 'react'
 import { withApollo } from '../../src/apollo'
-import { Layout } from '../../components/PageLayout/Layout'
 import Head from 'next/head'
 import { Card, CardContent } from '@material-ui/core'
 
 const CookiePolicyPage = () => {
   return (
-    <Layout>
+    <>
       <Head>
         <title>Cookie Policy - FinSharing.com</title>
       </Head>
@@ -185,7 +184,7 @@ const CookiePolicyPage = () => {
           </section>
         </CardContent>
       </Card>
-    </Layout>
+    </>
   )
 }
 

@@ -1,6 +1,5 @@
 import * as React from 'react'
 import Head from 'next/head'
-import { Layout } from '../../components/PageLayout/Layout'
 import { withApollo } from '../../src/apollo'
 import { RedisClient } from '../../src/clients/redis'
 import { AppBar, Box, Card, CardContent, Divider, Grid, makeStyles, Tab, Tabs } from '@material-ui/core'
@@ -128,7 +127,7 @@ function CountryCoronavirus (props: Props) {
   const url = `https://finsharing.com/coronavirus/${countryKey}`
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>{title}</title>
         <meta name="description"
@@ -327,7 +326,7 @@ function CountryCoronavirus (props: Props) {
         </Typography>
       </Box>
 
-    </Layout>
+    </>
   )
 }
 

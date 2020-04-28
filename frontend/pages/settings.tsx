@@ -1,6 +1,5 @@
 import React, { FormEvent, useEffect, useState } from 'react'
 import { withApollo } from '../src/apollo'
-import { Layout } from '../components/PageLayout/Layout'
 import Head from 'next/head'
 import {
   AppBar,
@@ -132,7 +131,7 @@ const SettingsPage = () => {
   }
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>User settings - FinSharing.com</title>
       </Head>
@@ -208,7 +207,7 @@ const SettingsPage = () => {
       <ChangePasswordDialog username={viewer.username}
                             open={changePasswordDialogOpen}
                             onClose={() => setChangePasswordDialogOpen(false)}/>
-    </Layout>
+    </>
   )
 }
 

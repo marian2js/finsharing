@@ -1,6 +1,5 @@
 import React, { FormEvent, useEffect, useState } from 'react'
 import { withApollo } from '../src/apollo'
-import { Layout } from '../components/PageLayout/Layout'
 import Head from 'next/head'
 import { NextPageContext } from 'next'
 import Router from 'next/router'
@@ -111,7 +110,7 @@ function CompleteAuthPage (props: Props) {
   }
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>Complete Sign Up</title>
       </Head>
@@ -119,7 +118,7 @@ function CompleteAuthPage (props: Props) {
       {
         props.newUser ? renderSelectUsername() : <CircularProgress/>
       }
-    </Layout>
+    </>
   )
 }
 

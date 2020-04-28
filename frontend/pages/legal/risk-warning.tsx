@@ -1,12 +1,11 @@
 import React from 'react'
 import { withApollo } from '../../src/apollo'
-import { Layout } from '../../components/PageLayout/Layout'
 import Head from 'next/head'
 import { Card, CardContent } from '@material-ui/core'
 
 const RiskWarningPage = () => {
   return (
-    <Layout>
+    <>
       <Head>
         <title>Risk Warning - FinSharing.com</title>
       </Head>
@@ -83,7 +82,7 @@ const RiskWarningPage = () => {
           </section>
         </CardContent>
       </Card>
-    </Layout>
+    </>
   )
 }
 

@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { useContext } from 'react'
-import { Layout } from '../components/PageLayout/Layout'
 import Head from 'next/head'
 import { PostList } from '../components/posts/PostList'
 import { withApollo } from '../src/apollo'
@@ -28,7 +27,7 @@ function IndexPage () {
   const image = 'https://finsharing.com/finsharing.png'
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>{title}</title>
         <meta name="description" content={description}/>
@@ -46,7 +45,7 @@ function IndexPage () {
       </div>
 
       <PostList viewerId={viewer?.id}/>
-    </Layout>
+    </>
   )
 }
 

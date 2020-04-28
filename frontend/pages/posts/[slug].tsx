@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Post } from '../../src/types/Post'
 import { Comment } from '../../src/types/Comment'
 import { Box, Card, CardContent, CircularProgress, Divider, Grid, Typography } from '@material-ui/core'
-import { Layout } from '../../components/PageLayout/Layout'
 import { MarkdownContent } from '../../components/MarkdownContent'
 import { CommentForm } from '../../components/comments/CommentForm'
 import Link from 'next/link'
@@ -86,7 +85,7 @@ function PostPage (props: Props) {
   }
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>{post.title} - ${post.market.symbol.toUpperCase()}</title>
         <meta name="description" content={shortDescription}/>
@@ -148,7 +147,7 @@ function PostPage (props: Props) {
       </Box>
 
 
-    </Layout>
+    </>
   )
 }
 

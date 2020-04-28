@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { useState } from 'react'
 import Head from 'next/head'
-import { Layout } from '../../components/PageLayout/Layout'
 import { withApollo } from '../../src/apollo'
 import { RedisClient } from '../../src/clients/redis'
 import {
@@ -23,7 +22,6 @@ import { countries } from 'countries-list'
 import Link from 'next/link'
 import { makeStyles } from '@material-ui/styles'
 import { getComparator, stableSort } from '../../src/utils/arrays'
-import { roundDecimals } from '../../src/utils/number'
 
 const useStyles = makeStyles({
   countryTableRow: {
@@ -88,7 +86,7 @@ function CoronavirusPage (props: Props) {
   const url = 'https://finsharing.com/coronavirus'
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>Cases of coronavirus by country</title>
         <meta name="description"
@@ -176,7 +174,8 @@ function CoronavirusPage (props: Props) {
                     <TableCell align="right">{country.cases.toLocaleString()}</TableCell>
                     <TableCell align="right">{country.deaths.toLocaleString()}</TableCell>
                     <TableCell align="right">{country.casesDoubling ? `${country.casesDoubling} days` : ''}</TableCell>
-                    <TableCell align="right">{country.deathsDoubling ? `${country.deathsDoubling} days` : ''}</TableCell>
+                    <TableCell
+                      align="right">{country.deathsDoubling ? `${country.deathsDoubling} days` : ''}</TableCell>
                   </TableRow>
                 </Link>
               )
@@ -209,7 +208,7 @@ function CoronavirusPage (props: Props) {
           <a href="https://www.cdc.gov" target="_blank" rel="nofollow noopener noreferrer">CDC</a>
         </Typography>
       </Box>
-    </Layout>
+    </>
   )
 }
 

@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 import { NextPageContext } from 'next'
 import Error from 'next/error'
 import Head from 'next/head'
-import { Layout } from '../../components/PageLayout/Layout'
 import { PostList } from '../../components/posts/PostList'
 import { Box, CircularProgress } from '@material-ui/core'
 import { withApollo } from '../../src/apollo'
@@ -51,7 +50,7 @@ function MarketPage (props: Props) {
   const url = `https://finsharing.com/markets/${market.symbol}`
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>{title} - ${market.symbol.toUpperCase()}</title>
         <meta name="description" content={description}/>
@@ -65,7 +64,7 @@ function MarketPage (props: Props) {
         <MarketHeader market={market} viewerId={viewer?.id}/>
       </Box>
       <PostList market={market} viewerId={viewer?.id}/>
-    </Layout>
+    </>
   )
 }
 

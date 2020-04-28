@@ -12,6 +12,7 @@ import { AuthService, TOKENS_COOKIE_NAME, USER_COOKIE_NAME } from './services/Au
 import { UserTokens } from './types/UserTokens'
 import { User } from './types/User'
 import ViewerContextProvider from '../components/providers/ViewerContextProvider'
+import { Layout } from '../components/PageLayout/Layout'
 
 let globalApolloClient: ApolloClient<NormalizedCacheObject> | null = null
 
@@ -45,7 +46,9 @@ export function withApollo (PageComponent: any, { ssr = true } = {}) {
     return (
       <ViewerContextProvider viewer={viewer}>
         <ApolloProvider client={client}>
-          <PageComponent {...pageProps} />
+          <Layout>
+            <PageComponent {...pageProps} />
+          </Layout>
         </ApolloProvider>
       </ViewerContextProvider>
     )

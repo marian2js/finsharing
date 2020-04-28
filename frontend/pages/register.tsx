@@ -7,7 +7,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-import { Layout } from '../components/PageLayout/Layout'
 import { MessageSnackbar } from '../components/MessageSnackbar'
 import Head from 'next/head'
 import { withApollo } from '../src/apollo'
@@ -84,7 +83,7 @@ function RegisterPage () {
   }
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>Sign Up in FinSharing.com</title>
       </Head>
@@ -166,7 +165,7 @@ function RegisterPage () {
       </Container>
 
       <MessageSnackbar message={message}/>
-    </Layout>
+    </>
   )
 }
 

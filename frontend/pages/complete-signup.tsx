@@ -4,7 +4,6 @@ import Head from 'next/head'
 import { CircularProgress } from '@material-ui/core'
 import { NextPageContext } from 'next'
 import Router from 'next/router'
-import { Layout } from '../components/PageLayout/Layout'
 import { useVerifyEmail } from '../src/services/UserHooks'
 
 interface Props {
@@ -29,12 +28,12 @@ const CompleteSignUpPage = (props: Props) => {
   }, [])
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>Complete Sign Up</title>
       </Head>
       <CircularProgress/>
-    </Layout>
+    </>
   )
 }
 

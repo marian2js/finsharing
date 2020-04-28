@@ -1,5 +1,4 @@
 import React, { useContext } from 'react'
-import { Layout } from '../../components/PageLayout/Layout'
 import Head from 'next/head'
 import gql from 'graphql-tag'
 import { NextPageContext } from 'next'
@@ -49,7 +48,7 @@ const UserPage = (props: Props) => {
   const user: User = data.user
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>{user.username} on FinSharing.com</title>
       </Head>
@@ -67,7 +66,7 @@ const UserPage = (props: Props) => {
       </Box>
 
       <PostList viewerId={viewer?.id} userId={user.id}/>
-    </Layout>
+    </>
   )
 }
 

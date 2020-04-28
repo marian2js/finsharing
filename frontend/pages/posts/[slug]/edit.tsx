@@ -3,7 +3,6 @@ import { NextPageContext } from 'next'
 import { PostForm } from '../../../components/posts/PostForm'
 import Head from 'next/head'
 import { Card, CardContent, CircularProgress } from '@material-ui/core'
-import { Layout } from '../../../components/PageLayout/Layout'
 import { withApollo } from '../../../src/apollo'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
@@ -54,7 +53,7 @@ function EditPostPage (props: Props) {
   }
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>Edit {post.title}</title>
       </Head>
@@ -64,7 +63,7 @@ function EditPostPage (props: Props) {
           <PostForm post={post}/>
         </CardContent>
       </Card>
-    </Layout>
+    </>
   )
 }
 

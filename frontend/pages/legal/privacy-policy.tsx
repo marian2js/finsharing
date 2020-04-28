@@ -1,12 +1,11 @@
 import React from 'react'
 import { withApollo } from '../../src/apollo'
-import { Layout } from '../../components/PageLayout/Layout'
 import Head from 'next/head'
 import { Card, CardContent } from '@material-ui/core'
 
 const PrivacyPolicyPage = () => {
   return (
-    <Layout>
+    <>
       <Head>
         <title>Privacy Policy - FinSharing.com</title>
       </Head>
@@ -775,7 +774,7 @@ const PrivacyPolicyPage = () => {
           </section>
         </CardContent>
       </Card>
-    </Layout>
+    </>
   )
 }
 

@@ -1,7 +1,6 @@
 import { withApollo } from '../../src/apollo'
 import { RedisClient } from '../../src/clients/redis'
 import Head from 'next/head'
-import { Layout } from '../../components/PageLayout/Layout'
 import * as React from 'react'
 import Typography from '@material-ui/core/Typography'
 import { Box, Divider } from '@material-ui/core'
@@ -36,7 +35,7 @@ function TravelRestrictionsPage (props: Props) {
     .sort((a, b) => a.country.name > b.country.name ? 1 : -1)
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>{title}</title>
         <meta name="description"
@@ -82,7 +81,7 @@ function TravelRestrictionsPage (props: Props) {
           })
         }
       </>
-    </Layout>
+    </>
   )
 }
 
