@@ -1,5 +1,5 @@
-import { Post } from '../../src/types/Post'
-import { parseUrl } from '../../src/utils/string'
+import { Post } from '../../../src/types/Post'
+import { parseUrl } from '../../../src/utils/string'
 import Link from 'next/link'
 import {
   Card,
@@ -11,11 +11,11 @@ import {
   Typography,
   useMediaQuery
 } from '@material-ui/core'
-import { PostVotes } from './PostVotes'
-import { PostHeader } from './PostHeader'
-import { PostActions } from './PostActions'
+import { PostVotes } from '../PostVotes'
+import { PostHeader } from '../PostHeader'
+import { PostActions } from '../PostActions'
 import React from 'react'
-import theme from '../../src/theme'
+import theme from '../../../src/theme'
 import gql from 'graphql-tag'
 
 const useStyles = makeStyles(theme => ({

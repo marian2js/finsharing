@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 import { NextPageContext } from 'next'
 import Error from 'next/error'
 import Head from 'next/head'
-import { PostList } from '../../components/posts/PostList'
 import { Box, CircularProgress } from '@material-ui/core'
 import { withApollo } from '../../src/apollo'
 import gql from 'graphql-tag'
@@ -10,6 +9,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { Market } from '../../src/types/Market'
 import { MarketHeader } from '../../components/markets/MarketHeader'
 import { ViewerContext } from '../../components/providers/ViewerContextProvider'
+import { MarketPostList } from '../../components/posts/lists/MarketPostList'
 
 interface Props {
   symbol: string
@@ -63,7 +63,7 @@ function MarketPage (props: Props) {
       <Box mb={3}>
         <MarketHeader market={market} viewerId={viewer?.id}/>
       </Box>
-      <PostList market={market} viewerId={viewer?.id}/>
+      <MarketPostList viewerId={viewer?.id} marketId={market?.id}/>
     </>
   )
 }

@@ -2,29 +2,28 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { CircularProgress } from '@material-ui/core'
 import { useQuery } from '@apollo/react-hooks'
-import { Market } from '../../src/types/Market'
-import { Post } from '../../src/types/Post'
+import { Post } from '../../../src/types/Post'
 import { PostListItem } from './PostListItem'
 import InfiniteScroll from 'react-infinite-scroller'
+import { DocumentNode } from 'graphql'
 
-const POSTS_PER_PAGE = 30
+export const POSTS_PER_PAGE = 30
 
 interface Props {
-  market?: Market
-  userId?: string
   viewerId: string | undefined
+  query: DocumentNode
+  queryVariables: object
 }
 
 export const PostList = (props: Props) => {
-  const { market, userId, viewerId } = props
+  const { viewerId, query, queryVariables } = props
   const { loading, error, data, fetchMore } = useQuery(
-    market ? MARKET_LAST_POSTS_QUERY : (userId ? USER_LAST_POSTS_QUERY : LAST_POSTS_QUERY),
+    query,
     {
       variables: {
-        marketId: market?.id,
-        userId,
+        ...queryVariables,
         after: undefined,
-      },
+      }
     }
   )
   let lastCursorFetched: string
@@ -37,8 +36,7 @@ export const PostList = (props: Props) => {
     lastCursorFetched = cursor
     await fetchMore({
       variables: {
-        marketId: market?.id,
-        userId,
+        ...queryVariables,
         after: cursor,
       },
       updateQuery: (prev: { posts: any }, { fetchMoreResult }) => {
@@ -95,30 +93,3 @@ PostList.fragments = {
     ${PostListItem.fragments.post}
   `,
 }
-
-const LAST_POSTS_QUERY = gql`
-  query Posts ($after: String) {
-    posts (first: ${POSTS_PER_PAGE}, after: $after, orderBy: [{ createdAt: DESC }]) {
-      ...PostList
-    }
-  }
-  ${PostList.fragments.postList}
-`
-
-const MARKET_LAST_POSTS_QUERY = gql`
-  query Posts ($marketId: ID!, $after: String) {
-    posts (first: ${POSTS_PER_PAGE}, after: $after, filter: { market: { value: $marketId } }, orderBy: [{ createdAt: DESC }]) {
-      ...PostList
-    }
-  }
-  ${PostList.fragments.postList}
-`
-
-const USER_LAST_POSTS_QUERY = gql`
-  query Posts ($userId: ID!, $after: String) {
-    posts (first: ${POSTS_PER_PAGE}, after: $after, filter: { user: { value: $userId } }, orderBy: [{ createdAt: DESC }]) {
-      ...PostList
-    }
-  }
-  ${PostList.fragments.postList}
-`

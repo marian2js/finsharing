@@ -7,8 +7,8 @@ import { useQuery } from '@apollo/react-hooks'
 import Error from 'next/error'
 import { Box, CircularProgress, Typography } from '@material-ui/core'
 import { User } from '../../src/types/User'
-import { PostList } from '../../components/posts/PostList'
 import { ViewerContext } from '../../components/providers/ViewerContextProvider'
+import { UserPostList } from '../../components/posts/lists/UserPostList'
 
 const USER_QUERY = gql`
   query ($username: String!) {
@@ -65,7 +65,7 @@ const UserPage = (props: Props) => {
         </Typography>
       </Box>
 
-      <PostList viewerId={viewer?.id} userId={user.id}/>
+      <UserPostList viewerId={viewer?.id} userId={user.id}/>
     </>
   )
 }
