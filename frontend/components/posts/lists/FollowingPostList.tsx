@@ -3,6 +3,8 @@ import { PostList, POSTS_PER_PAGE } from './PostList'
 import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import { CircularProgress } from '@material-ui/core'
+import AddIcon from '@material-ui/icons/Add'
+import { Alert } from '@material-ui/lab'
 
 interface Props {
   viewerId: string
@@ -18,6 +20,11 @@ export const FollowingPostList = (props: Props) => {
       }
     }
   )
+  const emptyMessage = (
+    <Alert color="warning" icon={<AddIcon/>}>
+      Follow the markets that interest you to get relevant posts here.
+    </Alert>
+  )
 
   if (loading) {
     return <CircularProgress/>
@@ -25,7 +32,7 @@ export const FollowingPostList = (props: Props) => {
 
   const followedMarkets = data.marketFollows.nodes
   if (!followedMarkets?.length) {
-    return <></>
+    return emptyMessage
   }
 
   const filter = {
@@ -33,7 +40,10 @@ export const FollowingPostList = (props: Props) => {
   }
 
   return (
-    <PostList viewerId={viewerId} query={FOLLOWING_POSTS_QUERY} queryVariables={{ filter }}/>
+    <PostList viewerId={viewerId}
+              query={FOLLOWING_POSTS_QUERY}
+              queryVariables={{ filter }}
+              emptyMessage={emptyMessage}/>
   )
 }
 

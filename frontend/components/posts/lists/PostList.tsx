@@ -13,10 +13,11 @@ interface Props {
   viewerId: string | undefined
   query: DocumentNode
   queryVariables: object
+  emptyMessage?: JSX.Element[] | JSX.Element
 }
 
 export const PostList = (props: Props) => {
-  const { viewerId, query, queryVariables } = props
+  const { viewerId, query, queryVariables, emptyMessage } = props
   const { loading, error, data, fetchMore } = useQuery(
     query,
     {
@@ -59,9 +60,11 @@ export const PostList = (props: Props) => {
   if (error) {
     return <div>Unknown error rendering the list of posts</div>
   }
-
   if (loading && !posts?.length) {
     return <CircularProgress/>
+  }
+  if (!posts?.length && emptyMessage) {
+    return <>{emptyMessage || ''}</>
   }
 
   return (
