@@ -40,7 +40,7 @@ export const SideMenuWatchlist = (props: Props) => {
   )
 }
 
-const LIST_FOLLOWED_MARKETS_QUERY = gql`
+export const LIST_FOLLOWED_MARKETS_QUERY = gql`
   query MarketFollows ($userId: ID!) {
     marketFollows (filter: { user: { value: $userId } }) {
       nodes {

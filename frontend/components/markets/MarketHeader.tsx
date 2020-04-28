@@ -14,6 +14,7 @@ import { getPartnerLink } from '../../src/utils/partner'
 import { useMutation } from '@apollo/react-hooks'
 import { DataProxy } from 'apollo-cache'
 import Router from 'next/router'
+import { LIST_FOLLOWED_MARKETS_QUERY } from '../PageLayout/SideMenuWatchlist'
 
 const useStyles = makeStyles(theme => ({
   priceChange: {
@@ -95,6 +96,19 @@ export const MarketHeader = (props: Props) => {
       },
       update: (proxy, { data }) => {
         updateMarketFollowers(proxy, data.createMarketFollow.marketFollow.id)
+
+        // update viewer watchlist
+        const query = { query: LIST_FOLLOWED_MARKETS_QUERY, variables: { userId: viewerId } }
+        const cachedData: any = proxy.readQuery(query)
+        cachedData.marketFollows.nodes.push({
+          id: data.createMarketFollow.marketFollow.id,
+          market: {
+            ...market,
+            __typename: 'Market',
+          },
+          __typename: 'MarketFollow',
+        })
+        proxy.writeQuery({ ...query, data: cachedData })
       },
     })
     setViewerFollowId(res.data.createMarketFollow.marketFollow.id)
@@ -105,7 +119,19 @@ export const MarketHeader = (props: Props) => {
       variables: {
         followId: viewerFollowId
       },
-      update: (proxy) => updateMarketFollowers(proxy, null),
+      update: (proxy) => {
+        updateMarketFollowers(proxy, null)
+
+        // update viewer watchlist
+        const query = { query: LIST_FOLLOWED_MARKETS_QUERY, variables: { userId: viewerId } }
+        const data: any = proxy.readQuery(query)
+        const index = data.marketFollows.nodes
+          ?.findIndex((marketFollow: { market: Market }) => marketFollow.market.symbol === market.symbol)
+        if (index >= 0) {
+          data.marketFollows.nodes.splice(index, 1)
+          proxy.writeQuery({ ...query, data })
+        }
+      },
     })
     setViewerFollowId(null)
   }
