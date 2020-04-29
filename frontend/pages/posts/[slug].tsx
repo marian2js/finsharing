@@ -87,7 +87,7 @@ function PostPage (props: Props) {
   return (
     <>
       <Head>
-        <title>{post.title} - ${post.market.symbol.toUpperCase()}</title>
+        <title>{post.title} - ${post.market.symbol.toUpperCase().replace('^', '')}</title>
         <meta name="description" content={shortDescription}/>
         <meta property="og:title" content={post.title}/>
         <meta property="og:url" content={postFullUrl}/>

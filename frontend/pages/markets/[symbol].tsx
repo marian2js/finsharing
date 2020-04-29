@@ -52,7 +52,7 @@ function MarketPage (props: Props) {
   return (
     <>
       <Head>
-        <title>{title} - ${market.symbol.toUpperCase()}</title>
+        <title>{title} - ${market.symbol.toUpperCase().replace('^', '')}</title>
         <meta name="description" content={description}/>
         <meta property="og:title" content={title}/>
         <meta property="og:url" content={url}/>
