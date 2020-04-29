@@ -42,14 +42,15 @@ export const PostForm = (props: Props) => {
     e.preventDefault()
     try {
       let postSlug: string
+      const postImage = getImage(body) || undefined
       if (props.post) {
         const res = await updatePost({
           variables: {
             slug: props.post.slug,
             title,
             body,
-            smImageUrl: getImage(body, 'small') || undefined,
-            lgImageUrl: getImage(body, 'large') || undefined,
+            smImageUrl: postImage,
+            lgImageUrl: postImage,
           }
         })
         postSlug = res.data.updatePost.post.slug
@@ -59,8 +60,8 @@ export const PostForm = (props: Props) => {
             marketId: market,
             title,
             body,
-            smImageUrl: getImage(body, 'small') || undefined,
-            lgImageUrl: getImage(body, 'large') || undefined,
+            smImageUrl: postImage,
+            lgImageUrl: postImage,
           }
         })
         postSlug = res.data.createPost.post.slug

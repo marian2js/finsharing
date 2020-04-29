@@ -28,8 +28,8 @@ describe('Markdown Utils', () => {
         .toBe('https://i3.ytimg.com/vi/J2U9Hmmpqhc/maxresdefault.jpg')
     })
 
-    it('should return a small image from a video from youtube', async () => {
-      expect(getImage('`youtube:J2U9Hmmpqhc`', 'small'))
+    it('should return an image from a video from youtube', async () => {
+      expect(getImage('`youtube:J2U9Hmmpqhc`'))
         .toBe('https://i3.ytimg.com/vi/J2U9Hmmpqhc/hqdefault.jpg')
     })
 

@@ -1,9 +1,7 @@
-export function getImage (markdown: string, size: 'small' | 'large' = 'large'): string | null {
+export function getImage (markdown: string): string | null {
   const youtubeMatch = markdown.match(/`youtube:([^`]+)`/)
   if (youtubeMatch && youtubeMatch.length === 2) {
-    return size === 'large' ?
-      `https://i3.ytimg.com/vi/${youtubeMatch[1]}/maxresdefault.jpg` :
-      `https://i3.ytimg.com/vi/${youtubeMatch[1]}/hqdefault.jpg`
+    return `https://i3.ytimg.com/vi/${youtubeMatch[1]}/hqdefault.jpg`
   }
 
   const imgMatch = markdown.match(/!\[[^\]]*]\(([^)]+)\)/)
