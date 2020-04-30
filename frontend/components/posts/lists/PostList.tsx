@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import gql from 'graphql-tag'
 import { CircularProgress } from '@material-ui/core'
 import { useQuery } from '@apollo/react-hooks'
@@ -18,7 +18,7 @@ interface Props {
 
 export const PostList = (props: Props) => {
   const { viewerId, query, queryVariables, emptyMessage } = props
-  const { loading, error, data, fetchMore } = useQuery(
+  const { loading, error, data, fetchMore, refetch } = useQuery(
     query,
     {
       variables: {
@@ -28,6 +28,10 @@ export const PostList = (props: Props) => {
     }
   )
   let lastCursorFetched: string
+
+  useEffect(() => {
+    refetch()
+  }, [])
 
   const handleLoadMore = async () => {
     const cursor = data?.posts?.pageInfo?.endCursor
