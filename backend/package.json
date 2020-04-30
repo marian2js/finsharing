@@ -10,12 +10,12 @@
     "watch": "tsc-watch --onSuccess \"node ./dist/server.js\""
   },
   "dependencies": {
-    "@commun/admin": "^0.3.8",
-    "@commun/core": "^0.3.8",
-    "@commun/dashboard": "^0.3.8",
-    "@commun/emails": "^0.3.8",
-    "@commun/graphql": "^0.3.8",
-    "@commun/users": "^0.3.8",
+    "@commun/admin": "^0.3.9",
+    "@commun/core": "^0.3.9",
+    "@commun/dashboard": "^0.3.9",
+    "@commun/emails": "^0.3.9",
+    "@commun/graphql": "^0.3.9",
+    "@commun/users": "^0.3.9",
     "aws-sdk": "^2.614.0",
     "dotenv": "^8.2.0"
   },
@@ -26,6 +26,6 @@
     "@types/mongodb": "^3.3.14",
     "@types/nodemailer": "^6.4.0",
     "tsc-watch": "^4.0.0",
-    "typescript": "^3.7.4"
+    "typescript": "^3.8.3"
   }
 }
