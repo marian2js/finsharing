@@ -87,11 +87,13 @@ function CodeBlock (props: { language: string, value: string }) {
     const titleLine = lines.find(line => line.toLowerCase().startsWith('title='))
     const imageLine = lines.find(line => line.toLowerCase().startsWith('image='))
     const linkLine = lines.find(line => line.toLowerCase().startsWith('link='))
+    const descriptionLine = lines.find(summary => summary.toLowerCase().startsWith('description='))
     const title = titleLine?.split('=').slice(1).join('=')
     const image = imageLine?.split('=').slice(1).join('=')
     const link = linkLine?.split('=').slice(1).join('=')
+    const description = descriptionLine?.split('=').slice(1).join('=')
     if (title || image || link) {
-      return <LinkCard title={title} image={image} link={link}/>
+      return <LinkCard title={title} image={image} link={link} description={description}/>
     }
   }
 

@@ -36,11 +36,12 @@ interface Props {
   title?: string
   link?: string
   image?: string
+  description?: string
 }
 
 export const LinkCard = (props: Props) => {
   const classes = useStyles()
-  const { title } = props
+  const { title, description } = props
   const parsedLink = props.link && parseUrl(props.link)
   const parsedImage = props.image && parseUrl(props.image)
 
@@ -63,14 +64,23 @@ export const LinkCard = (props: Props) => {
         <CardContent className={classes.content}>
           {
             title && (
-              <Typography variant="h5" className={parsedLink ? classes.hoverUnderline : ''}>
+              <Typography variant="h5">
                 {title}
               </Typography>
             )
           }
           {
+            description && (
+              <Box mt={title ? 1 : 0} mb={description ? 2 : 0}>
+                <Typography variant="subtitle1">
+                  {description}
+                </Typography>
+              </Box>
+            )
+          }
+          {
             parsedLink && (
-              <Typography variant="subtitle1" color="primary" className={parsedLink ? classes.hoverUnderline : ''}>
+              <Typography variant="subtitle2" color="primary" className={parsedLink ? classes.hoverUnderline : ''}>
                 {parsedLink}
               </Typography>
             )
