@@ -6,6 +6,8 @@ interface Props {
   message?: { text: string, severity?: Color }
 }
 
+export type MessageSnackbarType = { text: string, severity?: Color }
+
 export const MessageSnackbar = (props: Props) => {
   const [message, setMessage] = useState(props.message?.text)
   const [severity, setSeverity] = useState(props.message?.severity)

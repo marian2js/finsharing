@@ -1,12 +1,14 @@
 import React, { FormEvent, useState } from 'react'
 import { Button, Grid, makeStyles, TextField } from '@material-ui/core'
-import { MessageSnackbar } from '../MessageSnackbar'
+import { MessageSnackbar, MessageSnackbarType } from '../MessageSnackbar'
 import Router from 'next/router'
 import { MarketSelector } from '../markets/MarketSelector'
 import { Post } from '../../src/types/Post'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 import { getImage } from '../../src/utils/markdown'
+import LinkIcon from '@material-ui/icons/Link'
+import { ShareLinkDialog } from './ShareLinkDialog'
 
 const useStyles = makeStyles(theme => ({
   bodyField: {
@@ -21,6 +23,10 @@ const useStyles = makeStyles(theme => ({
   cancelButton: {
     marginRight: theme.spacing(2)
   },
+  shareLinkButton: {
+    marginTop: theme.spacing(2),
+    textTransform: 'none',
+  },
 }))
 
 interface Props {
@@ -33,7 +39,10 @@ export const PostForm = (props: Props) => {
   const [market, setMarket] = useState(props.post?.market?.id || '')
   const [title, setTitle] = useState(props.post?.title || '')
   const [body, setBody] = useState(props.post?.body || '')
-  const [message, setMessage] = useState()
+  const [linkImage, setLinkImage] = useState('')
+  const [message, setMessage] = useState<MessageSnackbarType>()
+  const [shareLinkDialogOpen, setShareLinkDialogOpen] = useState(false)
+
   const [createPost] = useMutation(CREATE_POST_MUTATION)
   const [updatePost] = useMutation(UPDATE_POST_MUTATION)
   const [upvotePost] = useMutation(UPVOTE_POST_MUTATION)
@@ -42,7 +51,7 @@ export const PostForm = (props: Props) => {
     e.preventDefault()
     try {
       let postSlug: string
-      const postImage = getImage(body) || undefined
+      const postImage = getImage(body) || linkImage || undefined
       if (props.post) {
         const res = await updatePost({
           variables: {
@@ -82,6 +91,17 @@ export const PostForm = (props: Props) => {
     }
   }
 
+  const handleLinkShare = (data: { markdown: string, title?: string, image?: string }) => {
+    if (!title.trim() && data.title) {
+      setTitle(data.title)
+    }
+    if (!linkImage && data.image) {
+      setLinkImage(data.image)
+    }
+    setBody(body.trim() ? `${body.trim()}\n\n${data.markdown}\n\n` : `${data.markdown}\n\n`)
+    setShareLinkDialogOpen(false)
+  }
+
   const handleCancel = async () => {
     await Router.push('/posts/[slug]', `/posts/${props.post!.slug}`)
   }
@@ -108,6 +128,14 @@ export const PostForm = (props: Props) => {
             margin="normal"
             fullWidth/>
         </Grid>
+
+        <Button onClick={() => setShareLinkDialogOpen(true)}
+                variant="contained"
+                color="default"
+                startIcon={<LinkIcon/>}
+                className={classes.shareLinkButton}>
+          Share a link
+        </Button>
 
         <Grid item xs={12}>
           <TextField
@@ -141,6 +169,10 @@ export const PostForm = (props: Props) => {
       </Grid>
 
       <MessageSnackbar message={message}/>
+
+      <ShareLinkDialog open={shareLinkDialogOpen}
+                       onCancel={() => setShareLinkDialogOpen(false)}
+                       onLinkShared={handleLinkShare}/>
     </form>
   )
 }
