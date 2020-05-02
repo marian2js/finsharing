@@ -17,6 +17,7 @@ import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 import Router from 'next/router'
 import { useLogin } from '../src/services/UserHooks'
+import { GoogleAnalyticsService } from '../src/services/GoogleAnalyticsService'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -76,6 +77,13 @@ function RegisterPage () {
       await login({
         variables: { username, password }
       })
+
+      GoogleAnalyticsService.sendEvent({
+        category: 'user',
+        action: 'signup',
+        label: 'local',
+      })
+
       await Router.push('/')
     } catch (e) {
       setMessage({ text: e.message, severity: 'error' })

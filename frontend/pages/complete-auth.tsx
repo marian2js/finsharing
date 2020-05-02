@@ -13,6 +13,7 @@ import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
 import { MessageSnackbar, MessageSnackbarType } from '../components/MessageSnackbar'
 import { useCompleteSocialAuthentication } from '../src/services/UserHooks'
+import { GoogleAnalyticsService } from '../src/services/GoogleAnalyticsService'
 
 const useStyles = makeStyles(theme => ({
   form: {
@@ -69,6 +70,13 @@ function CompleteAuthPage (props: Props) {
         code: props.code
       }
     })
+
+    GoogleAnalyticsService.sendEvent({
+      category: 'user',
+      action: 'signup',
+      label: props.provider,
+    })
+
     await Router.push('/')
   }
 
