@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField'
 import { NextPageContext } from 'next'
 import Router from 'next/router'
 import { useLogin, useResetPassword } from '../src/services/UserHooks'
-import { MessageSnackbar } from '../components/MessageSnackbar'
+import { MessageSnackbar, MessageSnackbarType } from '../components/MessageSnackbar'
 
 const useStyles = makeStyles(theme => ({
   submitButton: {
@@ -25,7 +25,7 @@ const ResetPasswordPage = (props: Props) => {
   const { username, code } = props
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [message, setMessage] = useState()
+  const [message, setMessage] = useState<MessageSnackbarType>()
   const [login] = useLogin()
   const [resetPassword] = useResetPassword()
 

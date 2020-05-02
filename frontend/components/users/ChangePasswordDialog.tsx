@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
 import theme from '../../src/theme'
-import { MessageSnackbar } from '../MessageSnackbar'
+import { MessageSnackbar, MessageSnackbarType } from '../MessageSnackbar'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 
@@ -38,7 +38,7 @@ export const ChangePasswordDialog = (props: Props) => {
   const { username, open, onClose } = props
   const [password, setPassword] = useState<string>('')
   const [confirmPassword, setConfirmPassword] = useState<string>('')
-  const [message, setMessage] = useState()
+  const [message, setMessage] = useState<MessageSnackbarType>()
   const [changePassword] = useMutation(CHANGE_PASSWORD_MUTATION)
 
   const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))

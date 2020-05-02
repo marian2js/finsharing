@@ -1,5 +1,5 @@
 {
-  "name": "with-typescript",
+  "name": "finsharing-frontend",
   "version": "1.0.0",
   "scripts": {
     "dev": "cross-env NODE_ENV=development PORT=3100 node server.js",
@@ -69,7 +69,7 @@
     "http-proxy-middleware": "^0.20.0",
     "jest": "^25.1.0",
     "ts-jest": "^25.2.0",
-    "typescript": "^3.7.3"
+    "typescript": "^3.8.3"
   },
   "license": "ISC"
 }

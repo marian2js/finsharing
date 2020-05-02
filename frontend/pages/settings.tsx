@@ -15,7 +15,7 @@ import {
   TextField,
   Typography
 } from '@material-ui/core'
-import { MessageSnackbar } from '../components/MessageSnackbar'
+import { MessageSnackbar, MessageSnackbarType } from '../components/MessageSnackbar'
 import gql from 'graphql-tag'
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import Error from 'next/error'
@@ -97,7 +97,7 @@ const SettingsPage = () => {
   const [website, setWebsite] = useState(viewer?.website || '')
   const [tabIndex, setTabIndex] = useState(0)
   const [changePasswordDialogOpen, setChangePasswordDialogOpen] = useState(false)
-  const [message, setMessage] = useState()
+  const [message, setMessage] = useState<MessageSnackbarType>()
 
   useEffect(() => {
     setFullName(data?.viewer?.fullName || '')

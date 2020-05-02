@@ -1,6 +1,6 @@
 import React, { FormEvent, useState } from 'react'
 import { Button, Grid, makeStyles, TextField } from '@material-ui/core'
-import { MessageSnackbar } from '../MessageSnackbar'
+import { MessageSnackbar, MessageSnackbarType } from '../MessageSnackbar'
 import { Post } from '../../src/types/Post'
 import { Comment } from '../../src/types/Comment'
 import gql from 'graphql-tag'
@@ -40,7 +40,7 @@ export const CommentForm = (props: Props) => {
   const [upvoteComment] = useMutation(UPVOTE_COMMENT_MUTATION)
 
   const [body, setBody] = useState((props as UpdateCommentProps).comment?.body || '')
-  const [message, setMessage] = useState()
+  const [message, setMessage] = useState<MessageSnackbarType>()
   const newComment = (props as NewCommentProps).post
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {

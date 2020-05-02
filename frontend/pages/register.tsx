@@ -7,7 +7,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-import { MessageSnackbar } from '../components/MessageSnackbar'
+import { MessageSnackbar, MessageSnackbarType } from '../components/MessageSnackbar'
 import Head from 'next/head'
 import { withApollo } from '../src/apollo'
 import { SocialAuth } from '../components/users/SocialAuth'
@@ -45,7 +45,7 @@ function RegisterPage () {
   const [password, setPassword] = useState<string>('')
   const [confirmPassword, setConfirmPassword] = useState<string>('')
   const [acceptTerms, setAcceptTerms] = useState<boolean>(false)
-  const [message, setMessage] = useState()
+  const [message, setMessage] = useState<MessageSnackbarType>()
   const [createUser] = useMutation(CREATE_USER_MUTATION)
   const [login] = useLogin()
 

@@ -4,7 +4,7 @@ import Head from 'next/head'
 import TextField from '@material-ui/core/TextField'
 import { Button, Card, CardContent, Grid, makeStyles } from '@material-ui/core'
 import Typography from '@material-ui/core/Typography'
-import { MessageSnackbar } from '../components/MessageSnackbar'
+import { MessageSnackbar, MessageSnackbarType } from '../components/MessageSnackbar'
 import { useSendResetPasswordEmail } from '../src/services/UserHooks'
 
 const useStyles = makeStyles(theme => ({
@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 const ForgotPasswordPage = () => {
   const classes = useStyles()
   const [email, setEmail] = useState('')
-  const [message, setMessage] = useState()
+  const [message, setMessage] = useState<MessageSnackbarType>()
   const [sendResetPasswordEmail] = useSendResetPasswordEmail()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {

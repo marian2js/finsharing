@@ -7,7 +7,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
-import { MessageSnackbar } from '../components/MessageSnackbar'
+import { MessageSnackbar, MessageSnackbarType } from '../components/MessageSnackbar'
 import Router from 'next/router'
 import Head from 'next/head'
 import { withApollo } from '../src/apollo'
@@ -40,7 +40,7 @@ function LoginPage () {
   const classes = useStyles()
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const [message, setMessage] = useState()
+  const [message, setMessage] = useState<MessageSnackbarType>()
   const [login] = useLogin()
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {

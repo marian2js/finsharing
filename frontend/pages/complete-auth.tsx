@@ -11,7 +11,7 @@ import { AcceptTermsCheckbox } from '../components/users/AcceptTermsCheckbox'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
-import { MessageSnackbar } from '../components/MessageSnackbar'
+import { MessageSnackbar, MessageSnackbarType } from '../components/MessageSnackbar'
 import { useCompleteSocialAuthentication } from '../src/services/UserHooks'
 
 const useStyles = makeStyles(theme => ({
@@ -32,9 +32,9 @@ interface Props {
 
 function CompleteAuthPage (props: Props) {
   const classes = useStyles()
-  const [username, setUsername] = useState()
+  const [username, setUsername] = useState('')
   const [acceptTerms, setAcceptTerms] = useState<boolean>(false)
-  const [message, setMessage] = useState()
+  const [message, setMessage] = useState<MessageSnackbarType>()
   const [completeSocialAuthentication] = useCompleteSocialAuthentication()
 
   useEffect(() => {
