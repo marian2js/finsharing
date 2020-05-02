@@ -15,6 +15,7 @@ import Link from 'next/link'
 import { Box } from '@material-ui/core'
 import { SocialAuth } from '../components/users/SocialAuth'
 import { useLogin } from '../src/services/UserHooks'
+import { TextDivider } from '../components/TextDivider'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -73,6 +74,7 @@ function LoginPage () {
 
           <form className={classes.form} onSubmit={handleSubmit}>
             <SocialAuth/>
+            <TextDivider><span>OR</span></TextDivider>
 
             <TextField
               onChange={e => setUsername(e.target.value)}

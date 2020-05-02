@@ -24,6 +24,8 @@ import Router from 'next/router'
 import { useLogout } from '../../src/services/UserHooks'
 import { SearchBar } from './SearchBar'
 import { ViewerContext } from '../providers/ViewerContextProvider'
+import { isServer } from '../../src/utils/environment'
+import { ExitIntentDialog } from './ExitIntentDialog'
 
 const drawerWidth = 240
 
@@ -80,14 +82,39 @@ export function Layout (props: Props) {
   const [mobileOpen, setMobileOpen] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const [loadingRoute, setLoadingRoute] = React.useState(false)
+  const [exitIntentDialogOpen, setExitIntentDialogOpen] = React.useState(false)
   const [logout] = useLogout()
 
   const smDown = useMediaQuery(theme.breakpoints.down('sm'))
 
   useEffect(() => {
-    Router.events.on('routeChangeStart', () => setLoadingRoute(true))
-    Router.events.on('routeChangeComplete', () => setLoadingRoute(false))
-    Router.events.on('routeChangeError', () => setLoadingRoute(false))
+    const routeLoadingCallback = () => setLoadingRoute(true)
+    const routeNotLoadingCallback = () => setLoadingRoute(false)
+    Router.events.on('routeChangeStart', routeLoadingCallback)
+    Router.events.on('routeChangeComplete', () => routeNotLoadingCallback)
+    Router.events.on('routeChangeError', () => routeNotLoadingCallback)
+
+    let removeExitIntent: () => void | undefined
+    ;(async () => {
+      if (!isServer && !viewer?.id) {
+        const exitIntent = require('exit-intent').default
+        removeExitIntent = exitIntent({
+          eventThrottle: 3000,
+          onExitIntent: () => {
+            setExitIntentDialogOpen(true)
+          }
+        })
+        // TODO
+        // removeExitIntent()
+      }
+    })()
+
+    return () => {
+      Router.events.off('routeChangeStart', routeLoadingCallback)
+      Router.events.off('routeChangeComplete', routeNotLoadingCallback)
+      Router.events.off('routeChangeError', routeNotLoadingCallback)
+      removeExitIntent?.()
+    }
   }, [])
 
   const handleDrawerToggle = () => {
@@ -217,6 +244,9 @@ export function Layout (props: Props) {
         <div className={classes.toolbar}/>
         {props.children}
       </main>
+
+      <ExitIntentDialog open={exitIntentDialogOpen && !viewer?.id}
+                        onClose={() => setExitIntentDialogOpen(false)}/>
     </div>
   )
 }

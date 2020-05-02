@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core'
 import Button from '@material-ui/core/Button'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFacebookF, faGoogle } from '@fortawesome/free-brands-svg-icons'
-import { TextDivider } from '../TextDivider'
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 
 const useStyles = makeStyles(theme => ({
   socialAuth: {
@@ -16,11 +16,24 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export const SocialAuth = () => {
+interface Props {
+  showEmail?: boolean
+}
+
+export const SocialAuth = (props: Props) => {
   const classes = useStyles()
   return (
     <>
       <Grid container justify="center" alignItems="center" className={classes.socialAuth}>
+        {
+          props.showEmail && (
+            <Grid item xs>
+              <a href="/register">
+                <Button variant="contained" size="large" startIcon={<FontAwesomeIcon icon={faEnvelope}/>}>Email</Button>
+              </a>
+            </Grid>
+          )
+        }
         <Grid item xs>
           <a href="/api/v1/auth/google">
             <Button variant="contained" size="large" startIcon={<FontAwesomeIcon icon={faGoogle}/>}>Google</Button>
@@ -32,8 +45,6 @@ export const SocialAuth = () => {
           </a>
         </Grid>
       </Grid>
-
-      <TextDivider><span>OR</span></TextDivider>
     </>
   )
 }

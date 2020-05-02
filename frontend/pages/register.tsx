@@ -18,6 +18,7 @@ import { useMutation } from '@apollo/react-hooks'
 import Router from 'next/router'
 import { useLogin } from '../src/services/UserHooks'
 import { GoogleAnalyticsService } from '../src/services/GoogleAnalyticsService'
+import { TextDivider } from '../components/TextDivider'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -108,6 +109,7 @@ function RegisterPage () {
 
           <form className={classes.form} onSubmit={handleSubmit}>
             <SocialAuth/>
+            <TextDivider><span>OR</span></TextDivider>
 
             <TextField
               onChange={e => setEmail(e.target.value)}
