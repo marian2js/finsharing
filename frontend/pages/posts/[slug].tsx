@@ -19,6 +19,7 @@ import { getPlainText } from '../../src/utils/markdown'
 import { parseUrl } from '../../src/utils/string'
 import { MarketHeader } from '../../components/markets/MarketHeader'
 import { ViewerContext } from '../../components/providers/ViewerContextProvider'
+import ShareButtons from '../../components/ShareButtons'
 
 interface Props {
   slug: string
@@ -83,11 +84,12 @@ function PostPage (props: Props) {
   if (postDescription.length > shortDescription.length) {
     shortDescription += '...'
   }
+  const cashTag = '$' + post.market.symbol.toUpperCase().replace('^', '')
 
   return (
     <>
       <Head>
-        <title>{post.title} - ${post.market.symbol.toUpperCase().replace('^', '')}</title>
+        <title>{post.title} - {cashTag}</title>
         <meta name="description" content={shortDescription}/>
         <meta property="og:title" content={post.title}/>
         <meta property="og:url" content={postFullUrl}/>
@@ -112,6 +114,7 @@ function PostPage (props: Props) {
         <Grid container>
           <Grid item xs={2} sm={1}>
             <PostVotes post={post} viewerId={viewer?.id}/>
+            <ShareButtons url={postFullUrl} title={post.title} cashTag={cashTag}/>
           </Grid>
           <Grid item xs={10} sm={11}>
             <CardContent>
