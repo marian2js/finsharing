@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Post } from '../../src/types/Post'
 import { Comment } from '../../src/types/Comment'
 import { Box, Card, CardContent, CircularProgress, Divider, Grid, Typography } from '@material-ui/core'
-import { MarkdownContent } from '../../components/MarkdownContent'
+import { MarkdownBody } from '../../components/body/MarkdownBody'
 import { CommentForm } from '../../components/comments/CommentForm'
 import Link from 'next/link'
 import Error from 'next/error'
@@ -123,7 +123,7 @@ function PostPage (props: Props) {
               <Typography gutterBottom variant="h5" component="h2">
                 {post.title}
               </Typography>
-              <MarkdownContent content={post.body}/>
+              <MarkdownBody content={post.body}/>
             </CardContent>
 
             <Divider variant="middle"/>

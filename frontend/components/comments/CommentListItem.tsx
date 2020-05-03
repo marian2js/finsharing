@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Comment } from '../../src/types/Comment'
 import { Button, Card, CardActions, CardContent, makeStyles, Typography } from '@material-ui/core'
-import { MarkdownContent } from '../MarkdownContent'
+import { MarkdownBody } from '../body/MarkdownBody'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete'
 import { ConfirmCommentDeleteDialog } from '../posts/ConfirmCommentDeleteDialog'
@@ -136,7 +136,7 @@ export const CommentListItem = (props: Props) => {
           <Typography variant="subtitle2" color="textSecondary" component="span">
             {moment(Number(comment.createdAt)).fromNow()}
           </Typography>
-          <MarkdownContent content={comment.body}/>
+          <MarkdownBody content={comment.body}/>
         </CardContent>
         <CardActions>
           <IconButton size="small" aria-label="Up vote"

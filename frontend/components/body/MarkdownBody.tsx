@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { createElement } from 'react'
 import ReactMarkdown, { MarkdownAbstractSyntaxTree } from 'react-markdown'
-import TweetEmbed from 'react-tweet-embed'
 import { makeStyles } from '@material-ui/core'
-import { Youtube } from './YouTube'
-import { LinkCard } from './LinkCard'
-import { GoogleTrends } from './charts/GoogleTrends'
+import { Youtube } from '../YouTube'
+import { LinkCard } from '../LinkCard'
+import { GoogleTrends } from '../charts/GoogleTrends'
+import { TweetEmbedBody } from './TweetEmbedBody'
 
 const useStyles = makeStyles({
   markdown: {
@@ -23,7 +23,7 @@ interface Props {
   className?: string
 }
 
-export const MarkdownContent = (props: Props) => {
+export const MarkdownBody = (props: Props) => {
   const classes = useStyles()
   const content = props.content
 
@@ -46,7 +46,7 @@ function InlineCode (props: MarkdownAbstractSyntaxTree) {
     }
     if (props.value.toLowerCase().startsWith('twitter:')) {
       const twitterId = props.value.split(':')[1].trim()
-      return <TweetEmbed id={twitterId}/>
+      return <TweetEmbedBody id={twitterId}/>
     }
     if (props.value.toLowerCase().startsWith('facebook:')) {
       const facebookId = encodeURIComponent(props.value.split(':')[1].trim())
