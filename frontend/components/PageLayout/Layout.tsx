@@ -20,12 +20,12 @@ import Link from 'next/link'
 import { AccountCircle } from '@material-ui/icons'
 import CreateIcon from '@material-ui/icons/Create'
 import theme from '../../src/theme'
-import Router from 'next/router'
+import Router, { useRouter } from 'next/router'
 import { useLogout } from '../../src/services/UserHooks'
 import { SearchBar } from './SearchBar'
 import { ViewerContext } from '../providers/ViewerContextProvider'
 import { isServer } from '../../src/utils/environment'
-import { ExitIntentDialog } from './ExitIntentDialog'
+import { ExitIntentDialog, ExitIntentDialogSkipPaths } from './ExitIntentDialog'
 
 const drawerWidth = 240
 
@@ -84,6 +84,7 @@ export function Layout (props: Props) {
   const [loadingRoute, setLoadingRoute] = React.useState(false)
   const [exitIntentDialogOpen, setExitIntentDialogOpen] = React.useState(false)
   const [logout] = useLogout()
+  const router = useRouter()
 
   const smDown = useMediaQuery(theme.breakpoints.down('sm'))
 
@@ -96,16 +97,14 @@ export function Layout (props: Props) {
 
     let removeExitIntent: () => void | undefined
     ;(async () => {
-      if (!isServer && !viewer?.id) {
+      if (!isServer && !viewer?.id && !ExitIntentDialogSkipPaths.includes(router.pathname)) {
         const exitIntent = require('exit-intent').default
         removeExitIntent = exitIntent({
           eventThrottle: 3000,
           onExitIntent: () => {
             setExitIntentDialogOpen(true)
-          }
+          },
         })
-        // TODO
-        // removeExitIntent()
       }
     })()
 

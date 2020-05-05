@@ -65,3 +65,12 @@ export const ExitIntentDialog = (props: Props) => {
     </Dialog>
   )
 }
+
+export const ExitIntentDialogSkipPaths = [
+  '/login',
+  '/register',
+  '/complete-signup',
+  '/complete-auth',
+  '/forgot-password',
+  '/reset-password',
+]
