@@ -75,7 +75,7 @@ export async function getMarkdownForLink (link: string):
       break
     case 'finance.yahoo.com':
       const yahooVideoId = url.origin + url.pathname
-      if (yahooVideoId) {
+      if (yahooVideoId && url.pathname.startsWith('/video')) {
         markdown = `\`yahoofinancevideo:${yahooVideoId}\``
         if (linkData.description) {
           markdown += `\n\n> ${linkData.description}`
