@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Backdrop,
   Button,
@@ -24,6 +24,7 @@ const useStyles = makeStyles({
 
 interface Props {
   open: boolean
+  includeCardTitle: boolean
   onCancel: () => void
   onLinkShared: (link: { markdown: string, title?: string, image?: string }) => void
 }
@@ -34,6 +35,11 @@ export const ShareLinkDialog = (props: Props) => {
   const [link, setLink] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<MessageSnackbarType>()
+  const [includeCardTitle, setIncludeCardTitle] = useState(props.includeCardTitle)
+
+  useEffect(() => {
+    setIncludeCardTitle(props.includeCardTitle)
+  }, [props.includeCardTitle])
 
   const smDownScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
@@ -43,7 +49,7 @@ export const ShareLinkDialog = (props: Props) => {
       return
     }
     setLoading(true)
-    const markdownData = await getMarkdownForLink(link)
+    const markdownData = await getMarkdownForLink(link, includeCardTitle)
     if (markdownData?.markdown) {
       onLinkShared(markdownData)
     } else {

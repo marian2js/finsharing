@@ -33,7 +33,7 @@ export function getPlainText (markdown: string): string {
     .trim()
 }
 
-export async function getMarkdownForLink (link: string):
+export async function getMarkdownForLink (link: string, includeCardTitle: boolean):
   Promise<{ markdown: string, title?: string, image?: string } | null> {
   const linkData = await ScriptsService.getLinkData(link)
   if (!linkData) {
@@ -92,7 +92,7 @@ export async function getMarkdownForLink (link: string):
     if (linkData.image) {
       markdownCard += `\nimage=${linkData.image}`
     }
-    if (linkData.title) {
+    if (linkData.title && includeCardTitle) {
       markdownCard += `\ntitle=${linkData.title}`
     }
     if (linkData.description) {

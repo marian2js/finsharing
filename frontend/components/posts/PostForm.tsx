@@ -171,6 +171,7 @@ export const PostForm = (props: Props) => {
       <MessageSnackbar message={message}/>
 
       <ShareLinkDialog open={shareLinkDialogOpen}
+                       includeCardTitle={!!title}
                        onCancel={() => setShareLinkDialogOpen(false)}
                        onLinkShared={handleLinkShare}/>
     </form>

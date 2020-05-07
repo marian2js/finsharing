@@ -85,38 +85,38 @@ describe('Markdown Utils', () => {
     })
 
     it('should return the markdown for a youtube video', async () => {
-      expect(await getMarkdownForLink('https://www.youtube.com/watch?v=J2U9Hmmpqhc'))
+      expect(await getMarkdownForLink('https://www.youtube.com/watch?v=J2U9Hmmpqhc', true))
         .toEqual({ markdown: '`youtube:J2U9Hmmpqhc`', title: 'title', image: 'image' })
-      expect(await getMarkdownForLink('http://youtube.com/watch?v=J2U9Hmmpqhc'))
+      expect(await getMarkdownForLink('http://youtube.com/watch?v=J2U9Hmmpqhc', true))
         .toEqual({ markdown: '`youtube:J2U9Hmmpqhc`', title: 'title', image: 'image' })
-      expect(await getMarkdownForLink('https://www.youtube.com/watch?feature=youtu.be&v=J2U9Hmmpqhc&t=4'))
+      expect(await getMarkdownForLink('https://www.youtube.com/watch?feature=youtu.be&v=J2U9Hmmpqhc&t=4', true))
         .toEqual({ markdown: '`youtube:J2U9Hmmpqhc`', title: 'title', image: 'image' })
-      expect(await getMarkdownForLink('https://youtu.be/J2U9Hmmpqhc'))
+      expect(await getMarkdownForLink('https://youtu.be/J2U9Hmmpqhc', true))
         .toEqual({ markdown: '`youtube:J2U9Hmmpqhc`', title: 'title', image: 'image' })
-      expect(await getMarkdownForLink('http://www.youtu.be/J2U9Hmmpqhc?t=4'))
+      expect(await getMarkdownForLink('http://www.youtu.be/J2U9Hmmpqhc?t=4', true))
         .toEqual({ markdown: '`youtube:J2U9Hmmpqhc`', title: 'title', image: 'image' })
     })
 
     it('should return the markdown for a tweet', async () => {
-      expect(await getMarkdownForLink('https://twitter.com/elonmusk/status/1026872652290379776'))
+      expect(await getMarkdownForLink('https://twitter.com/elonmusk/status/1026872652290379776', true))
         .toEqual({ markdown: '`twitter:1026872652290379776`', title: 'title', image: 'image' })
-      expect(await getMarkdownForLink('http://www.twitter.com/elonmusk/status/1026872652290379776'))
+      expect(await getMarkdownForLink('http://www.twitter.com/elonmusk/status/1026872652290379776', true))
         .toEqual({ markdown: '`twitter:1026872652290379776`', title: 'title', image: 'image' })
-      expect(await getMarkdownForLink('https://twitter.com/elonmusk/status/1026872652290379776?foo=bar'))
+      expect(await getMarkdownForLink('https://twitter.com/elonmusk/status/1026872652290379776?foo=bar', true))
         .toEqual({ markdown: '`twitter:1026872652290379776`', title: 'title', image: 'image' })
     })
 
     it('should return markdown for a facebook video', async () => {
-      expect(await getMarkdownForLink('https://www.facebook.com/facebook/videos/237308277348177'))
+      expect(await getMarkdownForLink('https://www.facebook.com/facebook/videos/237308277348177', true))
         .toEqual({ markdown: '`facebook:facebook/videos/237308277348177`', title: 'title', image: 'image' })
-      expect(await getMarkdownForLink('http://facebook.com/facebook/videos/237308277348177'))
+      expect(await getMarkdownForLink('http://facebook.com/facebook/videos/237308277348177', true))
         .toEqual({ markdown: '`facebook:facebook/videos/237308277348177`', title: 'title', image: 'image' })
-      expect(await getMarkdownForLink('https://www.facebook.com/facebook/videos/237308277348177/?t=0'))
+      expect(await getMarkdownForLink('https://www.facebook.com/facebook/videos/237308277348177/?t=0', true))
         .toEqual({ markdown: '`facebook:facebook/videos/237308277348177`', title: 'title', image: 'image' })
     })
 
     it('should return markdown for a yahoo finance video', async () => {
-      expect(await getMarkdownForLink('https://finance.yahoo.com/video/tesla-inching-toward-induction-p-211457122.html'))
+      expect(await getMarkdownForLink('https://finance.yahoo.com/video/tesla-inching-toward-induction-p-211457122.html', true))
         .toEqual({
           markdown: '`yahoofinancevideo:https://finance.yahoo.com/video/tesla-inching-toward-induction-p-211457122.html`' +
             '\n\n> description',
@@ -126,10 +126,37 @@ describe('Markdown Utils', () => {
     })
 
     it('should return markdown for a google trend link', async () => {
-      expect(await getMarkdownForLink('https://trends.google.com/trends/explore?q=FinSharing'))
+      expect(await getMarkdownForLink('https://trends.google.com/trends/explore?q=FinSharing', true))
         .toEqual({
           markdown: '`googletrends:https://trends.google.com/trends/explore?q=FinSharing`',
           title: '',
+          image: 'image'
+        })
+    })
+
+    it('should return a link card with title', async () => {
+      expect(await getMarkdownForLink('http://example.com', true))
+        .toEqual({
+          markdown: '```card\n' +
+            'link=http://example.com\n' +
+            'image=image\n' +
+            'title=title\n' +
+            'description=description\n' +
+            '```',
+          title: 'title',
+          image: 'image'
+        })
+    })
+
+    it('should return a link card without title', async () => {
+      expect(await getMarkdownForLink('http://example.com', false))
+        .toEqual({
+          markdown: '```card\n' +
+            'link=http://example.com\n' +
+            'image=image\n' +
+            'description=description\n' +
+            '```',
+          title: 'title',
           image: 'image'
         })
     })
