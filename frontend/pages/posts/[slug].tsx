@@ -118,7 +118,7 @@ function PostPage (props: Props) {
           </Grid>
           <Grid item xs={10} sm={11}>
             <CardContent>
-              <PostHeader post={post}/>
+              <PostHeader post={post} showPriceChange={false}/>
 
               <Typography gutterBottom variant="h5" component="h2">
                 {post.title}

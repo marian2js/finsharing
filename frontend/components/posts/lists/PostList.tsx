@@ -13,11 +13,12 @@ interface Props {
   viewerId: string | undefined
   query: DocumentNode
   queryVariables: object
+  showPriceChange: boolean
   emptyMessage?: JSX.Element[] | JSX.Element
 }
 
 export const PostList = (props: Props) => {
-  const { viewerId, query, queryVariables, emptyMessage } = props
+  const { viewerId, query, queryVariables, showPriceChange, emptyMessage } = props
   const { loading, error, data, fetchMore, refetch } = useQuery(
     query,
     {
@@ -78,7 +79,8 @@ export const PostList = (props: Props) => {
       hasMore={!loading && (data?.posts?.pageInfo?.hasNextPage || false)}
       loader={<CircularProgress key={0}/>}>
       {
-        posts.map((post, i) => <PostListItem key={i} post={post} viewerId={viewerId}/>)
+        posts.map((post, i) =>
+          <PostListItem key={i} post={post} viewerId={viewerId} showPriceChange={showPriceChange}/>)
       }
     </InfiniteScroll>
   )

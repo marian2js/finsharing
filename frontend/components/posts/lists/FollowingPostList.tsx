@@ -43,6 +43,7 @@ export const FollowingPostList = (props: Props) => {
     <PostList viewerId={viewerId}
               query={FOLLOWING_POSTS_QUERY}
               queryVariables={{ filter }}
+              showPriceChange={true}
               emptyMessage={emptyMessage}/>
   )
 }

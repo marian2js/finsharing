@@ -16,6 +16,7 @@ export const MarketPostList = (props: Props) => {
     <PostList viewerId={viewerId}
               query={MARKET_LAST_POSTS_QUERY}
               queryVariables={{ marketId }}
+              showPriceChange={false}
               emptyMessage={
                 <Alert color="warning" icon={<WarningIcon/>}>
                   There are no recent posts for this market. Please check out later or <Link href="/new-post">

@@ -4,10 +4,7 @@ import { Box, makeStyles, Typography } from '@material-ui/core'
 import moment from 'moment'
 import { Post } from '../../src/types/Post'
 import gql from 'graphql-tag'
-
-interface Props {
-  post: Post
-}
+import { MarketPriceChange } from '../markets/MarketPriceChange'
 
 const useStyles = makeStyles(theme => ({
   headerLink: {
@@ -16,12 +13,20 @@ const useStyles = makeStyles(theme => ({
     '&:hover': {
       textDecoration: 'underline'
     }
-  }
+  },
+  priceChange: {
+    marginLeft: '2px',
+  },
 }))
+
+interface Props {
+  post: Post
+  showPriceChange: boolean
+}
 
 export const PostHeader = (props: Props) => {
   const classes = useStyles()
-  const { post } = props
+  const { post, showPriceChange } = props
   return (
     <Box mb={1}>
       <Typography variant="subtitle2" component="div">
@@ -31,7 +36,18 @@ export const PostHeader = (props: Props) => {
               {post.market.name}
             </strong>
           </a>
-        </Link> - Posted by&nbsp;
+        </Link>
+        {
+          showPriceChange && (
+            <>
+              &nbsp;<MarketPriceChange market={post.market}
+                                       variant="subtitle2"
+                                       component="span"
+                                       className={classes.priceChange}/>
+            </>
+          )
+        }
+        &nbsp;- Posted by&nbsp;
         <Link href="/users/[username]" as={`/users/${post.user.username}`}>
           <a className={classes.headerLink}>
           <span>
@@ -52,6 +68,8 @@ PostHeader.fragments = {
       market {
         name
         symbol
+        price
+        priceClose
       }
       user {
         username

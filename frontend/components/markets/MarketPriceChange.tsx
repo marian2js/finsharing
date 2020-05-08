@@ -10,10 +10,11 @@ interface Props {
   market: Market
   variant?: Variant | 'inherit'
   component?: React.ElementType
+  className?: string
 }
 
 export const MarketPriceChange = (props: Props) => {
-  const { market, variant, component } = props
+  const { market, variant, component, className } = props
   if (!market.price || !market.priceClose) {
     return <></>
   }
@@ -21,7 +22,8 @@ export const MarketPriceChange = (props: Props) => {
   return (
     <Typography variant={variant}
                 {...{ component }}
-                style={{ color: change > 0 ? green['500'] : change < 0 ? red['500'] : 'inherit' }}>
+                style={{ color: change > 0 ? green['500'] : change < 0 ? red['500'] : 'inherit' }}
+                className={className}>
       {
         `${change > 0 ? '+' : ''}${roundDecimals(change, 2)}%`
       }

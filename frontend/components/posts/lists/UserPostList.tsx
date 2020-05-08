@@ -10,7 +10,7 @@ interface Props {
 export const UserPostList = (props: Props) => {
   const { viewerId, userId } = props
   return (
-    <PostList viewerId={viewerId} query={USER_LAST_POSTS_QUERY} queryVariables={{ userId }}/>
+    <PostList viewerId={viewerId} query={USER_LAST_POSTS_QUERY} queryVariables={{ userId }} showPriceChange={true}/>
   )
 }
 
