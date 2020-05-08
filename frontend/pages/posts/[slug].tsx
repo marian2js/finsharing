@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Post } from '../../src/types/Post'
 import { Comment } from '../../src/types/Comment'
-import { Box, Card, CardContent, CircularProgress, Divider, Grid, Typography } from '@material-ui/core'
+import { Box, Card, CardActions, CardContent, CircularProgress, Divider, Grid, Typography } from '@material-ui/core'
 import { MarkdownBody } from '../../components/body/MarkdownBody'
 import { CommentForm } from '../../components/comments/CommentForm'
 import Link from 'next/link'
@@ -113,7 +113,7 @@ function PostPage (props: Props) {
       <Card>
         <Grid container>
           <Grid item xs={2} sm={1}>
-            <PostVotes post={post} viewerId={viewer?.id}/>
+            <PostVotes post={post} viewerId={viewer?.id} size="large"/>
             <ShareButtons url={postFullUrl} title={post.title} cashTag={cashTag}/>
           </Grid>
           <Grid item xs={10} sm={11}>
@@ -128,7 +128,9 @@ function PostPage (props: Props) {
 
             <Divider variant="middle"/>
 
-            <PostActions post={post} authUserId={viewer?.id}/>
+            <CardActions>
+              <PostActions post={post} authUserId={viewer?.id}/>
+            </CardActions>
           </Grid>
         </Grid>
       </Card>

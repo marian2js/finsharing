@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, makeStyles, Typography } from '@material-ui/core'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Post } from '../../src/types/Post'
@@ -8,13 +8,24 @@ import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
 import Router from 'next/router'
 
+const useStyles = makeStyles(theme => ({
+  smallVotesContainer: {
+    marginRight: theme.spacing(2),
+  },
+  smallVoteCount: {
+    margin: theme.spacing(0, 1),
+  },
+}))
+
 interface Props {
   post: Post
   viewerId: string | undefined
+  size: 'large' | 'small'
 }
 
 export const PostVotes = (props: Props) => {
-  const { post, viewerId } = props
+  const classes = useStyles()
+  const { post, viewerId, size } = props
   const [createPostVote] = useMutation(CREATE_POST_VOTE_MUTATION)
   const [deletePostVote] = useMutation(DELETE_POST_VOTE_MUTATION)
   const [viewerVote, setViewerVote] = useState(post.viewerVote ? (post.viewerVote.value === 'POSITIVE_1' ? 1 : -1) : 0)
@@ -76,33 +87,59 @@ export const PostVotes = (props: Props) => {
     })
   }
 
-  return (
-    <Grid container direction="column" justify="center" alignItems="center">
-      <Grid item xs>
-        <div>
-          <IconButton size="small" aria-label="Up vote"
-                      color={viewerVote === 1 ? 'primary' : 'default'}
-                      onClick={e => handleVote(e, 1)}>
-            <ExpandLessIcon fontSize="large"/>
-          </IconButton>
-        </div>
+  const renderLargeVotes = () => {
+    return (
+      <Grid container direction="column" justify="center" alignItems="center">
+        <Grid item xs>
+          <div>
+            <IconButton size="small" aria-label="Up vote"
+                        color={viewerVote === 1 ? 'primary' : 'default'}
+                        onClick={e => handleVote(e, 1)}>
+              <ExpandLessIcon fontSize="large"/>
+            </IconButton>
+          </div>
+        </Grid>
+        <Grid item xs>
+          <Typography gutterBottom variant="h6" component="div" style={{ margin: '7px 14px' }}>
+            {post.votes}
+          </Typography>
+        </Grid>
+        <Grid item xs>
+          <div>
+            <IconButton size="small" aria-label="Down vote"
+                        color={viewerVote === -1 ? 'secondary' : 'default'}
+                        onClick={e => handleVote(e, -1)}>
+              <ExpandMoreIcon fontSize="large"/>
+            </IconButton>
+          </div>
+        </Grid>
       </Grid>
-      <Grid item xs>
-        <Typography gutterBottom variant="h6" component="div" style={{ margin: '7px 14px' }}>
+    )
+  }
+
+  const renderSmallVotes = () => {
+    return (
+      <span className={classes.smallVotesContainer}>
+        <IconButton size="small" aria-label="Up vote"
+                    color={viewerVote === 1 ? 'primary' : 'default'}
+                    onClick={e => handleVote(e, 1)}>
+          <ExpandLessIcon fontSize="default"/>
+        </IconButton>
+
+        <Typography gutterBottom variant="subtitle2" component="span" className={classes.smallVoteCount}>
           {post.votes}
         </Typography>
-      </Grid>
-      <Grid item xs>
-        <div>
-          <IconButton size="small" aria-label="Down vote"
-                      color={viewerVote === -1 ? 'secondary' : 'default'}
-                      onClick={e => handleVote(e, -1)}>
-            <ExpandMoreIcon fontSize="large"/>
-          </IconButton>
-        </div>
-      </Grid>
-    </Grid>
-  )
+
+        <IconButton size="small" aria-label="Down vote"
+                    color={viewerVote === -1 ? 'secondary' : 'default'}
+                    onClick={e => handleVote(e, -1)}>
+          <ExpandMoreIcon fontSize="default"/>
+        </IconButton>
+      </span>
+    )
+  }
+
+  return size === 'large' ? renderLargeVotes() : renderSmallVotes()
 }
 
 const CREATE_POST_VOTE_MUTATION = gql`

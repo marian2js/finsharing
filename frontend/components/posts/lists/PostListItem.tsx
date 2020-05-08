@@ -2,8 +2,10 @@ import { Post } from '../../../src/types/Post'
 import { parseUrl } from '../../../src/utils/string'
 import Link from 'next/link'
 import {
+  Box,
   Card,
   CardActionArea,
+  CardActions,
   CardContent,
   CardMedia,
   Grid,
@@ -23,20 +25,31 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     marginBottom: theme.spacing(2)
   },
+  content: {
+    flex: '1 0 auto',
+    paddingBottom: 0,
+  },
   titleLink: {
     textDecoration: 'none',
     color: theme.palette.text.primary,
+  },
+  postTitle: {
+    marginBottom: 0,
   },
   details: {
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
   },
-  content: {
-    flex: '1 0 auto',
+  postImageContainer: {
+    padding: theme.spacing(0, 1),
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
   },
-  imageRight: {
-    width: 150,
+  postImage: { // ratio 16:12
+    width: 104,
+    height: 78,
   },
 }))
 
@@ -50,8 +63,7 @@ export const PostListItem = (props: Props) => {
   const { post, viewerId } = props
   const imageUrl = post.smImageUrl && parseUrl(post.smImageUrl)
 
-  // xs screens show the image at the top of the card, larger screens do it at the right
-  const showImageOnTop = useMediaQuery(theme.breakpoints.down('xs'))
+  const xsDownScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
   return (
     <Link href="/posts/[slug]" as={`/posts/${post.slug}`}>
@@ -59,7 +71,8 @@ export const PostListItem = (props: Props) => {
         <div className={classes.details}>
           <CardActionArea component="div">
             {
-              showImageOnTop && imageUrl && (
+              // xs screens show the image at the top of the card, larger screens do it at the right
+              xsDownScreen && imageUrl && (
                 <CardMedia
                   component="img"
                   height="140"
@@ -70,35 +83,40 @@ export const PostListItem = (props: Props) => {
             }
 
             <Grid container>
-              <Grid item xs={2} sm={1}>
-                <PostVotes post={post} viewerId={viewerId}/>
-              </Grid>
-              <Grid item xs={10} sm={11}>
-                <CardContent className={classes.content}>
-                  <PostHeader post={post}/>
+              {
+                !xsDownScreen && imageUrl && (
+                  <Grid item sm={1} className={classes.postImageContainer}>
+                    <CardMedia
+                      component="img"
+                      className={classes.postImage}
+                      image={imageUrl}
+                      title={post.title}
+                    />
+                  </Grid>
+                )
+              }
 
-                  <Link key={post.slug} href="/posts/[slug]" as={`/posts/${post.slug}`}>
-                    <a className={classes.titleLink}>
-                      <Typography gutterBottom variant="h5" component="h2">
-                        {post.title}
-                      </Typography>
-                    </a>
-                  </Link>
-                </CardContent>
-                <PostActions post={post}/>
+              <Grid item xs={12} sm={11}>
+                <Box ml={xsDownScreen ? 0 : 2}>
+                  <CardContent className={classes.content}>
+                    <PostHeader post={post}/>
+                    <Link key={post.slug} href="/posts/[slug]" as={`/posts/${post.slug}`}>
+                      <a className={classes.titleLink}>
+                        <Typography gutterBottom variant="h5" component="h2" className={classes.postTitle}>
+                          {post.title}
+                        </Typography>
+                      </a>
+                    </Link>
+                  </CardContent>
+                  <CardActions>
+                    <PostVotes post={post} viewerId={viewerId} size="small"/>
+                    <PostActions post={post}/>
+                  </CardActions>
+                </Box>
               </Grid>
             </Grid>
           </CardActionArea>
         </div>
-        {
-          !showImageOnTop && imageUrl && (
-            <CardMedia
-              className={classes.imageRight}
-              image={imageUrl}
-              title={post.title}
-            />
-          )
-        }
       </Card>
     </Link>
   )

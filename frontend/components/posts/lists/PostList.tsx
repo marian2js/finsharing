@@ -72,17 +72,15 @@ export const PostList = (props: Props) => {
   }
 
   return (
-    <>
-      <InfiniteScroll
-        pageStart={0}
-        loadMore={handleLoadMore}
-        hasMore={!loading && (data?.posts?.pageInfo?.hasNextPage || false)}
-        loader={<CircularProgress key={0}/>}>
-        {
-          posts.map((post, i) => <PostListItem key={i} post={post} viewerId={viewerId}/>)
-        }
-      </InfiniteScroll>
-    </>
+    <InfiniteScroll
+      pageStart={0}
+      loadMore={handleLoadMore}
+      hasMore={!loading && (data?.posts?.pageInfo?.hasNextPage || false)}
+      loader={<CircularProgress key={0}/>}>
+      {
+        posts.map((post, i) => <PostListItem key={i} post={post} viewerId={viewerId}/>)
+      }
+    </InfiniteScroll>
   )
 }
 

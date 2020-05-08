@@ -24,21 +24,23 @@ export const PostHeader = (props: Props) => {
   const { post } = props
   return (
     <Box mb={1}>
-      <Link href="/markets/[symbol]" as={`/markets/${post.market.symbol}`}>
-        <a className={classes.headerLink}>
-          <Typography gutterBottom variant="subtitle2" component="span">
-            {post.market.name}
-          </Typography>
-        </a>
-      </Link> - Posted by&nbsp;
-      <Link href="/users/[username]" as={`/users/${post.user.username}`}>
-        <a className={classes.headerLink}>
+      <Typography variant="subtitle2" component="div">
+        <Link href="/markets/[symbol]" as={`/markets/${post.market.symbol}`}>
+          <a className={classes.headerLink}>
+            <strong>
+              {post.market.name}
+            </strong>
+          </a>
+        </Link> - Posted by&nbsp;
+        <Link href="/users/[username]" as={`/users/${post.user.username}`}>
+          <a className={classes.headerLink}>
           <span>
             {post.user.username}
           </span>
-        </a>
-      </Link>
-      &nbsp;{moment(Number(post.createdAt)).fromNow()}
+          </a>
+        </Link>
+        &nbsp;{moment(Number(post.createdAt)).fromNow()}
+      </Typography>
     </Box>
   )
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, CardActions, IconButton, Menu, MenuItem, useMediaQuery } from '@material-ui/core'
+import { Button, IconButton, Menu, MenuItem, useMediaQuery } from '@material-ui/core'
 import { Post } from '../../src/types/Post'
 import gql from 'graphql-tag'
 import theme from '../../src/theme'
@@ -42,7 +42,7 @@ export const PostActions = (props: Props) => {
   const userIsAuthor = authUserId && authUserId === post.user.id
 
   return (
-    <CardActions>
+    <>
       <Button size="small" startIcon={<CommentIcon/>}>
         {post.numberOfComments} comments
       </Button>
@@ -86,7 +86,7 @@ export const PostActions = (props: Props) => {
       <ConfirmPostDeleteDialog post={post}
                                open={confirmPostDeleteDialogOpen}
                                onCancel={() => setConfirmPostDeleteDialogOpen(false)}/>
-    </CardActions>
+    </>
   )
 }
 
