@@ -92,8 +92,8 @@ export function Layout (props: Props) {
     const routeLoadingCallback = () => setLoadingRoute(true)
     const routeNotLoadingCallback = () => setLoadingRoute(false)
     Router.events.on('routeChangeStart', routeLoadingCallback)
-    Router.events.on('routeChangeComplete', () => routeNotLoadingCallback)
-    Router.events.on('routeChangeError', () => routeNotLoadingCallback)
+    Router.events.on('routeChangeComplete', routeNotLoadingCallback)
+    Router.events.on('routeChangeError', routeNotLoadingCallback)
 
     let removeExitIntent: () => void | undefined
     ;(async () => {
