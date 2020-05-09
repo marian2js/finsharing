@@ -29,7 +29,7 @@ export const SideMenuPopularList = () => {
 
 const LIST_MARKETS_QUERY = gql`
   {
-    markets (first: 30, orderBy: [{ numberOfPosts: DESC }]) {
+    markets (first: 30, orderBy: [{ numberOfFollowers: DESC }]) {
       nodes {
         ...SideMenuMarketList
       }
