@@ -85,14 +85,18 @@ export const PostListItem = (props: Props) => {
 
             <Grid container>
               {
-                !xsDownScreen && imageUrl && (
+                !xsDownScreen && (
                   <Grid item sm={1} className={classes.postImageContainer}>
-                    <CardMedia
-                      component="img"
-                      className={classes.postImage}
-                      image={imageUrl}
-                      title={post.title}
-                    />
+                    {
+                      imageUrl && (
+                        <CardMedia
+                          component="img"
+                          className={classes.postImage}
+                          image={imageUrl}
+                          title={post.title}
+                        />
+                      )
+                    }
                   </Grid>
                 )
               }
