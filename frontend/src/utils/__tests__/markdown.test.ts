@@ -84,6 +84,16 @@ describe('Markdown Utils', () => {
       }))
     })
 
+    it('should return the markdown for an image', async () => {
+      for (const extension of ['jpg', 'jpeg', 'gif', 'png', 'svg', 'webp']) {
+        expect(await getMarkdownForLink(`https://example.org/image.${extension}`, true))
+          .toEqual({
+            markdown: `![Image Description](https://example.org/image.${extension})`,
+            image: `https://example.org/image.${extension}`,
+          })
+      }
+    })
+
     it('should return the markdown for a youtube video', async () => {
       expect(await getMarkdownForLink('https://www.youtube.com/watch?v=J2U9Hmmpqhc', true))
         .toEqual({ markdown: '`youtube:J2U9Hmmpqhc`', title: 'title', image: 'image' })

@@ -35,6 +35,14 @@ export function getPlainText (markdown: string): string {
 
 export async function getMarkdownForLink (link: string, includeCardTitle: boolean):
   Promise<{ markdown: string, title?: string, image?: string } | null> {
+  const extension = link.split('.').pop()
+  if (extension && ['jpg', 'jpeg', 'gif', 'png', 'svg', 'webp'].includes(extension)) {
+    return {
+      markdown: `![Image Description](${link})`,
+      image: link,
+    }
+  }
+
   const linkData = await ScriptsService.getLinkData(link)
   if (!linkData) {
     return null
