@@ -1,5 +1,5 @@
 import React, { FormEvent, useState } from 'react'
-import { Button, Grid, makeStyles, TextField } from '@material-ui/core'
+import { Button, Grid, makeStyles, TextField, Typography } from '@material-ui/core'
 import { MessageSnackbar, MessageSnackbarType } from '../MessageSnackbar'
 import Router from 'next/router'
 import { MarketSelector } from '../markets/MarketSelector'
@@ -9,6 +9,7 @@ import { useMutation } from '@apollo/react-hooks'
 import { getImage } from '../../src/utils/markdown'
 import LinkIcon from '@material-ui/icons/Link'
 import { ShareLinkDialog } from './ShareLinkDialog'
+import { MarkdownBody } from '../body/MarkdownBody'
 
 const useStyles = makeStyles(theme => ({
   bodyField: {
@@ -21,6 +22,9 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(3, 0),
   },
   cancelButton: {
+    marginRight: theme.spacing(2)
+  },
+  previewButton: {
     marginRight: theme.spacing(2)
   },
   shareLinkButton: {
@@ -42,6 +46,7 @@ export const PostForm = (props: Props) => {
   const [linkImage, setLinkImage] = useState('')
   const [message, setMessage] = useState<MessageSnackbarType>()
   const [shareLinkDialogOpen, setShareLinkDialogOpen] = useState(false)
+  const [previewMode, setPreviewMode] = useState(false)
 
   const [createPost] = useMutation(CREATE_POST_MUTATION)
   const [updatePost] = useMutation(UPDATE_POST_MUTATION)
@@ -106,8 +111,8 @@ export const PostForm = (props: Props) => {
     await Router.push('/posts/[slug]', `/posts/${props.post!.slug}`)
   }
 
-  return (
-    <form onSubmit={handleSubmit}>
+  const renderPostForm = () => {
+    return (
       <Grid container>
         {
           !props.post && (
@@ -153,13 +158,30 @@ export const PostForm = (props: Props) => {
             fullWidth/>
         </Grid>
       </Grid>
+    )
+  }
+
+  const renderPreviewPost = () => {
+    return (
+      <>
+        <Typography gutterBottom variant="h5">
+          {title}
+        </Typography>
+        <MarkdownBody content={body}/>
+      </>
+    )
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      {previewMode ? renderPreviewPost() : renderPostForm()}
 
       <Grid item xs={12} className={classes.actionButtons}>
         {
-          props.post && (
-            <Button onClick={handleCancel} type="button" size="large" variant="contained" color="default"
-                    className={classes.cancelButton}>
-              Cancel
+          body && (
+            <Button onClick={() => setPreviewMode(!previewMode)} size="large" variant="contained" color="default"
+                    className={classes.previewButton}>
+              {previewMode ? 'Continue Editing' : 'Preview'}
             </Button>
           )
         }
