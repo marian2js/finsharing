@@ -42,7 +42,7 @@ export const SideMenuWatchlist = (props: Props) => {
 
 export const LIST_FOLLOWED_MARKETS_QUERY = gql`
   query MarketFollows ($userId: ID!) {
-    marketFollows (filter: { user: { value: $userId } }) {
+    marketFollows (first: 100, filter: { user: { value: $userId } }) {
       nodes {
         id
         market {
