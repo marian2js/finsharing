@@ -6,5 +6,8 @@
     "uri": "mongodb://fs-mongo:27017",
     "dbName": "finsharing",
     "options": {}
+  },
+  "logger": {
+    "request": ":remote-addr :user-id :graphql-operation HTTP/:http-version :status - :response-time ms"
   }
 }
