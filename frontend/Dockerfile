@@ -1,4 +1,4 @@
-FROM node:12
+FROM node:14
 MAINTAINER marian2js
 
 COPY . /app/finsharing
