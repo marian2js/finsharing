@@ -33,7 +33,7 @@ export async function getPostsRss ({
   })
   for (const post of posts) {
     rss.item({
-      title: `${post.title} $${post.market.symbol.toUpperCase()}`,
+      title: `${post.title} $${post.market.symbol.toUpperCase().replace('^', '')}`,
       description: getPlainText(post.body).slice(0, 300).trim(),
       url: `https://finsharing.com/posts/${post.slug}`,
       guid: post.slug,
