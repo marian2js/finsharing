@@ -140,7 +140,13 @@ function PostPage (props: Props) {
           {
             viewer?.id ?
               <CommentForm post={post} onCommentAdd={handleCommentAdded}/> :
-              <CardContent>You need <Link href="/register"><a>a free account</a></Link> to comment.</CardContent>
+              <CardContent>
+                <Typography variant="body1">
+                  👋 Welcome to our community for investors.&nbsp;
+                  <Link href="/register"><a>Join for free</a></Link> to personalize your experience
+                  and participate on discussions.
+                </Typography>
+              </CardContent>
           }
         </Card>
       </Box>
