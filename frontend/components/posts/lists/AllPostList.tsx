@@ -15,7 +15,7 @@ export const AllPostList = (props: Props) => {
 
 const ALL_POSTS_QUERY = gql`
   query Posts ($after: String) {
-    posts (first: ${POSTS_PER_PAGE}, after: $after, orderBy: [{ createdAt: DESC }]) {
+    posts (first: ${POSTS_PER_PAGE}, filter: { votes: { comparator: GREATER_THAN, value: 0 } }, after: $after, orderBy: [{ createdAt: DESC }]) {
       ...PostList
     }
   }
