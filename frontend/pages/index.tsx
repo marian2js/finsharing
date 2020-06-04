@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { withApollo } from '../src/apollo'
 import { Alert } from '@material-ui/lab'
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer'
-import { Box, Tabs } from '@material-ui/core'
+import { Box, Card, CardContent, Tabs, Typography } from '@material-ui/core'
 import Link from 'next/link'
 import { ViewerContext } from '../components/providers/ViewerContextProvider'
 import { FollowingPostList } from '../components/posts/lists/FollowingPostList'
@@ -34,6 +34,20 @@ function IndexPage () {
         <meta property="og:image" content={image}/>
         <meta name="twitter:image" content={image}/>
       </Head>
+
+      {
+        !viewer?.id && (
+          <Card>
+            <CardContent>
+              <Typography variant="body1">
+                👋 Welcome to our community for investors.&nbsp;
+                <Link href="/register"><a>Join for free</a></Link> to customize your watchlist
+                and participate on discussions.
+              </Typography>
+            </CardContent>
+          </Card>
+        )
+      }
 
       <Box mb={2}>
         <Tabs value={tabIndex} onChange={(_, i) => setTabIndex(i)}
