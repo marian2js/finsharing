@@ -15,6 +15,7 @@ interface Props {
   label?: string
   value?: string
   onChange?: (market: Market) => void
+  renderMarketAction?: (market: Market) => JSX.Element
   className?: string
   inputClassName?: string
 }
@@ -45,7 +46,7 @@ const POPULAR_MARKETS_QUERY = gql`
 
 export const MarketSelector = (props: Props) => {
   const classes = useStyles()
-  const { label, value, onChange, className, inputClassName } = props
+  const { label, value, onChange, renderMarketAction, className, inputClassName } = props
   const [searchMarkets, search] = useLazyQuery(SEARCH_MARKETS_QUERY)
   const [getPopularMarkets, popular] = useLazyQuery(POPULAR_MARKETS_QUERY)
   const [market, setMarket] = useState(value || '')
@@ -107,12 +108,19 @@ export const MarketSelector = (props: Props) => {
       renderOption={(market: Market) => {
         return (
           <Grid container alignItems="center">
-            <Grid item xs>
+            <Grid item xs={renderMarketAction ? 11 : 12}>
               <span style={{ fontWeight: 400 }}>{market.symbol}</span>
               <Typography variant="body2" color="textSecondary">
                 {market.name}
               </Typography>
             </Grid>
+            {
+              renderMarketAction && (
+                <Grid item xs={1}>
+                  {renderMarketAction(market)}
+                </Grid>
+              )
+            }
           </Grid>
         )
       }}

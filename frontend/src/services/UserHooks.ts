@@ -4,6 +4,12 @@ import { MutationFunctionOptions } from '@apollo/react-common'
 import { TOKENS_COOKIE_NAME, USER_COOKIE_NAME } from './AuthService'
 import { refreshApolloClient } from '../apollo'
 import { destroyCookie as nookiesDestroyCookie, setCookie } from 'nookies'
+import { useContext } from 'react'
+import { ViewerContext } from '../../components/providers/ViewerContextProvider'
+
+export function useViewer () {
+  return useContext(ViewerContext)
+}
 
 export function useLogin () {
   const mutation = gql`

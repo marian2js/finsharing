@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Post } from '../../src/types/Post'
 import { Comment } from '../../src/types/Comment'
 import { Box, Card, CardActions, CardContent, CircularProgress, Divider, Grid, Typography } from '@material-ui/core'
@@ -18,8 +18,8 @@ import { PostHeader } from '../../components/posts/PostHeader'
 import { getPlainText } from '../../src/utils/markdown'
 import { parseUrl } from '../../src/utils/string'
 import { MarketHeader } from '../../components/markets/MarketHeader'
-import { ViewerContext } from '../../components/providers/ViewerContextProvider'
 import ShareButtons from '../../components/ShareButtons'
+import { useViewer } from '../../src/services/UserHooks'
 
 interface Props {
   slug: string
@@ -57,7 +57,7 @@ function PostPage (props: Props) {
       notifyOnNetworkStatusChange: true,
     }
   )
-  const { viewer } = useContext(ViewerContext)
+  const { viewer } = useViewer()
   const [post, setPost] = useState<Post>(data?.post)
   const [lastCommentAddedId, setLastCommentAddedId] = useState('')
 

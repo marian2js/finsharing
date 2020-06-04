@@ -1,6 +1,6 @@
 import Hidden from '@material-ui/core/Hidden'
 import Drawer from '@material-ui/core/Drawer'
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { makeStyles, Theme, useTheme } from '@material-ui/core/styles'
 import Divider from '@material-ui/core/Divider'
 import { AppBar, Box, Tab, Tabs, Typography } from '@material-ui/core'
@@ -9,7 +9,7 @@ import HomeIcon from '@material-ui/icons/Home'
 import { TabPanel, tabProps } from '../TabPanel'
 import { SideMenuWatchlist } from './SideMenuWatchlist'
 import { SideMenuPopularList } from './SideMenuPopularList'
-import { ViewerContext } from '../providers/ViewerContextProvider'
+import { useViewer } from '../../src/services/UserHooks'
 
 export const drawerWidth = 240
 
@@ -44,7 +44,7 @@ interface Props {
 export function SideMenu (props: Props) {
   const classes = useStyles()
   const theme = useTheme()
-  const { viewer } = useContext(ViewerContext)
+  const { viewer } = useViewer()
   const [tabIndex, setTabIndex] = useState(viewer?.id ? 0 : 1)
 
   const handleTabChange = (e: React.ChangeEvent<{}>, newIndex: number) => {

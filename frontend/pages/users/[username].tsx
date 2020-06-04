@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import Head from 'next/head'
 import gql from 'graphql-tag'
 import { NextPageContext } from 'next'
@@ -7,8 +7,8 @@ import { useQuery } from '@apollo/react-hooks'
 import Error from 'next/error'
 import { Box, CircularProgress, Typography } from '@material-ui/core'
 import { User } from '../../src/types/User'
-import { ViewerContext } from '../../components/providers/ViewerContextProvider'
 import { UserPostList } from '../../components/posts/lists/UserPostList'
+import { useViewer } from '../../src/services/UserHooks'
 
 const USER_QUERY = gql`
   query ($username: String!) {
@@ -26,7 +26,7 @@ interface Props {
 }
 
 const UserPage = (props: Props) => {
-  const { viewer } = useContext(ViewerContext)
+  const { viewer } = useViewer()
   const { loading, error, data } = useQuery(
     USER_QUERY,
     {

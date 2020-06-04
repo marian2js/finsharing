@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import IconButton from '@material-ui/core/IconButton'
@@ -21,9 +21,8 @@ import { AccountCircle } from '@material-ui/icons'
 import CreateIcon from '@material-ui/icons/Create'
 import theme from '../../src/theme'
 import Router, { useRouter } from 'next/router'
-import { useLogout } from '../../src/services/UserHooks'
+import { useLogout, useViewer } from '../../src/services/UserHooks'
 import { SearchBar } from './SearchBar'
-import { ViewerContext } from '../providers/ViewerContextProvider'
 import { isServer } from '../../src/utils/environment'
 import { ExitIntentDialog, ExitIntentDialogSkipPaths } from './ExitIntentDialog'
 
@@ -78,7 +77,7 @@ interface Props {
 export function Layout (props: Props) {
   const classes = useStyles()
   const { noPadding } = props
-  const { viewer, setViewer } = useContext(ViewerContext)
+  const { viewer, setViewer } = useViewer()
   const [mobileOpen, setMobileOpen] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const [loadingRoute, setLoadingRoute] = React.useState(false)

@@ -11,10 +11,8 @@ import VisibilityIcon from '@material-ui/icons/Visibility'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 import theme from '../../src/theme'
 import { getPartnerLink } from '../../src/utils/partner'
-import { useMutation } from '@apollo/react-hooks'
-import { DataProxy } from 'apollo-cache'
 import Router from 'next/router'
-import { LIST_FOLLOWED_MARKETS_QUERY } from '../PageLayout/SideMenuWatchlist'
+import { useFollowMarket, useUnfollowMarket } from '../../src/services/MarketHooks'
 
 const useStyles = makeStyles(theme => ({
   priceChange: {
@@ -50,39 +48,17 @@ interface Props {
 
 export const MarketHeader = (props: Props) => {
   const classes = useStyles()
-  const { market, viewerId } = props
-  const [followMarket] = useMutation(FOLLOW_MARKET_MUTATION)
-  const [unfollowMarket] = useMutation(UNFOLLOW_MARKET_MUTATION)
-  const xsDown = useMediaQuery(theme.breakpoints.down('sm'))
+  const { viewerId } = props
+  const [market, setMarket] = useState(props.market)
   const [viewerFollowId, setViewerFollowId] = useState(market.viewerFollow?.id || null)
+  const [followMarket] = useFollowMarket()
+  const [unfollowMarket] = useUnfollowMarket()
+  const xsDown = useMediaQuery(theme.breakpoints.down('sm'))
 
   useEffect(() => {
-    setViewerFollowId(market.viewerFollow?.id || null)
-  }, [market])
-
-  const updateMarketFollowers = (proxy: DataProxy, marketFollowId: string | null) => {
-    proxy.writeFragment({
-      id: market.symbol,
-      fragment: gql`
-        fragment MarketFollowers on Market {
-          __typename
-          numberOfFollowers
-          viewerFollow {
-            id
-            __typename
-          }
-        }
-      `,
-      data: {
-        __typename: 'Market',
-        numberOfFollowers: market.numberOfFollowers + (marketFollowId ? 1 : -1),
-        viewerFollow: marketFollowId ? {
-          id: marketFollowId,
-          __typename: 'MarketFollow'
-        } : null
-      },
-    })
-  }
+    setMarket(props.market)
+    setViewerFollowId(props.market.viewerFollow?.id || null)
+  }, [props.market])
 
   const handleFollowClick = async () => {
     if (!viewerId) {
@@ -90,49 +66,14 @@ export const MarketHeader = (props: Props) => {
       return
     }
 
-    const res = await followMarket({
-      variables: {
-        marketId: market.id
-      },
-      update: (proxy, { data }) => {
-        updateMarketFollowers(proxy, data.createMarketFollow.marketFollow.id)
-
-        // update viewer watchlist
-        const query = { query: LIST_FOLLOWED_MARKETS_QUERY, variables: { userId: viewerId } }
-        const cachedData: any = proxy.readQuery(query)
-        cachedData.marketFollows.nodes.push({
-          id: data.createMarketFollow.marketFollow.id,
-          market: {
-            ...market,
-            __typename: 'Market',
-          },
-          __typename: 'MarketFollow',
-        })
-        proxy.writeQuery({ ...query, data: cachedData })
-      },
-    })
+    const res = await followMarket({ market, viewerId })
     setViewerFollowId(res.data.createMarketFollow.marketFollow.id)
   }
 
   const handleUnfollowClick = async () => {
-    await unfollowMarket({
-      variables: {
-        followId: viewerFollowId
-      },
-      update: (proxy) => {
-        updateMarketFollowers(proxy, null)
-
-        // update viewer watchlist
-        const query = { query: LIST_FOLLOWED_MARKETS_QUERY, variables: { userId: viewerId } }
-        const data: any = proxy.readQuery(query)
-        const index = data.marketFollows.nodes
-          ?.findIndex((marketFollow: { market: Market }) => marketFollow.market.symbol === market.symbol)
-        if (index >= 0) {
-          data.marketFollows.nodes.splice(index, 1)
-          proxy.writeQuery({ ...query, data })
-        }
-      },
-    })
+    if (viewerId && viewerFollowId) {
+      await unfollowMarket({ market, viewerId, viewerFollowId })
+    }
     setViewerFollowId(null)
   }
 
@@ -200,24 +141,6 @@ export const MarketHeader = (props: Props) => {
     </Grid>
   )
 }
-
-const FOLLOW_MARKET_MUTATION = gql`
-  mutation ($marketId: ID!) {
-    createMarketFollow (input: { market: $marketId }) {
-      marketFollow {
-        id
-      }
-    }
-  }
-`
-
-const UNFOLLOW_MARKET_MUTATION = gql`
-  mutation ($followId: ID!) {
-    deleteMarketFollow (input: {id: $followId}) {
-      result
-    }
-  }
-`
 
 MarketHeader.fragments = {
   market: gql`

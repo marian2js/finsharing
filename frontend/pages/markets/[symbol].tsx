@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { NextPageContext } from 'next'
 import Error from 'next/error'
 import Head from 'next/head'
@@ -8,8 +8,8 @@ import gql from 'graphql-tag'
 import { useQuery } from '@apollo/react-hooks'
 import { Market } from '../../src/types/Market'
 import { MarketHeader } from '../../components/markets/MarketHeader'
-import { ViewerContext } from '../../components/providers/ViewerContextProvider'
 import { MarketPostList } from '../../components/posts/lists/MarketPostList'
+import { useViewer } from '../../src/services/UserHooks'
 
 interface Props {
   symbol: string
@@ -26,7 +26,7 @@ const MARKET_QUERY = gql`
 `
 
 function MarketPage (props: Props) {
-  const { viewer } = useContext(ViewerContext)
+  const { viewer } = useViewer()
   const { loading, error, data } = useQuery(
     MARKET_QUERY,
     {

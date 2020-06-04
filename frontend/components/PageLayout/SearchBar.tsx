@@ -1,9 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import SearchIcon from '@material-ui/icons/Search'
+import AddCircleIcon from '@material-ui/icons/AddCircle'
+import DoneIcon from '@material-ui/icons/Done'
 import { createStyles, fade, makeStyles, Theme } from '@material-ui/core'
 import { MarketSelector } from '../markets/MarketSelector'
 import Router from 'next/router'
 import { Market } from '../../src/types/Market'
+import { useFollowMarket } from '../../src/services/MarketHooks'
+import { useViewer } from '../../src/services/UserHooks'
+import { useLazyQuery } from '@apollo/react-hooks'
+import { LIST_FOLLOWED_MARKETS_QUERY } from './SideMenuWatchlist'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -59,9 +65,49 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const SearchBar = () => {
   const classes = useStyles()
+  const [followMarket] = useFollowMarket()
+  const { viewer } = useViewer()
+  const [getMarketFollows, marketFollows] = useLazyQuery(
+    LIST_FOLLOWED_MARKETS_QUERY,
+    {
+      variables: {
+        userId: viewer?.id
+      }
+    }
+  )
+
+  useEffect(() => {
+    if (viewer?.id) {
+      getMarketFollows()
+    }
+  }, [viewer])
 
   const handleMarketSelected = async (market: Market) => {
     await Router.push('/markets/[symbol]', `/markets/${market.symbol}`)
+  }
+
+  const handleMarketFollow = async (e: React.MouseEvent<HTMLElement>, market: Market) => {
+    e.preventDefault()
+
+    // don't execute the market selected event
+    e.stopPropagation()
+
+    if (viewer?.id) {
+      await followMarket({ market, viewerId: viewer.id })
+    }
+  }
+
+  const renderMarketAction = (market: Market) => {
+    if (!viewer?.id) {
+      return <></>
+    }
+    const following = marketFollows.data?.marketFollows?.nodes
+      ?.find((f: { market: Market }) => f.market.id === market.id)
+    if (following) {
+      return <div><DoneIcon/></div>
+    } else {
+      return <div onClick={(e) => handleMarketFollow(e, market)}><AddCircleIcon/></div>
+    }
   }
 
   return (
@@ -71,6 +117,7 @@ export const SearchBar = () => {
       </div>
       <MarketSelector label="Search Market…"
                       onChange={handleMarketSelected}
+                      renderMarketAction={renderMarketAction}
                       className={classes.selector}
                       inputClassName={classes.searchInput}/>
     </div>

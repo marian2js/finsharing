@@ -1,19 +1,19 @@
 import * as React from 'react'
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import Head from 'next/head'
 import { withApollo } from '../src/apollo'
 import { Alert } from '@material-ui/lab'
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer'
 import { Box, Card, CardContent, Tabs, Typography } from '@material-ui/core'
 import Link from 'next/link'
-import { ViewerContext } from '../components/providers/ViewerContextProvider'
 import { FollowingPostList } from '../components/posts/lists/FollowingPostList'
 import { AllPostList } from '../components/posts/lists/AllPostList'
 import { TabPanel } from '../components/TabPanel'
 import { PostListTab } from '../components/posts/lists/PostListTab'
+import { useViewer } from '../src/services/UserHooks'
 
 function IndexPage () {
-  const { viewer } = useContext(ViewerContext)
+  const { viewer } = useViewer()
   const [tabIndex, setTabIndex] = useState(viewer?.id ? 0 : 1)
 
   const url = 'https://finsharing.com'
