@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { CircularProgress } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import { Alert } from '@material-ui/lab'
+import { LIST_FOLLOWED_MARKETS_QUERY } from '../../PageLayout/SideMenuWatchlist'
 
 interface Props {
   viewerId: string
@@ -55,17 +56,4 @@ const FOLLOWING_POSTS_QUERY = gql`
     }
   }
   ${PostList.fragments.postList}
-`
-
-const LIST_FOLLOWED_MARKETS_QUERY = gql`
-  query MarketFollows ($userId: ID!) {
-    marketFollows (filter: { user: { value: $userId } }) {
-      nodes {
-        id
-        market {
-          id
-        }
-      }
-    }
-  }
 `

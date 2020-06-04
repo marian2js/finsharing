@@ -46,6 +46,7 @@ export const LIST_FOLLOWED_MARKETS_QUERY = gql`
       nodes {
         id
         market {
+          id
           ...SideMenuMarketList
         }
       }
