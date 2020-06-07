@@ -4,6 +4,7 @@ import theme from '../../src/theme'
 import { drawerWidth } from './SideMenu'
 import Link from 'next/link'
 import TwitterIcon from '@material-ui/icons/Twitter'
+import FacebookIcon from '@material-ui/icons/Facebook'
 
 const useStyles = makeStyles(theme => ({
   footer: {
@@ -14,6 +15,11 @@ const useStyles = makeStyles(theme => ({
   footerSmallScreenUp: {
     marginLeft: `${drawerWidth}px`
   },
+  socialLinks: {
+    '& a': {
+      marginRight: theme.spacing(2),
+    },
+  },
 }))
 
 export const Footer = () => {
@@ -23,11 +29,14 @@ export const Footer = () => {
 
   return (
     <footer className={`${classes.footer} ${smUp && classes.footerSmallScreenUp}`}>
-      <a href="https://twitter.com/finsharing" target="_blank">
-        <Typography variant="h6" align="center" gutterBottom>
+      <Typography variant="h6" align="center" gutterBottom className={classes.socialLinks}>
+        <a href="https://twitter.com/finsharing" target="_blank">
           <TwitterIcon/>
-        </Typography>
-      </a>
+        </a>
+        <a href="https://facebook.com/finsharing" target="_blank">
+          <FacebookIcon/>
+        </a>
+      </Typography>
 
       <Typography variant="subtitle2" align="center" color="textSecondary" component="p">
         <a href="https://github.com/marian2js/finsharing" target="_blank">Open Source</a> project
