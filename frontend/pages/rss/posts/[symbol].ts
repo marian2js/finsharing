@@ -33,8 +33,9 @@ MarketPostsRss.getInitialProps = async ({ query, res }: NextPageContext): Promis
   const xml = await getPostsRss({
     apolloClient: apolloClient,
     feedUrlPath: `rss/posts/${symbol}`,
-    minVotes: Number(query.minVotes) || 0,
     marketId: data.market.id,
+    minVotes: Number(query.minVotes) || 0,
+    cashTagPos: query.cashTag?.toString?.() || 'suffix',
   })
   res.write(xml)
   res.end()

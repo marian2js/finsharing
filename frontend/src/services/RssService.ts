@@ -3,19 +3,22 @@ import RSS from 'rss'
 import { getPlainText } from '../utils/markdown'
 import gql from 'graphql-tag'
 import { ApolloClient } from 'apollo-client'
+import { getCashTag } from '../utils/markets'
 
 interface GetPostsRssParams {
   apolloClient: ApolloClient<any>
   feedUrlPath: string
   minVotes: number
   marketId?: string
+  cashTagPos?: string
 }
 
 export async function getPostsRss ({
   apolloClient,
   feedUrlPath,
   minVotes,
-  marketId
+  marketId,
+  cashTagPos,
 }: GetPostsRssParams) {
   const { data } = await apolloClient.query({
     query: marketId ? RSS_MARKET_POSTS_QUERY : RSS_POSTS_QUERY,
@@ -32,8 +35,18 @@ export async function getPostsRss ({
     ttl: marketId ? 30 : 10,
   })
   for (const post of posts) {
+    const cashTag = getCashTag(post.market.symbol)
+    let title: string
+    if (cashTagPos === 'prefix') {
+      title = `${cashTag} ${post.title}`
+    } else if (cashTagPos === 'suffix') {
+      title = `${post.title} ${cashTag}`
+    } else {
+      title = post.title
+    }
+
     rss.item({
-      title: `${post.title} $${post.market.symbol.toUpperCase().replace('^', '')}`,
+      title,
       description: getPlainText(post.body).slice(0, 300).trim(),
       url: `https://finsharing.com/posts/${post.slug}`,
       guid: post.slug,

@@ -17,7 +17,8 @@ PostsRss.getInitialProps = async ({ query, res }: NextPageContext): Promise<Prop
   const xml = await getPostsRss({
     apolloClient: apolloClient,
     feedUrlPath: 'rss/posts',
-    minVotes: Number(query.minVotes) || 0
+    minVotes: Number(query.minVotes) || 0,
+    cashTagPos: query.cashTag?.toString?.() || 'suffix',
   })
   res.write(xml)
   res.end()

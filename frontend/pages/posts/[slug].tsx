@@ -20,6 +20,7 @@ import { parseUrl } from '../../src/utils/string'
 import { MarketHeader } from '../../components/markets/MarketHeader'
 import ShareButtons from '../../components/ShareButtons'
 import { useViewer } from '../../src/services/UserHooks'
+import { getCashTag } from '../../src/utils/markets'
 
 interface Props {
   slug: string
@@ -84,7 +85,7 @@ function PostPage (props: Props) {
   if (postDescription.length > shortDescription.length) {
     shortDescription += '...'
   }
-  const cashTag = '$' + post.market.symbol.toUpperCase().replace('^', '')
+  const cashTag = getCashTag(post.market.symbol)
 
   return (
     <>
