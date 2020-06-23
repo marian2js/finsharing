@@ -6,7 +6,7 @@ import { Post } from '../../src/types/Post'
 import IconButton from '@material-ui/core/IconButton'
 import gql from 'graphql-tag'
 import { useMutation } from '@apollo/react-hooks'
-import Router from 'next/router'
+import { SignUpDialog } from '../dialogs/SignUpDialog'
 
 const useStyles = makeStyles(theme => ({
   smallVotesContainer: {
@@ -29,6 +29,7 @@ export const PostVotes = (props: Props) => {
   const [createPostVote] = useMutation(CREATE_POST_VOTE_MUTATION)
   const [deletePostVote] = useMutation(DELETE_POST_VOTE_MUTATION)
   const [viewerVote, setViewerVote] = useState(post.viewerVote ? (post.viewerVote.value === 'POSITIVE_1' ? 1 : -1) : 0)
+  const [signUpDialogOpen, setSignUpDialogOpen] = useState<boolean>(false)
 
   useEffect(() => {
     setViewerVote(post.viewerVote ? (post.viewerVote.value === 'POSITIVE_1' ? 1 : -1) : 0)
@@ -53,7 +54,7 @@ export const PostVotes = (props: Props) => {
     e.preventDefault()
 
     if (!viewerId) {
-      await Router.push('/register')
+      setSignUpDialogOpen(true)
       return
     }
 
@@ -139,7 +140,12 @@ export const PostVotes = (props: Props) => {
     )
   }
 
-  return size === 'large' ? renderLargeVotes() : renderSmallVotes()
+  return (
+    <>
+      {size === 'large' ? renderLargeVotes() : renderSmallVotes()}
+      <SignUpDialog open={signUpDialogOpen} onClose={() => setSignUpDialogOpen(false)}/>
+    </>
+  )
 }
 
 const CREATE_POST_VOTE_MUTATION = gql`

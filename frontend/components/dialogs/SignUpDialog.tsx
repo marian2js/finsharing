@@ -31,13 +31,14 @@ const useStyles = makeStyles((theme: Theme) =>
 )
 
 interface Props {
+  title?: string
   open: boolean
   onClose: () => void
 }
 
-export const ExitIntentDialog = (props: Props) => {
+export const SignUpDialog = (props: Props) => {
   const classes = useStyles()
-  const { open, onClose } = props
+  const { title, open, onClose } = props
   const smDownScreen = useMediaQuery(theme.breakpoints.down('sm'))
 
   return (
@@ -47,7 +48,7 @@ export const ExitIntentDialog = (props: Props) => {
       aria-labelledby="exit-dialog">
 
       <MuiDialogTitle disableTypography className={classes.root}>
-        <Typography variant="h6">Thanks for visiting FinSharing.com!</Typography>
+        <Typography variant="h6">{title || 'Join FinSharing\'s Community!'}</Typography>
         <IconButton aria-label="close" className={classes.closeButton} onClick={onClose}>
           <CloseIcon/>
         </IconButton>
@@ -65,12 +66,3 @@ export const ExitIntentDialog = (props: Props) => {
     </Dialog>
   )
 }
-
-export const ExitIntentDialogSkipPaths = [
-  '/login',
-  '/register',
-  '/complete-signup',
-  '/complete-auth',
-  '/forgot-password',
-  '/reset-password',
-]

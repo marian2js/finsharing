@@ -11,8 +11,8 @@ import VisibilityIcon from '@material-ui/icons/Visibility'
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff'
 import theme from '../../src/theme'
 import { getPartnerLink } from '../../src/utils/partner'
-import Router from 'next/router'
 import { useFollowMarket, useUnfollowMarket } from '../../src/services/MarketHooks'
+import { SignUpDialog } from '../dialogs/SignUpDialog'
 
 const useStyles = makeStyles(theme => ({
   priceChange: {
@@ -51,6 +51,7 @@ export const MarketHeader = (props: Props) => {
   const { viewerId } = props
   const [market, setMarket] = useState(props.market)
   const [viewerFollowId, setViewerFollowId] = useState(market.viewerFollow?.id || null)
+  const [signUpDialogOpen, setSignUpDialogOpen] = useState<boolean>(false)
   const [followMarket] = useFollowMarket()
   const [unfollowMarket] = useUnfollowMarket()
   const xsDown = useMediaQuery(theme.breakpoints.down('sm'))
@@ -62,7 +63,7 @@ export const MarketHeader = (props: Props) => {
 
   const handleFollowClick = async () => {
     if (!viewerId) {
-      await Router.push('/register')
+      setSignUpDialogOpen(true)
       return
     }
 
@@ -79,6 +80,7 @@ export const MarketHeader = (props: Props) => {
 
   return (
     <Grid container>
+
       <Grid item xs={6}>
         <Typography gutterBottom variant="subtitle1" component="h1">
           {market.symbol.toUpperCase()} - {market.fullName}
@@ -138,6 +140,8 @@ export const MarketHeader = (props: Props) => {
           )
         }
       </Grid>
+
+      <SignUpDialog open={signUpDialogOpen} onClose={() => setSignUpDialogOpen(false)}/>
     </Grid>
   )
 }

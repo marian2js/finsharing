@@ -24,7 +24,7 @@ import Router, { useRouter } from 'next/router'
 import { useLogout, useViewer } from '../../src/services/UserHooks'
 import { SearchBar } from './SearchBar'
 import { isServer } from '../../src/utils/environment'
-import { ExitIntentDialog, ExitIntentDialogSkipPaths } from './ExitIntentDialog'
+import { ExitIntentDialog, ExitIntentDialogSkipPaths } from '../dialogs/ExitIntentDialog'
 
 const drawerWidth = 240
 
