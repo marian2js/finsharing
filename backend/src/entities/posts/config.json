@@ -72,6 +72,10 @@
     },
     "lgImageUrl": {
       "type": "string"
+    },
+    "pinnedUntil": {
+      "type": "date",
+      "index": true
     }
   },
   "hooks": {

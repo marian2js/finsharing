@@ -2,10 +2,11 @@ import React, { useEffect } from 'react'
 import gql from 'graphql-tag'
 import { CircularProgress } from '@material-ui/core'
 import { useQuery } from '@apollo/react-hooks'
-import { Post } from '../../../src/types/Post'
 import { PostListItem } from './PostListItem'
 import InfiniteScroll from 'react-infinite-scroller'
 import { DocumentNode } from 'graphql'
+import { PostsResponse } from '../../../src/services/PostHooks'
+import { QueryResult } from '@apollo/react-common'
 
 export const POSTS_PER_PAGE = 30
 
@@ -14,12 +15,13 @@ interface Props {
   query: DocumentNode
   queryVariables: object
   showPriceChange: boolean
+  pinnedPostsQueryResult?: QueryResult<PostsResponse>
   emptyMessage?: JSX.Element[] | JSX.Element
 }
 
 export const PostList = (props: Props) => {
-  const { viewerId, query, queryVariables, showPriceChange, emptyMessage } = props
-  const { loading, error, data, fetchMore, refetch } = useQuery(
+  const { viewerId, query, queryVariables, showPriceChange, pinnedPostsQueryResult, emptyMessage } = props
+  const { loading, error, data, fetchMore, refetch } = useQuery<PostsResponse>(
     query,
     {
       variables: {
@@ -60,7 +62,13 @@ export const PostList = (props: Props) => {
     })
   }
 
-  const posts = data?.posts?.nodes as Post[]
+  const pinnedPosts = pinnedPostsQueryResult?.data?.posts?.nodes || []
+  const notPinnedPosts = (data?.posts?.nodes || []).filter(post => !pinnedPosts.find(p => p.slug === post.slug))
+
+  const posts = [
+    ...pinnedPosts,
+    ...notPinnedPosts,
+  ]
 
   if (error) {
     return <div>Unknown error rendering the list of posts</div>
@@ -80,7 +88,11 @@ export const PostList = (props: Props) => {
       loader={<CircularProgress key={0}/>}>
       {
         posts.map((post, i) =>
-          <PostListItem key={i} post={post} viewerId={viewerId} showPriceChange={showPriceChange}/>)
+          <PostListItem key={i}
+                        post={post}
+                        viewerId={viewerId}
+                        showPriceChange={showPriceChange}
+                        showPinnedIcon={pinnedPosts.includes(post)}/>)
       }
     </InfiniteScroll>
   )

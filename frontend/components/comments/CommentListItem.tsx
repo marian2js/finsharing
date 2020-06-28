@@ -134,7 +134,7 @@ export const CommentListItem = (props: Props) => {
           </Link>
           &nbsp; - &nbsp;
           <Typography variant="subtitle2" color="textSecondary" component="span">
-            {moment(Number(comment.createdAt)).fromNow()}
+            {moment(comment.createdAt).fromNow()}
           </Typography>
           <MarkdownBody content={comment.body}/>
         </CardContent>

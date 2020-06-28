@@ -4,6 +4,7 @@ import { PostList, POSTS_PER_PAGE } from './PostList'
 import WarningIcon from '@material-ui/icons/Warning'
 import { Alert } from '@material-ui/lab'
 import Link from 'next/link'
+import { usePinnedPosts } from '../../../src/services/PostHooks'
 
 interface Props {
   viewerId: string | undefined
@@ -12,11 +13,14 @@ interface Props {
 
 export const MarketPostList = (props: Props) => {
   const { viewerId, marketId } = props
+  const pinnedPosts = usePinnedPosts(marketId)
+
   return (
     <PostList viewerId={viewerId}
               query={MARKET_LAST_POSTS_QUERY}
               queryVariables={{ marketId }}
               showPriceChange={false}
+              pinnedPostsQueryResult={pinnedPosts}
               emptyMessage={
                 <Alert color="warning" icon={<WarningIcon/>}>
                   There are no recent posts for this market. Please check out later or <Link href="/new-post">

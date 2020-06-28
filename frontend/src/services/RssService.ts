@@ -50,7 +50,7 @@ export async function getPostsRss ({
       description: getPlainText(post.body).slice(0, 300).trim(),
       url: `https://finsharing.com/posts/${post.slug}`,
       guid: post.slug,
-      date: new Date(Number(post.createdAt)),
+      date: new Date(post.createdAt),
     })
   }
   return rss.xml()

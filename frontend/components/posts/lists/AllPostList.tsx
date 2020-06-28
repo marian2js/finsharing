@@ -1,6 +1,7 @@
 import React from 'react'
 import gql from 'graphql-tag'
 import { PostList, POSTS_PER_PAGE } from './PostList'
+import { usePinnedPosts } from '../../../src/services/PostHooks'
 
 interface Props {
   viewerId: string | undefined
@@ -8,8 +9,14 @@ interface Props {
 
 export const AllPostList = (props: Props) => {
   const { viewerId } = props
+  const pinnedPosts = usePinnedPosts()
+
   return (
-    <PostList viewerId={viewerId} query={ALL_POSTS_QUERY} queryVariables={{}} showPriceChange={true}/>
+    <PostList viewerId={viewerId}
+              query={ALL_POSTS_QUERY}
+              queryVariables={{}}
+              showPriceChange={true}
+              pinnedPostsQueryResult={pinnedPosts}/>
   )
 }
 
