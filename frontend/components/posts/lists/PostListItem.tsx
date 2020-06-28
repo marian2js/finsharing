@@ -57,11 +57,12 @@ interface Props {
   post: Post
   viewerId: string | undefined
   showPriceChange: boolean
+  showPinnedIcon: boolean
 }
 
 export const PostListItem = (props: Props) => {
   const classes = useStyles()
-  const { post, viewerId, showPriceChange } = props
+  const { post, viewerId, showPriceChange, showPinnedIcon } = props
   const imageUrl = post.smImageUrl && parseUrl(post.smImageUrl)
 
   const xsDownScreen = useMediaQuery(theme.breakpoints.down('xs'))
@@ -104,7 +105,7 @@ export const PostListItem = (props: Props) => {
               <Grid item xs={12} sm={11}>
                 <Box ml={xsDownScreen ? 0 : 2}>
                   <CardContent className={classes.content}>
-                    <PostHeader post={post} showPriceChange={showPriceChange}/>
+                    <PostHeader post={post} showPriceChange={showPriceChange} showPinnedIcon={showPinnedIcon}/>
                     <Link key={post.slug} href="/posts/[slug]" as={`/posts/${post.slug}`}>
                       <a className={classes.titleLink}>
                         <Typography gutterBottom variant="h5" component="h2" className={classes.postTitle}>

@@ -210,6 +210,7 @@ input CreatePostInput {
   market: ID!
   smImageUrl: String
   lgImageUrl: String
+  pinnedUntil: Date
 }
 
 type CreatePostPayload {
@@ -642,6 +643,7 @@ type Post implements Node {
   votes: Float
   smImageUrl: String
   lgImageUrl: String
+  pinnedUntil: Date
   id: ID!
   createdAt: Date
   updatedAt: Date
@@ -676,6 +678,7 @@ input PostFilterInput {
   votes: PostVotesFilterInput
   smImageUrl: PostSmImageUrlFilterInput
   lgImageUrl: PostLgImageUrlFilterInput
+  pinnedUntil: PostPinnedUntilFilterInput
   id: PostIdFilterInput
   createdAt: PostCreatedAtFilterInput
   updatedAt: PostUpdatedAtFilterInput
@@ -713,9 +716,15 @@ input PostOrderByInput {
   votes: OrderByDirection
   smImageUrl: OrderByDirection
   lgImageUrl: OrderByDirection
+  pinnedUntil: OrderByDirection
   id: OrderByDirection
   createdAt: OrderByDirection
   updatedAt: OrderByDirection
+}
+
+input PostPinnedUntilFilterInput {
+  value: Date!
+  comparator: FilterComparatorSymbol
 }
 
 input PostSlugFilterInput {
@@ -941,6 +950,7 @@ input UpdatePostInput {
   body: String
   smImageUrl: String
   lgImageUrl: String
+  pinnedUntil: Date
 }
 
 type UpdatePostPayload {

@@ -5,6 +5,8 @@ import moment from 'moment'
 import { Post } from '../../src/types/Post'
 import gql from 'graphql-tag'
 import { MarketPriceChange } from '../markets/MarketPriceChange'
+import { faThumbtack } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const useStyles = makeStyles(theme => ({
   headerLink: {
@@ -17,19 +19,28 @@ const useStyles = makeStyles(theme => ({
   priceChange: {
     marginLeft: '2px',
   },
+  postPinIcon: {
+    marginRight: theme.spacing(1),
+  },
 }))
 
 interface Props {
   post: Post
   showPriceChange: boolean
+  showPinnedIcon: boolean
 }
 
 export const PostHeader = (props: Props) => {
   const classes = useStyles()
-  const { post, showPriceChange } = props
+  const { post, showPriceChange, showPinnedIcon } = props
   return (
     <Box mb={1}>
       <Typography variant="subtitle2" component="div">
+        {
+          showPinnedIcon && post.pinnedUntil && new Date(post.pinnedUntil) > new Date() && (
+            <FontAwesomeIcon icon={faThumbtack} className={classes.postPinIcon}/>
+          )
+        }
         <Link href="/markets/[symbol]" as={`/markets/${post.market.symbol}`}>
           <a className={classes.headerLink}>
             <strong>
@@ -55,7 +66,7 @@ export const PostHeader = (props: Props) => {
           </span>
           </a>
         </Link>
-        &nbsp;{moment(Number(post.createdAt)).fromNow()}
+        &nbsp;{moment(post.createdAt).fromNow()}
       </Typography>
     </Box>
   )
@@ -65,6 +76,7 @@ PostHeader.fragments = {
   post: gql`
     fragment PostHeader on Post {
       createdAt
+      pinnedUntil
       market {
         name
         symbol

@@ -17,4 +17,5 @@ export type Post = {
   votes: number
   numberOfComments: number
   createdAt: string
+  pinnedUntil: string
 }
