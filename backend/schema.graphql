@@ -10,8 +10,8 @@ type Comment implements Node {
   post: Post!
   body: String!
   votes: Float
-  createdAt: String
-  updatedAt: String
+  createdAt: Date
+  updatedAt: Date
   viewerVote: CommentVote
 }
 
@@ -29,7 +29,7 @@ type CommentConnection {
 }
 
 input CommentCreatedAtFilterInput {
-  value: String!
+  value: Date!
   comparator: FilterComparatorSymbol
 }
 
@@ -66,7 +66,7 @@ input CommentPostFilterInput {
 }
 
 input CommentUpdatedAtFilterInput {
-  value: String!
+  value: Date!
   comparator: FilterComparatorSymbol
 }
 
@@ -81,8 +81,8 @@ type CommentVote implements Node {
   user: User!
   comment: Comment!
   value: CommentVoteValueEnum!
-  createdAt: String
-  updatedAt: String
+  createdAt: Date
+  updatedAt: Date
 }
 
 input CommentVoteCommentFilterInput {
@@ -99,7 +99,7 @@ type CommentVoteConnection {
 }
 
 input CommentVoteCreatedAtFilterInput {
-  value: String!
+  value: Date!
   comparator: FilterComparatorSymbol
 }
 
@@ -134,7 +134,7 @@ input CommentVotesFilterInput {
 }
 
 input CommentVoteUpdatedAtFilterInput {
-  value: String!
+  value: Date!
   comparator: FilterComparatorSymbol
 }
 
@@ -193,7 +193,7 @@ input CreateMarketInput {
   exchange: MarketExchangeEnum
   price: Float
   priceClose: Float
-  priceUpdatedAt: String
+  priceUpdatedAt: Date
   numberOfPosts: Float
   partnerId: String
   icId: String
@@ -237,6 +237,8 @@ input CreateUserInput {
 type CreateUserPayload {
   user: User
 }
+
+scalar Date
 
 input DeleteCommentInput {
   id: ID!
@@ -323,14 +325,14 @@ type Market implements Node {
   exchange: MarketExchangeEnum
   price: Float
   priceClose: Float
-  priceUpdatedAt: String
+  priceUpdatedAt: Date
   numberOfPosts: Float
   partnerId: String
   icId: String
   numberOfFollowers: Float
   id: ID!
-  createdAt: String
-  updatedAt: String
+  createdAt: Date
+  updatedAt: Date
   viewerFollow: MarketFollow
 }
 
@@ -343,7 +345,7 @@ type MarketConnection {
 }
 
 input MarketCreatedAtFilterInput {
-  value: String!
+  value: Date!
   comparator: FilterComparatorSymbol
 }
 
@@ -388,8 +390,8 @@ type MarketFollow implements Node {
   id: ID!
   user: User!
   market: Market!
-  createdAt: String
-  updatedAt: String
+  createdAt: Date
+  updatedAt: Date
 }
 
 type MarketFollowConnection {
@@ -401,7 +403,7 @@ type MarketFollowConnection {
 }
 
 input MarketFollowCreatedAtFilterInput {
-  value: String!
+  value: Date!
   comparator: FilterComparatorSymbol
 }
 
@@ -434,7 +436,7 @@ input MarketFollowOrderByInput {
 }
 
 input MarketFollowUpdatedAtFilterInput {
-  value: String!
+  value: Date!
   comparator: FilterComparatorSymbol
 }
 
@@ -513,7 +515,7 @@ input MarketPriceFilterInput {
 }
 
 input MarketPriceUpdatedAtFilterInput {
-  value: String!
+  value: Date!
   comparator: FilterComparatorSymbol
 }
 
@@ -523,7 +525,7 @@ input MarketSymbolFilterInput {
 }
 
 input MarketUpdatedAtFilterInput {
-  value: String!
+  value: Date!
   comparator: FilterComparatorSymbol
 }
 
@@ -641,8 +643,8 @@ type Post implements Node {
   smImageUrl: String
   lgImageUrl: String
   id: ID!
-  createdAt: String
-  updatedAt: String
+  createdAt: Date
+  updatedAt: Date
   viewerVote: PostVote
 }
 
@@ -660,7 +662,7 @@ type PostConnection {
 }
 
 input PostCreatedAtFilterInput {
-  value: String!
+  value: Date!
   comparator: FilterComparatorSymbol
 }
 
@@ -732,7 +734,7 @@ input PostTitleFilterInput {
 }
 
 input PostUpdatedAtFilterInput {
-  value: String!
+  value: Date!
   comparator: FilterComparatorSymbol
 }
 
@@ -747,8 +749,8 @@ type PostVote implements Node {
   user: User!
   post: Post!
   value: PostVoteValueEnum!
-  createdAt: String
-  updatedAt: String
+  createdAt: Date
+  updatedAt: Date
 }
 
 type PostVoteConnection {
@@ -760,7 +762,7 @@ type PostVoteConnection {
 }
 
 input PostVoteCreatedAtFilterInput {
-  value: String!
+  value: Date!
   comparator: FilterComparatorSymbol
 }
 
@@ -800,7 +802,7 @@ input PostVotesFilterInput {
 }
 
 input PostVoteUpdatedAtFilterInput {
-  value: String!
+  value: Date!
   comparator: FilterComparatorSymbol
 }
 
@@ -922,7 +924,7 @@ input UpdateMarketInput {
   exchange: MarketExchangeEnum
   price: Float
   priceClose: Float
-  priceUpdatedAt: String
+  priceUpdatedAt: Date
   numberOfPosts: Float
   partnerId: String
   icId: String
@@ -977,8 +979,8 @@ type User implements Node {
   numberOfComments: Float
   fullName: String
   website: String
-  createdAt: String
-  updatedAt: String
+  createdAt: Date
+  updatedAt: Date
 }
 
 input UserAdminFilterInput {
@@ -995,7 +997,7 @@ type UserConnection {
 }
 
 input UserCreatedAtFilterInput {
-  value: String!
+  value: Date!
   comparator: FilterComparatorSymbol
 }
 
@@ -1055,7 +1057,7 @@ input UserOrderByInput {
 }
 
 input UserUpdatedAtFilterInput {
-  value: String!
+  value: Date!
   comparator: FilterComparatorSymbol
 }
 
