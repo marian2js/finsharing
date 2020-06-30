@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Post } from '../../src/types/Post'
 import { Comment } from '../../src/types/Comment'
-import { Box, Card, CardActions, CardContent, CircularProgress, Divider, Grid, Typography } from '@material-ui/core'
+import {
+  Box,
+  Card,
+  CardActions,
+  CardContent,
+  CircularProgress,
+  Divider,
+  Grid,
+  Typography,
+  useMediaQuery
+} from '@material-ui/core'
 import { MarkdownBody } from '../../components/body/MarkdownBody'
 import { CommentForm } from '../../components/comments/CommentForm'
 import Link from 'next/link'
@@ -18,9 +28,10 @@ import { PostHeader } from '../../components/posts/PostHeader'
 import { getPlainText } from '../../src/utils/markdown'
 import { parseUrl } from '../../src/utils/string'
 import { MarketHeader } from '../../components/markets/MarketHeader'
-import ShareButtons from '../../components/ShareButtons'
 import { useViewer } from '../../src/services/UserHooks'
 import { getCashTag } from '../../src/utils/markets'
+import theme from '../../src/theme'
+import ShareButtons from '../../components/ShareButtons'
 
 interface Props {
   slug: string
@@ -61,6 +72,8 @@ function PostPage (props: Props) {
   const { viewer } = useViewer()
   const [post, setPost] = useState<Post>(data?.post)
   const [lastCommentAddedId, setLastCommentAddedId] = useState('')
+
+  const xsDownScreen = useMediaQuery(theme.breakpoints.down('xs'))
 
   useEffect(() => {
     setPost(data?.post)
@@ -113,11 +126,15 @@ function PostPage (props: Props) {
 
       <Card>
         <Grid container>
-          <Grid item xs={2} sm={1}>
-            <PostVotes post={post} viewerId={viewer?.id} size="large"/>
-            <ShareButtons url={postFullUrl} title={post.title} cashTag={cashTag}/>
-          </Grid>
-          <Grid item xs={10} sm={11}>
+          {
+            !xsDownScreen && (
+              <Grid item xs={2} sm={1}>
+                <PostVotes post={post} viewerId={viewer?.id} size="large"/>
+                <ShareButtons url={postFullUrl} title={post.title} cashTag={cashTag} size="small"/>
+              </Grid>
+            )
+          }
+          <Grid item xs={12} sm={11}>
             <CardContent>
               <PostHeader post={post} showPriceChange={false} showPinnedIcon={false}/>
 
@@ -130,7 +147,10 @@ function PostPage (props: Props) {
             <Divider variant="middle"/>
 
             <CardActions>
-              <PostActions post={post} authUserId={viewer?.id}/>
+              {
+                xsDownScreen && <PostVotes post={post} viewerId={viewer?.id} size="small"/>
+              }
+              <PostActions post={post} authUserId={viewer?.id} showShareButton={true}/>
             </CardActions>
           </Grid>
         </Grid>

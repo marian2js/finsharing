@@ -116,7 +116,7 @@ export const PostListItem = (props: Props) => {
                   </CardContent>
                   <CardActions>
                     <PostVotes post={post} viewerId={viewerId} size="small"/>
-                    <PostActions post={post}/>
+                    <PostActions post={post} showShareButton={false}/>
                   </CardActions>
                 </Box>
               </Grid>
