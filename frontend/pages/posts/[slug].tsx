@@ -32,9 +32,15 @@ import { useViewer } from '../../src/services/UserHooks'
 import { getCashTag } from '../../src/utils/markets'
 import theme from '../../src/theme'
 import ShareButtons from '../../components/ShareButtons'
+import { RedisClient } from '../../src/clients/redis'
+import { isServer } from '../../src/utils/environment'
+import { roundDecimals } from '../../src/utils/number'
+import { Alert } from '@material-ui/lab'
+import TrendingUpIcon from '@material-ui/icons/TrendingUp'
 
 interface Props {
   slug: string
+  profit: number | null
 }
 
 const POST_QUERY = gql`
@@ -120,6 +126,20 @@ function PostPage (props: Props) {
         }
       </Head>
 
+      {
+        props.profit && (
+          <Box mb={2}>
+            <a href="https://marianopardo.com" target="_blank">
+              <Alert severity="success" variant="outlined" icon={<TrendingUpIcon/>}>
+                <strong>
+                  Our portfolio is up {roundDecimals(props.profit, 0)}% since 2015. Check it out!
+                </strong>
+              </Alert>
+            </a>
+          </Box>
+        )
+      }
+
       <Box mb={3}>
         <MarketHeader market={post.market} viewerId={viewer?.id}/>
       </Box>
@@ -187,6 +207,7 @@ PostPage.getInitialProps = async (ctx: NextPageContext): Promise<Props> => {
   const slug = (Array.isArray(ctx.query.slug) ? ctx.query.slug[0] : ctx.query.slug).toLowerCase()
   return {
     slug,
+    profit: isServer ? Number(await RedisClient.get('portfolio-profit')) : null,
   }
 }
 
