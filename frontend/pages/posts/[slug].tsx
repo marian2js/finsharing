@@ -37,6 +37,7 @@ import { isServer } from '../../src/utils/environment'
 import { roundDecimals } from '../../src/utils/number'
 import { Alert } from '@material-ui/lab'
 import TrendingUpIcon from '@material-ui/icons/TrendingUp'
+import { GoogleAnalyticsService } from '../../src/services/GoogleAnalyticsService'
 
 interface Props {
   slug: string
@@ -97,6 +98,14 @@ function PostPage (props: Props) {
     setLastCommentAddedId(comment.id)
   }
 
+  const handlePortfolioClick = () => {
+    GoogleAnalyticsService.sendEvent({
+      category: 'portfolio',
+      action: 'click',
+      label: `posts/${post.slug}`,
+    })
+  }
+
   const postFullUrl = `https://finsharing.com/posts/${post.slug}`
   const postDescription = getPlainText(post.body)
   const postImage = parseUrl(post.lgImageUrl)
@@ -129,7 +138,7 @@ function PostPage (props: Props) {
       {
         props.profit && (
           <Box mb={2}>
-            <a href="https://marianopardo.com" target="_blank">
+            <a href="https://marianopardo.com" target="_blank" onClick={handlePortfolioClick}>
               <Alert severity="success" variant="outlined" icon={<TrendingUpIcon/>}>
                 <strong>
                   Our portfolio is up {roundDecimals(props.profit, 0)}% since 2015. Check it out!
