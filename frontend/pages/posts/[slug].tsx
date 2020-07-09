@@ -102,7 +102,7 @@ function PostPage (props: Props) {
     GoogleAnalyticsService.sendEvent({
       category: 'portfolio',
       action: 'click',
-      label: `posts/${post.slug}`,
+      label: `post`,
     })
   }
 
@@ -141,7 +141,8 @@ function PostPage (props: Props) {
             <a href="https://marianopardo.com" target="_blank" onClick={handlePortfolioClick}>
               <Alert severity="success" variant="outlined" icon={<TrendingUpIcon/>}>
                 <strong>
-                  Our portfolio is up {roundDecimals(props.profit, 0)}% since 2015. Check it out!
+                  This portfolio is up {roundDecimals(props.profit, 0)}% since 2015.
+                  Check it out and copy it now!
                 </strong>
               </Alert>
             </a>
