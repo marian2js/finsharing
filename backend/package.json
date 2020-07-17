@@ -6,16 +6,18 @@
   "scripts": {
     "start": "npm run watch",
     "start:production": "npm run build && node dist/server.js",
+    "debug": "npm run watch:debug",
     "build": "tsc",
-    "watch": "tsc-watch --onSuccess \"node ./dist/server.js\""
+    "watch": "tsc-watch --onSuccess \"node ./dist/server.js\"",
+    "watch:debug": "tsc-watch --onSuccess \"node --inspect ./dist/server.js\""
   },
   "dependencies": {
-    "@commun/admin": "^0.3.11",
-    "@commun/core": "^0.3.11",
-    "@commun/dashboard": "^0.3.11",
-    "@commun/emails": "^0.3.11",
-    "@commun/graphql": "^0.3.11",
-    "@commun/users": "^0.3.11",
+    "@commun/admin": "^0.3.12",
+    "@commun/core": "^0.3.12",
+    "@commun/dashboard": "^0.3.12",
+    "@commun/emails": "^0.3.12",
+    "@commun/graphql": "^0.3.12",
+    "@commun/users": "^0.3.12",
     "aws-sdk": "^2.614.0",
     "dotenv": "^8.2.0"
   },
