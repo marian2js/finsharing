@@ -71,7 +71,7 @@ const RSS_POSTS_FRAGMENT = gql`
 `
 
 const RSS_POSTS_QUERY = gql`
-  query Posts ($minVotes: Float!) {
+  query Posts ($minVotes: Int!) {
     posts (first: 10, orderBy: [{ createdAt: DESC }], filter: { votes: { value: $minVotes, comparator: GREATER_THAN_OR_EQUAL } }) {
       ...RssPosts
     }
@@ -80,7 +80,7 @@ const RSS_POSTS_QUERY = gql`
 `
 
 const RSS_MARKET_POSTS_QUERY = gql`
-  query Posts ($marketId: ID!, $minVotes: Float!) {
+  query Posts ($marketId: ID!, $minVotes: Int!) {
     posts (
       first: 10,
       orderBy: [{ createdAt: DESC }],
