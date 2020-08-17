@@ -1,33 +1,36 @@
 {
   "entityName": "commentVotes",
   "collectionName": "commentVotes",
-  "attributes": {
-    "user": {
-      "type": "user",
-      "required": true,
-      "index": true,
-      "readonly": true,
-      "permissions": {
-        "create": "system",
-        "update": "system"
+  "schema": {
+    "required": [
+      "user",
+      "comment",
+      "value"
+    ],
+    "properties": {
+      "user": {
+        "$ref": "#user",
+        "readOnly": true
+      },
+      "comment": {
+        "$ref": "#entity/comment"
+      },
+      "value": {
+        "type": "integer",
+        "enum": [
+          1,
+          -1
+        ],
+        "readOnly": true
       }
-    },
-    "comment": {
-      "type": "ref",
-      "required": true,
-      "entity": "comments"
-    },
-    "value": {
-      "type": "enum",
-      "values": [
-        1,
-        -1
-      ],
-      "required": true,
-      "readonly": true
     }
   },
   "indexes": [
+    {
+      "keys": {
+        "user": 1
+      }
+    },
     {
       "keys": {
         "comment": 1,
@@ -40,7 +43,13 @@
     "get": "anyone",
     "create": "user",
     "update": "own",
-    "delete": "own"
+    "delete": "own",
+    "properties": {
+      "user": {
+        "create": "system",
+        "update": "system"
+      }
+    }
   },
   "hooks": {
     "afterCreate": [

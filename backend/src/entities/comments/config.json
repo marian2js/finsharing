@@ -1,37 +1,41 @@
 {
   "entityName": "comments",
   "collectionName": "comments",
+  "schema": {
+    "required": [
+      "user",
+      "post",
+      "body"
+    ],
+    "properties": {
+      "user": {
+        "$ref": "#user",
+        "readOnly": true
+      },
+      "post": {
+        "$ref": "#entity/post"
+      },
+      "body": {
+        "type": "string",
+        "maxLength": 5000
+      },
+      "votes": {
+        "type": "integer",
+        "default": 0
+      }
+    }
+  },
   "permissions": {
     "get": "anyone",
     "create": "user",
     "update": "own",
-    "delete": "own"
-  },
-  "attributes": {
-    "user": {
-      "type": "user",
-      "required": true,
-      "index": true,
-      "readonly": true,
-      "permissions": {
+    "delete": "own",
+    "properties": {
+      "user": {
         "create": "system",
         "update": "system"
-      }
-    },
-    "post": {
-      "type": "ref",
-      "entity": "posts",
-      "required": true
-    },
-    "body": {
-      "type": "string",
-      "maxLength": 5000,
-      "required": true
-    },
-    "votes": {
-      "type": "number",
-      "default": 0,
-      "permissions": {
+      },
+      "votes": {
         "create": "system",
         "update": "system"
       }
@@ -63,7 +67,7 @@
       }
     ]
   },
-  "joinAttributes": {
+  "joinProperties": {
     "viewerVote": {
       "type": "findOne",
       "entity": "commentVotes",
@@ -72,5 +76,12 @@
         "comment": "{this.id}"
       }
     }
-  }
+  },
+  "indexes": [
+    {
+      "keys": {
+        "user": 1
+      }
+    }
+  ]
 }

@@ -1,35 +1,38 @@
 {
   "entityName": "users",
   "collectionName": "users",
+  "schema": {
+    "properties": {
+      "numberOfPosts": {
+        "type": "integer",
+        "default": 0
+      },
+      "numberOfComments": {
+        "type": "integer",
+        "default": 0
+      },
+      "fullName": {
+        "type": "string"
+      },
+      "website": {
+        "type": "string"
+      }
+    }
+  },
   "permissions": {
     "get": "anyone",
     "create": "anyone",
     "update": "own",
-    "delete": "own"
-  },
-  "attributes": {
-    "numberOfPosts": {
-      "type": "number",
-      "default": 0,
-      "permissions": {
+    "delete": "own",
+    "properties": {
+      "numberOfPosts": {
+        "create": "system",
+        "update": "system"
+      },
+      "numberOfComments": {
         "create": "system",
         "update": "system"
       }
-    },
-    "numberOfComments": {
-      "type": "number",
-      "default": 0,
-      "permissions": {
-        "create": "system",
-        "update": "system"
-      }
-    },
-    "fullName": {
-      "type": "string"
-    },
-    "website": {
-      "type": "string"
     }
-  },
-  "joinAttributes": {}
+  }
 }

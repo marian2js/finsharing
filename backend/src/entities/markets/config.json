@@ -8,60 +8,80 @@
     "update": "admin",
     "delete": "admin"
   },
-  "attributes": {
-    "symbol": {
-      "type": "string",
-      "required": true,
-      "unique": true
-    },
-    "name": {
-      "type": "string",
-      "required": true
-    },
-    "fullName": {
-      "type": "string",
-      "required": true
-    },
-    "description": {
-      "type": "string"
-    },
-    "imageUrl": {
-      "type": "string"
-    },
-    "exchange": {
-      "type": "enum",
-      "values": [
-        "NYSE",
-        "NASDAQ"
-      ],
-      "index": true
-    },
-    "price": {
-      "type": "number"
-    },
-    "priceClose": {
-      "type": "number"
-    },
-    "priceUpdatedAt": {
-      "type": "date"
-    },
-    "numberOfPosts": {
-      "type": "number",
-      "default": 0
-    },
-    "partnerId": {
-      "type": "string"
-    },
-    "icId": {
-      "type": "string"
-    },
-    "numberOfFollowers": {
-      "type": "number",
-      "default": 0,
-      "index": true
+  "schema": {
+    "required": [
+      "symbol",
+      "name",
+      "fullName"
+    ],
+    "properties": {
+      "symbol": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "fullName": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "imageUrl": {
+        "type": "string"
+      },
+      "exchange": {
+        "type": "string",
+        "enum": [
+          "NYSE",
+          "NASDAQ"
+        ]
+      },
+      "price": {
+        "type": "number"
+      },
+      "priceClose": {
+        "type": "number"
+      },
+      "priceUpdatedAt": {
+        "type": "object",
+        "format": "date-time"
+      },
+      "numberOfPosts": {
+        "type": "integer",
+        "default": 0
+      },
+      "partnerId": {
+        "type": "string"
+      },
+      "icId": {
+        "type": "string"
+      },
+      "numberOfFollowers": {
+        "type": "integer",
+        "default": 0
+      }
     }
   },
   "indexes": [
+    {
+      "keys": {
+        "symbol": 1
+      },
+      "unique": true
+    },
+    {
+      "keys": {
+        "exchange": 1
+      },
+      "sparse": true
+    },
+    {
+      "keys": {
+        "numberOfFollowers": 1
+      },
+      "sparse": true
+    },
     {
       "keys": {
         "symbol": "text",
@@ -69,7 +89,7 @@
       }
     }
   ],
-  "joinAttributes": {
+  "joinProperties": {
     "viewerFollow": {
       "type": "findOne",
       "entity": "marketFollows",

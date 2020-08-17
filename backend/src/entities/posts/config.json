@@ -2,82 +2,102 @@
   "entityName": "posts",
   "collectionName": "posts",
   "apiKey": "slug",
+  "schema": {
+    "required": [
+      "user",
+      "title",
+      "slug",
+      "body",
+      "market"
+    ],
+    "properties": {
+      "user": {
+        "$ref": "#user",
+        "readOnly": true
+      },
+      "title": {
+        "type": "string",
+        "maxLength": 150
+      },
+      "slug": {
+        "format": "eval:{slug(this.title)}-{randomChars(8)}",
+        "readOnly": true
+      },
+      "body": {
+        "type": "string",
+        "maxLength": 30000
+      },
+      "market": {
+        "$ref": "#entity/market",
+        "readOnly": true
+      },
+      "numberOfComments": {
+        "type": "integer",
+        "default": 0
+      },
+      "votes": {
+        "type": "integer",
+        "default": 0
+      },
+      "smImageUrl": {
+        "type": "string"
+      },
+      "lgImageUrl": {
+        "type": "string"
+      },
+      "pinnedUntil": {
+        "type": "object",
+        "format": "date-time"
+      }
+    }
+  },
   "permissions": {
     "get": "anyone",
     "create": "user",
     "update": "own",
-    "delete": "own"
-  },
-  "attributes": {
-    "user": {
-      "type": "user",
-      "required": true,
-      "index": true,
-      "readonly": true,
-      "permissions": {
+    "delete": "own",
+    "properties": {
+      "user": {
         "create": "system",
         "update": "system"
-      }
-    },
-    "title": {
-      "type": "string",
-      "maxLength": 150,
-      "required": true
-    },
-    "slug": {
-      "type": "slug",
-      "maxLength": 64,
-      "required": true,
-      "setFrom": "title",
-      "suffix": {
-        "type": "random",
-        "chars": 8
       },
-      "unique": true,
-      "readonly": true
-    },
-    "body": {
-      "type": "string",
-      "required": true,
-      "maxLength": 30000
-    },
-    "market": {
-      "type": "ref",
-      "entity": "markets",
-      "required": true,
-      "index": true,
-      "readonly": true,
-      "permissions": {
+      "market": {
         "update": "system"
-      }
-    },
-    "numberOfComments": {
-      "type": "number",
-      "default": 0,
-      "permissions": {
+      },
+      "numberOfComments": {
+        "create": "system",
+        "update": "system"
+      },
+      "votes": {
         "create": "system",
         "update": "system"
       }
-    },
-    "votes": {
-      "type": "number",
-      "default": 0,
-      "permissions": {
-        "create": "system",
-        "update": "system"
-      }
-    },
-    "smImageUrl": {
-      "type": "string"
-    },
-    "lgImageUrl": {
-      "type": "string"
-    },
-    "pinnedUntil": {
-      "type": "date",
-      "index": true
     }
   },
+  "indexes": [
+    {
+      "keys": {
+        "user": 1
+      }
+    },
+    {
+      "keys": {
+        "slug": 1
+      },
+      "unique": true
+    },
+    {
+      "keys": {
+        "market": 1
+      }
+    },
+    {
+      "keys": {
+        "pinnedUntil": 1
+      },
+      "sparse": true
+    }
+  ],
   "hooks": {
     "afterCreate": [
       {
@@ -104,7 +124,7 @@
       }
     ]
   },
-  "joinAttributes": {
+  "joinProperties": {
     "viewerVote": {
       "type": "findOne",
       "entity": "postVotes",

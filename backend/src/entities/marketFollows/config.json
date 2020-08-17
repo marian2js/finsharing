@@ -1,32 +1,39 @@
 {
   "entityName": "marketFollows",
   "collectionName": "marketFollows",
-  "attributes": {
-    "user": {
-      "type": "user",
-      "required": true,
-      "index": true,
-      "readonly": true,
-      "permissions": {
-        "create": "system",
-        "update": "system"
+  "schema": {
+    "required": [
+      "user",
+      "market"
+    ],
+    "properties": {
+      "user": {
+        "$ref": "#user"
+      },
+      "market": {
+        "$ref": "#entity/market",
+        "readOnly": true
       }
-    },
-    "market": {
-      "type": "ref",
-      "entity": "markets",
-      "index": false,
-      "required": true,
-      "readonly": true
     }
   },
   "permissions": {
     "get": "anyone",
     "create": "user",
     "update": "own",
-    "delete": "own"
+    "delete": "own",
+    "properties": {
+      "user": {
+        "create": "system",
+        "update": "system"
+      }
+    }
   },
   "indexes": [
+    {
+      "keys": {
+        "user": 1
+      }
+    },
     {
       "keys": {
         "user": -1,

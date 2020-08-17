@@ -1,41 +1,49 @@
 {
   "entityName": "postVotes",
   "collectionName": "postVotes",
+  "schema": {
+    "required": [
+      "user",
+      "post",
+      "value"
+    ],
+    "properties": {
+      "user": {
+        "$ref": "#user",
+        "readOnly": true
+      },
+      "post": {
+        "$ref": "#entity/post",
+        "readOnly": true
+      },
+      "value": {
+        "type": "integer",
+        "enum": [
+          1,
+          -1
+        ],
+        "readOnly": true
+      }
+    }
+  },
   "permissions": {
     "get": "anyone",
     "create": "user",
     "update": "system",
-    "delete": "own"
-  },
-  "attributes": {
-    "user": {
-      "type": "user",
-      "required": true,
-      "index": true,
-      "readonly": true,
-      "permissions": {
+    "delete": "own",
+    "properties": {
+      "user": {
         "create": "system",
         "update": "system"
       }
-    },
-    "post": {
-      "type": "ref",
-      "entity": "posts",
-      "required": true,
-      "readonly": true,
-      "permissions": {}
-    },
-    "value": {
-      "type": "enum",
-      "values": [
-        1,
-        -1
-      ],
-      "required": true,
-      "readonly": true
     }
   },
   "indexes": [
+    {
+      "keys": {
+        "user": 1
+      }
+    },
     {
       "keys": {
         "post": 1,
