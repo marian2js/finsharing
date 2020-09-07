@@ -53,7 +53,7 @@
   },
   "permissions": {
     "get": "anyone",
-    "create": "admin",
+    "create": "anyone",
     "update": "own",
     "delete": "own",
     "properties": {
